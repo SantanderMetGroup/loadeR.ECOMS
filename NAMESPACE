@@ -1,0 +1,5 @@
+import("rJava")
+importFrom("sp", SpatialPolygons, SpatialPoints)
+export("datasetInventory",
+       "loadSeasonalForecast",
+       "loginECOMS_UDG")
