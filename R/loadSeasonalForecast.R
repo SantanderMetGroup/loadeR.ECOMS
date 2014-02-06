@@ -42,7 +42,7 @@ loadSeasonalForecast = function(dataset = c("System4_seasonal_15", "System4_seas
             out <- loadSeasonalForecast.CFS(grid, gcs, dic, members, latLon, timePars)
       }
       gds$close()
-      message("Done")
+      message("[",Sys.time(),"]", " Done")
       return(out)
 }
 # End
