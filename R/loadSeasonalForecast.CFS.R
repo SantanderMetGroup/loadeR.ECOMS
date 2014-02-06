@@ -16,8 +16,8 @@ loadSeasonalForecast.CFS = function(grid, gcs, dic, members, latLon, timePars) {
       sep.inits <- which(((d == 9 | d == 14 | d == 19 | d == 24 | d == 29) & m == 8) | (d == 3 & m == 9))
       oct.inits <- which(((d == 8 | d == 13 | d == 18 | d == 23 | d == 28) & m == 9) | (d == 3 & m == 10))
       nov.inits <- which(((d == 8 | d == 13 | d == 18 | d == 23 | d == 28) & m == 10) | ((d == 2 | d == 7) & m == 11))
-      dic.inits <- which(((d == 12 | d == 17 | d == 22 | d == 27) & m == 11) | ((d == 2 | d == 7) & m == 12))
-      init.list <- list(jan.inits, feb.inits, mar.inits, apr.inits, may.inits, jun.inits, jul.inits, aug.inits, sep.inits, oct.inits, nov.inits, dic.inits)
+      dec.inits <- which(((d == 12 | d == 17 | d == 22 | d == 27) & m == 11) | ((d == 2 | d == 7) & m == 12))
+      init.list <- lapply(ls(pattern = "\\.inits$")[pmatch(tolower(month.abb), ls(pattern = "\\.inits$"))], function(x) get(x))
       rm(list = c("d", "m", "y", ls(pattern = "\\.inits$")))
       runTimesAll <- init.list[[timePars$validMonth]]
       rm(init.list)
@@ -31,18 +31,14 @@ loadSeasonalForecast.CFS = function(grid, gcs, dic, members, latLon, timePars) {
       if (timePars$validMonth != 11 & (length(members) > 24 | any(members > 24))) {
             stop("Maximum number of members in this initialization is 24")
       }
-      rTimes <- c()
-      for (i in 1:length(timePars$years)) {
-            rTimes <- c(rTimes, runTimes[which(runDates$year + 1900 == timePars$years[i])][members])
-      }
-      runTimes <- rTimes
-      rm(rTimes)
+      runTimes <- unlist(lapply(unique(runDates$year + 1900), function(x) runTimes[which(runDates$year + 1900 == x)[members]]))
+      runDates <- timePars$runDatesAll[runTimes]
       runDatesEnsList <- list()
       runTimesEnsList <- list()
       for (i in 1:length(members)) {
-            ind <- seq.int(i, by = length(members), length.out = length(timePars$years))
-            runTimesEnsList[[length(runTimesEnsList) + 1]] <- runTimes[ind]
-            runDatesEnsList[[length(runDatesEnsList) + 1]] <- runDates[ind]
+            ind <- seq.int(i, by = length(members), length.out = length(unique(runDates$year)))
+            runTimesEnsList[[i]] <- runTimes[ind]
+            runDatesEnsList[[i]] <- runDates[ind]
             rm(ind)
       }
       # Forecast Dates
@@ -62,17 +58,11 @@ loadSeasonalForecast.CFS = function(grid, gcs, dic, members, latLon, timePars) {
             foreTimesList[[i]] <- foreTimesEnsList
             foreDatesList[[i]] <- foreDatesEnsList
       }
-      rm(timePars)
-      foreDatesContList <- list()
-      if (length(foreDatesList) > 1) {
-            for (i in 1:length(foreDatesList)) {
-                  foreDatesContList[[i]] <- do.call("append", foreDatesList[[i]])
-            }
-      } else {
-            foreDatesContList <- foreDatesList[[1]]
+      foreDates <- foreDatesList[[1]][[1]]
+      for (j in 2:length(foreDatesList[[1]])) {
+            foreDates <- c(foreDates, foreDatesList[[1]][[j]])
       }
       rm(foreDatesList)
-      foreDates <- foreDatesContList[[1]]
       if (!is.null(dic)) {
             ltb <- as.difftime(dic$lower_time_bound, format = "%H", units = "hours")
             utb <- as.difftime(dic$upper_time_bound, format = "%H", units = "hours")
