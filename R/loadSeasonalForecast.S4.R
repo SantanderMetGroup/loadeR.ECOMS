@@ -148,6 +148,7 @@ loadSeasonalForecast.S4 <- function(dataset, var, grid, gcs, dic, members, latLo
             Members[[i]] <- Data
       }
       rm(timePars)
+      names(Members) <- paste("Member", members + 1, sep = "_")
       return(list("VarName" = var, "isStandard" = is.standard, "MemberData" = Members, "LonLatCoords" = SpatialPoints(latLon$Grid), "RunDates" = rDatesNew, "ForecastDates" = list("Start" = foreDatesNew, "End" = foreDatesEndNew)))
 }
 # End
