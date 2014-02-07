@@ -36,10 +36,10 @@ loadSeasonalForecast = function(dataset = c("System4_seasonal_15", "System4_seas
       latLon <- getLatLonDomain(gcs, lonLim, latLim)
       timePars <- getTimeDomainForecast(gcs, season, years, leadMonth)
       if (grepl("^System4", dataset)) {
-            out <- loadSeasonalForecast.S4(dataset, grid, gcs, dic, members, latLon, timePars)
+            out <- loadSeasonalForecast.S4(dataset, var, grid, gcs, dic, members, latLon, timePars)
       }
       if (grepl("^CFS", dataset)) {
-            out <- loadSeasonalForecast.CFS(grid, gcs, dic, members, latLon, timePars)
+            out <- loadSeasonalForecast.CFS(grid, var, gcs, dic, members, latLon, timePars)
       }
       gds$close()
       message("[",Sys.time(),"]", " Done")
