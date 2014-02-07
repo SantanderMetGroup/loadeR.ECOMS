@@ -1,4 +1,4 @@
-loadSeasonalForecast.CFS = function(grid, gcs, dic, members, latLon, timePars) {
+loadSeasonalForecast.CFS = function(grid, var, gcs, dic, members, latLon, timePars) {
       if (is.null(members)) {
             members <- 1:16      
       }
@@ -59,8 +59,10 @@ loadSeasonalForecast.CFS = function(grid, gcs, dic, members, latLon, timePars) {
             foreDatesList[[i]] <- foreDatesEnsList
       }
       foreDates <- foreDatesList[[1]][[1]]
-      for (j in 2:length(foreDatesList[[1]])) {
-            foreDates <- c(foreDates, foreDatesList[[1]][[j]])
+      if (length(foreDatesList[[1]]) > 1) {
+            for (j in 2:length(foreDatesList[[1]])) {
+                  foreDates <- c(foreDates, foreDatesList[[1]][[j]])
+            }
       }
       rm(foreDatesList)
       if (!is.null(dic)) {
