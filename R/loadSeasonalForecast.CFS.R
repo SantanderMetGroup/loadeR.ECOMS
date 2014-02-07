@@ -58,7 +58,7 @@ loadSeasonalForecast.CFS = function(grid, var, gcs, dic, members, latLon, timePa
             foreTimesList[[i]] <- foreTimesEnsList
             foreDatesList[[i]] <- foreDatesEnsList
       }
-      rm(list = c("timePars", ls(pattern = "EnsList$")))
+      rm(list = c("timePars", "runDatesEnsList"))
       foreDates <- foreDatesList[[1]][[1]]
       if (length(foreDatesList[[1]]) > 1) {
             for (j in 2:length(foreDatesList[[1]])) {
