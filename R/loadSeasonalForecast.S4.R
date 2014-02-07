@@ -1,4 +1,4 @@
-loadSeasonalForecast.S4 <- function(dataset, grid, gcs, dic, members, latLon, timePars) {    
+loadSeasonalForecast.S4 <- function(dataset, var, grid, gcs, dic, members, latLon, timePars) {    
       if (grepl("15$", dataset) & !all(members %in% 1:15)) {
             stop("Accepted values for argument 'members' are integers in the range [1,15]")
       }
