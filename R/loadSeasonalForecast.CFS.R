@@ -58,6 +58,7 @@ loadSeasonalForecast.CFS = function(grid, var, gcs, dic, members, latLon, timePa
             foreTimesList[[i]] <- foreTimesEnsList
             foreDatesList[[i]] <- foreDatesEnsList
       }
+      rm(list = c("timePars", ls(pattern = "EnsList$")))
       foreDates <- foreDatesList[[1]][[1]]
       if (length(foreDatesList[[1]]) > 1) {
             for (j in 2:length(foreDatesList[[1]])) {
@@ -87,7 +88,6 @@ loadSeasonalForecast.CFS = function(grid, var, gcs, dic, members, latLon, timePa
       for (i in 1:length(members)) {
             message(paste("[", Sys.time(), "]", " Retrieving data from member ", i, " out of ", length(members), "...", sep = ""))
             Data <- matrix(ncol = nrow(latLon$Grid), nrow = length(foreDates))
-            length(Members) <- i
             auxC <- 1
             latStart <- latLon$LatIndex[1]
             latCount <- length(latLon$LatIndex)
@@ -145,6 +145,7 @@ loadSeasonalForecast.CFS = function(grid, var, gcs, dic, members, latLon, timePa
             }
             Members[[i]] <- Data[1:length(foreDates), ]
       }
+      names(Members) <- paste("Member", members, sep = "_")
       return(list("VarName" = var, "isStandard" = is.standard, "MemberData" = Members, "LonLatCoords" = SpatialPoints(latLon$Grid), "RunDates" = runDates, "ForecastDates" = list("Start" = foreDates, "End" = foreDatesEnd)))
 }
 # End
