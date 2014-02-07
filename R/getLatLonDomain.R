@@ -26,15 +26,12 @@ getLatLonDomain <- function(gridCoordinateSystem, lonLim, latLim) {
       }
       lons <- gcs$getLonAxis()$getCoordValues()
       lons[which(lons > 180)] <- lons[which(lons > 180)] - 360
-	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	lonAxisShape <- gcs$getLonAxis()$getShape()
 	if (length(lonAxisShape) == 2) {
 		lons <- apply(t(matrix(lons, ncol = lonAxisShape[1])), 2, min)
 	}
-	#-------------------------------------------------------
 	if (is.null(lonLim)) {
     	      lonSlice <- sort(lons)
-    	      # lonInd <- (1:gcs$getLonAxis()$getShapeAll())[sort(lons, index.return = TRUE)$ix] - 1
 	      lonInd <- (1:length(lons))[sort(lons, index.return = TRUE)$ix] - 1
     	      lonInd <- lonInd[order(lonSlice)]
     	      lonSlice <- sort(lonSlice)
@@ -51,7 +48,6 @@ getLatLonDomain <- function(gridCoordinateSystem, lonLim, latLim) {
                   lonSlice <- sort(lonSlice)
          	}
 	}
-      # dateline crossing 
       index <- c()
       for (i in 2:length(lonInd)) {
             index[i-1] <- lonInd[i] - lonInd[i-1]
@@ -60,17 +56,13 @@ getLatLonDomain <- function(gridCoordinateSystem, lonLim, latLim) {
       if (length(datelineCrossInd) == 0) {
             datelineCrossInd <- NULL
       }
-      # Latitudes
       lats <- gcs$getLatAxis()$getCoordValues()
-	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	latAxisShape <- gcs$getLatAxis()$getShape()
 	if (length(latAxisShape) == 2) {
 	      lats <- apply(t(matrix(lats, ncol = lonAxisShape[1])), 1, min)
 	}
-	#-------------------------------------------------------
       if (is.null(latLim)) {
             latSlice <- lats
-            # latInd <- (1:gcs$getLatAxis()$getShapeAll()) - 1
             latInd <- 1:length(lats) - 1
      	} else {
             if (length(latLim) == 1) {
