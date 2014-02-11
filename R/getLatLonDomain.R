@@ -19,10 +19,9 @@
 # Modified 18 Jan 2014, bug fix, dateline crossing sub-routine relocated to be applied also in case lonLim is NULL
 # Modified 23 Jan 2014, bug fix, selection fo the whole latitudinal domain for 2D lat definition, when latLim is NULL 
 # ~~~~~~~~~~~~
-getLatLonDomain <- function(gridCoordinateSystem, lonLim, latLim) {
-      gcs <- gridCoordinateSystem
+getLatLonDomain <- function(gcs, lonLim, latLim) {
       if (length(lonLim) > 2 | length(latLim) > 2) {
-    	      stop("Invalid coordinates. Check the spatial window definition")
+    	      stop("Invalid 'lonLim' and/or 'latLim' argument values")
       }
       lons <- gcs$getLonAxis()$getCoordValues()
       lons[which(lons > 180)] <- lons[which(lons > 180)] - 360
