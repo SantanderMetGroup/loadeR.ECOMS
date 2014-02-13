@@ -132,8 +132,10 @@ loadSeasonalForecast.CFS = function(grid, var, gcs, dic, members, latLon, timePa
                               Data[DataRowRange, DataColRangeList[[k]]] <- aux.mat
                               rm(aux.mat)
                         }
-                        latLon$Grid <- rbind(latLon$Grid[which(latLon$Grid[ ,1] < 0), ], latLon$Grid[which(latLon$Grid[ ,1] >= 0), ])
                   }
+            }
+            if (!is.null(latLon$DatelineCrossInd)) {
+                  Data <- t(t(Data)[order(-latLon$Grid[,2], latLon$Grid[,1]), ])
             }
             if (!is.null(dic)) {
                   is.standard <- TRUE
@@ -145,7 +147,11 @@ loadSeasonalForecast.CFS = function(grid, var, gcs, dic, members, latLon, timePa
             }
             Members[[i]] <- Data[1:length(foreDates), ]
       }
+      latLon$Grid <- SpatialPoints(latLon$Grid, proj4string = CRS("+proj=longlat +datum=WGS84"))
+      if (length(latLon$Grid) > 1) {
+            latLon$Grid <- SpatialGrid(points2grid(latLon$Grid, tolerance = 0.05), proj4string = CRS("+proj=longlat +datum=WGS84"))      
+      }
       names(Members) <- paste("Member", members, sep = "_")
-      return(list("VarName" = var, "isStandard" = is.standard, "MemberData" = Members, "LonLatCoords" = SpatialPoints(latLon$Grid), "RunDates" = runDates, "ForecastDates" = list("Start" = foreDates, "End" = foreDatesEnd)))
+      return(list("VarName" = var, "isStandard" = is.standard, "MemberData" = Members, "LonLatCoords" = latLon$Grid, "RunDates" = runDates, "ForecastDates" = list("Start" = foreDates, "End" = foreDatesEnd)))
 }
 # End
