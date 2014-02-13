@@ -23,7 +23,7 @@ Variable code (character string). This is the name of the variable either as cod
 A logical flag indicating if a dictionary is being used. Default (recommended) is set to \code{TRUE}, meaning that the function will internally perform the necessary conversions to return the standard variables defined in the vocabulary. See details. 
 }
   \item{members}{
-A vector of integers indicating the members to be loaded. Default to \code{NULL}, which loads the default members. For instance, \code{members=1:5} will retrieve the first five members of the hindcast. 
+A vector of integers indicating the members to be loaded. Default to \code{NULL}, which loads the default members (see the Note below). For instance, \code{members=1:5} will retrieve the first five members of the hindcast. 
 }
   \item{lonLim}{
 Vector of length = 2, with minimum and maximum longitude coordinates, in decimal degrees, of the bounding box selected. For single-point queries, a numeric value with the longitude coordinate. If \code{NULL} (default), the whole longitudinal range is selected (Note that this may lead to a large output object size). See details. 
@@ -64,7 +64,7 @@ A list with the following elements providing the necessary information for data 
 
 \emph{Available datasets}
 
-For details on the different hindcast datasets available go to \url{https://meteo.unican.es/trac/wiki/EcomsUdg/DataServer/Datasets}.
+For details on the different hindcast datasets available go to \url{https://meteo.unican.es/ecoms-udg/DataServer/Datasets}.
 
 \emph{Variable homogeneization}
 
@@ -74,7 +74,7 @@ The different nature of the various databases, models and variables, and the idi
 
 Regarding the selection of the spatial domain, it is possible to select the whole spatial domain of the datasets (currently global for all hindcasts available). In this case \code{lonLim=NULL} and \code{latLim=NULL}. More often, rectangular domains are defined by the minimum and maximum coordinates in longitude and latitude (for instance \code{lonLim=c(-10,10)} and \code{latLim=c(35,45)} indicates a rectangular window centered in the Iberian Peninsula), and single grid-cell values (for instance \code{lonLim=-3.21} and \code{latLim=41.087} for retrieving the data in the closest grid point to the point coordinate -3.21E, 41.087N. In the last two cases, the function operates by finding the nearest (euclidean distance) grid-points to the coordinates introduced.
 
-The returned value for the \code{LonLatCoords} slot varies accordingly: in case of single point selections, it is a \link[sp]{SpatialPoints} object, while in case of rectangular domains it is a \link[sp]{SpatialGrid}, which is a more efficient way of defining gridded data. Note that for retrieving the coordinates of a grid, a simple call to \link[sp]{coordinates} will suffice to obtain the entire coordinates matrix. See \link[sp]{coordinatevalues} or \link[grDevices]{xy.coords} for retrieving the coordinates in other R common formats.
+The returned value for the \code{LonLatCoords} slot varies accordingly: in case of single point selections, it is a \link[sp]{SpatialPoints} object, while in case of rectangular domains it is a \link[sp]{SpatialGrid}, which is a more efficient way of defining gridded data. Note that for retrieving the coordinates of a grid, a simple call to \link[sp]{coordinates} will suffice to obtain the entire coordinates matrix. See \link[sp]{coordinatevalues} or \link[grDevices]{xy.coords} for retrieving the coordinates in other common R formats.
 
 \emph{Definition of temporal slices}
 
@@ -89,9 +89,10 @@ In case the whole year is needed (instead of a particular season), the argument 
 \author{
 \href{http://www.meteo.unican.es}{Santander Meteorology Group}
 }
-%\note{
-%%  ~~further notes~~
-%}
+
+\note{
+16 members are returned for the CFSv2 hindcast by default, for better comparability with the 15 members returned by the ECMWF's System4 seasonal hindcast. However, note that up to 24 members can be obtained from the CFSv2 hindcast (i.e., \code{members=1:24}), and 28 in the case of the November initializations. See the \href{http://meteo.unican.es/ecoms-udg/DataServer/Datasets/CFSv2}{technical documentation} at the ECOMS-UDG wiki for more details on the lagged runtimes configuration.  
+}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 

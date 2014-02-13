@@ -5,7 +5,7 @@
 Log in to the ECOMS User Data Gateway
 }
 \description{
-Provides HTTP authentication for accessing the ECOMS UDG Portal.
+Provides HTTP authentication for accessing the ECOMS-UDG.
 }
 \usage{
 loginECOMS_UDG(username, password, proxy.host = NULL, proxy.port = NULL)
@@ -21,8 +21,8 @@ In case of a proxy connection, the name of the proxy host, as a character string
   \item{proxy.port}{In case of a proxy connection, an integer indicating the proxy port}
 }
 \details{
-Only registered users can access the data server of the ECOMS UDG. Prior to data access, users must log in.
-Further details on registration for dsata access are provided in \url{https://meteo.unican.es/trac/wiki/EcomsUdg/DataServer/Registration}.
+Only registered users can access the data server of the ECOMS-UDG. Prior to data access, users must log in.
+Further details on registration for data access are provided in \url{http://meteo.unican.es/ecoms-udg/DataServer/Registration}.
 }
 %\value{
 %%  ~Describe the value returned
@@ -32,7 +32,7 @@ Further details on registration for dsata access are provided in \url{https://me
 %% ...
 %}
 \references{
-\url{https://www.meteo.unican.es/trac/wiki/EcomsUdg}
+\url{http://www.meteo.unican.es/ecoms-udg}
 }
 \author{
 \href{http://www.meteo.unican.es}{Santander Meteorology Group}
@@ -47,5 +47,5 @@ Further details on registration for dsata access are provided in \url{https://me
 %\examples{}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ utils }
+%\keyword{ utils }
 %\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
