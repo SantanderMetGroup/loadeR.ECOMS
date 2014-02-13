@@ -18,6 +18,7 @@
 # Modified 31 Oct 2013, account for bidimensional lonlat coordinate axes
 # Modified 18 Jan 2014, bug fix, dateline crossing sub-routine relocated to be applied also in case lonLim is NULL
 # Modified 23 Jan 2014, bug fix, selection fo the whole latitudinal domain for 2D lat definition, when latLim is NULL 
+# Modified 13 Feb 2014. Coordinates rearrangement when dateline is crossed (formerly done in the loading functions)
 # ~~~~~~~~~~~~
 getLatLonDomain <- function(gcs, lonLim, latLim) {
       if (length(lonLim) > 2 | length(latLim) > 2) {
@@ -77,6 +78,9 @@ getLatLonDomain <- function(gcs, lonLim, latLim) {
 	      stop("Empty Spatial Domain.\nConsider expanding the boundaries or selecting a single point location")
 	}
 	gridPoints <- as.matrix(expand.grid("lon" = lonSlice, "lat" = latSlice))
+      if (!is.null(datelineCrossInd)) {
+            gridPoints <- rbind(gridPoints[which(gridPoints[ ,1] < 0), ], gridPoints[which(gridPoints[ ,1] >= 0), ])
+      }
 	return(list("Grid" = gridPoints, "LatIndex" = latInd, "LonIndex" = lonInd, "DatelineCrossInd" = datelineCrossInd))
 }
 # End
