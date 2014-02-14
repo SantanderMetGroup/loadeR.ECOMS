@@ -150,9 +150,10 @@ loadSeasonalForecast.S4 <- function(dataset, var, grid, gcs, dic, members, latLo
             Members[[i]] <- Data
       }
       rm(timePars)
-      latLon$Grid <- SpatialPoints(latLon$Grid, proj4string = CRS("+proj=longlat +datum=WGS84"))
+      crs <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")
+      latLon$Grid <- SpatialPoints(latLon$Grid, proj4string = crs)
       if (length(latLon$Grid) > 1) {
-            latLon$Grid <- SpatialGrid(points2grid(latLon$Grid, tolerance = 0.05), proj4string = CRS("+proj=longlat +datum=WGS84"))      
+            latLon$Grid <- SpatialGrid(points2grid(latLon$Grid, tolerance = 0.05), proj4string = crs)      
       }
       names(Members) <- paste("Member", members + 1, sep = "_")
       return(list("VarName" = var, "isStandard" = is.standard, "MemberData" = Members, "LonLatCoords" = latLon$Grid, "RunDates" = rDatesNew, "ForecastDates" = list("Start" = foreDatesNew, "End" = foreDatesEndNew)))

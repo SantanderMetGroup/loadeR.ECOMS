@@ -147,9 +147,10 @@ loadSeasonalForecast.CFS = function(grid, var, gcs, dic, members, latLon, timePa
             }
             Members[[i]] <- Data[1:length(foreDates), ]
       }
-      latLon$Grid <- SpatialPoints(latLon$Grid, proj4string = CRS("+proj=longlat +datum=WGS84"))
+      crs <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")
+      latLon$Grid <- SpatialPoints(latLon$Grid, proj4string = crs)
       if (length(latLon$Grid) > 1) {
-            latLon$Grid <- SpatialGrid(points2grid(latLon$Grid, tolerance = 0.05), proj4string = CRS("+proj=longlat +datum=WGS84"))      
+            latLon$Grid <- SpatialGrid(points2grid(latLon$Grid, tolerance = 0.05), proj4string = crs)      
       }
       names(Members) <- paste("Member", members, sep = "_")
       return(list("VarName" = var, "isStandard" = is.standard, "MemberData" = Members, "LonLatCoords" = latLon$Grid, "RunDates" = runDates, "ForecastDates" = list("Start" = foreDates, "End" = foreDatesEnd)))
