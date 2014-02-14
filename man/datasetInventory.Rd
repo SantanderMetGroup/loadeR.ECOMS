@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 
 \title{
-Summary of hindcast database characteristics
+Summary of hindcast database characteristics.
 }
 
 \description{
