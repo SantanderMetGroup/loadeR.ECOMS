@@ -16,7 +16,7 @@ datasetInventory(dataset = c("System4_seasonal_15", "System4_seasonal_51",
 }
 
 \arguments{
-  \item{dataset}{A character string indicating the hindcast database. Currently four datasets available (See Details).}
+  \item{dataset}{A character string indicating the hindcast database. Currently four datasets available (See details).}
 }
 
 \details{

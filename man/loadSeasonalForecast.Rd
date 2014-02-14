@@ -42,7 +42,7 @@ An integer vector specifying the desired season (in months, January = 1 ...). Op
 Optional vector of years to select. Default to all available years. See details. 
 }
   \item{leadMonth}{
-Integer value indicating the lead forecast time, relative to the first month of \code{season}. Note that \code{leadMonth=1} for \code{season=1} (January) corresponds to the December initialization. Default to 1} %The effect of the lead time in the forecast for a particular season can be analyzed by just changing this parameter. 
+Integer value indicating the lead forecast time, relative to the first month of \code{season}. Note that \code{leadMonth=1} for \code{season=1} (January) corresponds to the December initialization. Default to 1 (i.e., 1 lead month forecast).} %The effect of the lead time in the forecast for a particular season can be analyzed by just changing this parameter. 
 }
 
 
@@ -86,7 +86,10 @@ The different nature of the various databases, models and variables, and the idi
 Regarding the selection of the spatial domain, it is possible to select the whole spatial domain of the datasets (currently global for all hindcasts available). In this case \code{lonLim=NULL} and \code{latLim=NULL}. More often, rectangular domains are defined by the minimum and maximum coordinates in longitude and latitude (for instance \code{lonLim=c(-10,10)} and \code{latLim=c(35,45)} indicates a rectangular window centered in the Iberian Peninsula), and single grid-cell values (for instance \code{lonLim=-3.21} and \code{latLim=41.087} for retrieving the data in the closest grid point to the point coordinate -3.21E, 41.087N. In the last two cases, the function operates by finding the nearest (euclidean distance) grid-points to the coordinates introduced.
 
 
-The returned value for the \code{LonLatCoords} slot varies accordingly: in case of single point selections, it is a \link[sp]{SpatialPoints} object, while in case of rectangular domains it is a \link[sp]{SpatialGrid}, which is a more efficient way of defining gridded data. Note that for retrieving the coordinates of a grid, a simple call to \link[sp]{coordinates} will suffice to obtain the entire coordinates matrix. See \link[sp]{coordinatevalues} or \link[grDevices]{xy.coords} for retrieving the coordinates in other common R formats.
+The returned value by \code{LonLatCoords} varies accordingly: in case of single point selections, it is a \link[sp]{SpatialPoints} object, while in case of rectangular domains it is a \link[sp]{SpatialGrid}, which is a more efficient way of defining gridded data. Note that for retrieving the coordinates of a grid, a simple call to \link[sp]{coordinates} will suffice to obtain the entire coordinates matrix. See \link[sp]{coordinatevalues} or \link[grDevices]{xy.coords} for retrieving the coordinates in other common R formats.
+
+The spatial definition of the data is associated to a specific coordinate reference system via the \sQuote{proj4string} slot of \code{LonLatCoords}, thus enabling the direct application of geospatial operations such as projection transformations (e.g. \link[sp]{spTransform}), spatial overlay methods (e.g. \link[sp]{over}) etc.
+
 
 \strong{Definition of temporal slices}
 
@@ -98,7 +101,7 @@ In case the whole year is needed (instead of a particular season), the argument 
 
 \strong{Initialization times}
 
-The characteristics of the \code{RunDates} output vary depending on the dataset. In the case of models that have simultaneous initializations for different members (e.g. System4), there is an initialization time associated to each forecast time. Despite redundancy, this may be helpful for certain data analyses. Thus, in this case the length of the \code{ForecastDates} and \code{RunDates} vectors are identical. Unlike the simultaneous initializations scheme, the lagged runtime configuration of members used by some other models (e.g. CFSv2) results in different initialization times for the same forecast times of different members. In this case, the \code{RunDates} output does not match the \code{ForecastTimes} length, although this behaviour may change in future versions.
+The characteristics of the \code{RunDates} output vary depending on the dataset. In the case of models that have simultaneous initializations for different members (e.g. System4), there is an initialization time associated to each forecast time. Despite redundancy, this may be helpful for certain data analyses. Thus, in this case the length of the \code{ForecastDates} and \code{RunDates} vectors are identical. Unlike the simultaneous initializations scheme, the lagged runtime configuration of members used by some other models (e.g. CFSv2) results in different initialization times for the same forecast times of different members. In this case, the \code{RunDates} output does not match the \code{ForecastTimes} length, and returns a vector with each unique initialization date. This behaviour may change in future versions.
 
 
 By default, 16 members are returned for the CFSv2 hindcast for better comparability with the 15 members returned by the ECMWF's System4 seasonal hindcast. However, note that up to 24 members can be obtained from the CFSv2 hindcast (i.e., \code{members=1:24}), and 28 in the case of the November initializations.

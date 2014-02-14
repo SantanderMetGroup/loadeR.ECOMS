@@ -19,7 +19,7 @@ See \code{?maptools::wrld_simpl}
 \examples{
 data(world_map)
 proj4string(world_map)
-plot(world_map)
+plot(world_map, axes = TRUE)
 }
 \keyword{datasets}
  
