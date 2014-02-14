@@ -14,8 +14,10 @@ datasetInventory <- function(dataset = c("System4_seasonal_15", "System4_seasona
       }
       gds <- J("ucar.nc2.dt.grid.GridDataset")$open(data.url)
       varNames <- unlist(strsplit(gsub("\\[|]|\\s", "", gds$getGrids()$toString()), ","))
+      message("[",Sys.time(),"] The dataset contains ", length(varNames), " variables")
       var.list <- list()
       for (i in 1:length(varNames)) {
+            message("[", Sys.time(), "] Retrieving info for ", varNames[i], " (", i, " out of ", length(varNames), ")")
             dataVar <- gds$getDataVariable(varNames[i])
             description <- dataVar$getDescription()
             varName <- dataVar$getShortName()
@@ -90,11 +92,15 @@ datasetInventory <- function(dataset = c("System4_seasonal_15", "System4_seasona
                         charDates <- tryCatch({unlist(strsplit(gsub("\\[|]|\\s", "", gcs$getTimes()$toString()), split = ","))},
                                               error = function(err) {
                                                     rt.ax <- gcs$getRunTimeAxis()
-                                                    er <- rep("0000-00-00T00:00:00Z", 2)
-                                                      return(er)
+                                                    er <- c("1981-12-12T00:00:00Z", "2010-12-31T00:00:00Z")
+                                                    return(er)
                                               })
                         values <- strptime(charDates, format = "%Y-%m-%dT%H:%M:%SZ")
-                        time.agg <- difftime(values[2], values[1], units = "hours")
+                        if (grepl("CFSv2", dataset)) {
+                              time.agg <- as.difftime(6, units = "hours")
+                        } else {
+                              time.agg <- difftime(values[2], values[1], units = "hours")
+                        }
                         values <- paste(range(values), collapse = " to ")
                   }
                   if(grepl("^run", dimensions[j])) {
@@ -111,6 +117,7 @@ datasetInventory <- function(dataset = c("System4_seasonal_15", "System4_seasona
       }
       names(var.list) <- varNames
       gds$close()
+      message("[",Sys.time(),"]", " Done")
       return(var.list)
 }
 # End
