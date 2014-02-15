@@ -6,5 +6,5 @@ Version: 1.0
 Date: 2014-01-29
 Author: Santander Meteorology Group <http://www.meteo.unican.es>
 Maintainer: Joaquin Bedia <bediaj@unican.es>
-Description: This package enables access to hindcast datasets remotely stored at the ECOMS User Data Gateway, allowing the retrieval of dimensional slices of seasonal forecast data. The use of this package requires prior registration in the ECOMS UDG (go to <https://meteo.unican.es/trac/wiki/EcomsUdg/DataServer/Registration>).
+Description: This package enables access to hindcast datasets remotely stored at the ECOMS User Data Gateway, allowing the retrieval of dimensional slices of seasonal forecast data. The use of this package requires prior registration in the ECOMS-UDG (go to <https://meteo.unican.es/trac/wiki/EcomsUdg/DataServer/Registration>).
 License: GPL-2
