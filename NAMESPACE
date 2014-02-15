@@ -1,5 +1,5 @@
 import("rJava")
-importFrom("sp", SpatialPolygons, SpatialPoints, SpatialGrid)
+importFrom("sp", SpatialPolygonsDataFrame, SpatialPoints, SpatialGrid)
 export("datasetInventory",
        "loadSeasonalForecast",
        "loginECOMS_UDG")
