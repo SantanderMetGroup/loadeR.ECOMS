@@ -5,7 +5,7 @@
 Remote access to climate datasets stored in the ECOMS User Data Gateway
 }
 \description{
-This package enables access to hindcast datasets remotely stored at the ECOMS User Data Gateway, allowing the retrieval of dimensional slices of seasonal forecast data. The use of this package requires prior registration. Please refer to the \href{https://meteo.unican.es/trac/wiki/EcomsUdg}{ECOMS UDG wiki} for more details.
+This package enables access to hindcast datasets remotely stored at the ECOMS User Data Gateway, allowing the retrieval of dimensional slices of seasonal forecast data. The use of this package requires prior registration. Please refer to the \href{http://meteo.unican.es/ecoms-udg}{ECOMS UDG wiki} for more details.
 }
 \details{
 \tabular{ll}{
