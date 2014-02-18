@@ -7,4 +7,4 @@ As part of the data management activities in these projects, the [Santander Mete
 
 The ecomsUDG.Raccess is a R package envisaged as a R interface for accessing the hindcast datasets stored at the **ECOMS-UDG**.
 
-For more information visit the [ECOMS-UDG wiki!](http://wwww.meteo.unican.es/ecoms-udg). 
+For more information visit the [ECOMS-UDG wiki!](http://www.meteo.unican.es/ecoms-udg). 
