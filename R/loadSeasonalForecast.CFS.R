@@ -66,17 +66,8 @@ loadSeasonalForecast.CFS = function(grid, var, gcs, dic, members, latLon, timePa
             }
       }
       rm(foreDatesList)
-      if (!is.null(dic)) {
-            ltb <- as.difftime(dic$lower_time_bound, format = "%H", units = "hours")
-            utb <- as.difftime(dic$upper_time_bound, format = "%H", units = "hours")
-            foreDates <- foreDates - ltb
-            foreDates <- as.POSIXlt(foreDates)
-            foreDatesEnd <- foreDates + utb
-      } else {
-            varTimeStep <- difftime(foreDates[2],foreDates[1])
-            foreDatesEnd <- foreDates + varTimeStep
-      }
-      foreDatesEnd <- as.POSIXlt(foreDatesEnd)
+      foreDates <- timeBounds(dic, foreDates)$start
+      foreDatesEnd <- timeBounds(dic, foreDates)$end       
       # Data Retrieval
       dimNames <- unlist(strsplit(grid$getVariable()$getDimensionsString(), split="\\s"))
       if (length(grep("height_above_ground", dimNames)) == 0) {

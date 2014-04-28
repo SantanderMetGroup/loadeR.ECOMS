@@ -59,17 +59,8 @@ loadSeasonalForecast.S4 <- function(dataset, var, grid, gcs, dic, members, latLo
             }
       }
       rm(foreDatesList)
-      if (!is.null(dic)) {
-            ltb <- as.difftime(dic$lower_time_bound, format = "%H", units = "hours")
-            utb <- as.difftime(dic$upper_time_bound, format = "%H", units = "hours")
-            foreDates <- foreDates - ltb
-            foreDates <- as.POSIXlt(foreDates)
-            foreDatesEnd <- foreDates + utb
-      } else {
-            varTimeStep <- difftime(foreDates[2],foreDates[1])
-            foreDatesEnd <- foreDates + varTimeStep
-      }
-      foreDatesEnd <- as.POSIXlt(foreDatesEnd)
+      foreDates <- timeBounds(dic, foreDates)$start
+      foreDatesEnd <- timeBounds(dic, foreDates)$end       
       # Data retrieval
       Members <- list()
       foreDatesNew <- foreDates
