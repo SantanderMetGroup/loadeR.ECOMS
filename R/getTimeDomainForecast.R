@@ -1,6 +1,6 @@
 getTimeDomainForecast <- function(gcs, season, years, leadMonth) {
       if (is.null(season)) {
-            auxDateString <- gsub("\\[|]", "", unlist(strsplit(gcs$getTimeAxisForRun(as.integer(1))$getCalendarDates()$toString(), ", ")))
+            auxDateString <- gsub("\\[|]", "", unlist(strsplit(gcs$getTimeAxisForRun(0L)$getCalendarDates()$toString(), ", ")))
             season <- 1:length(unique(as.POSIXlt(strptime(auxDateString, format = "%Y-%m-%dT%H:%M:%SZ"))$mon))
             rm(auxDateString)
       }
