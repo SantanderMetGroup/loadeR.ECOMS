@@ -5,7 +5,7 @@ timeBounds <- function(dic, foreDates) {
             foreDates <- foreDates - ltb
             foreDates <- as.POSIXlt(foreDates)
             varTimeStep <- strptime(dic$time_step, format = "%Hh")$hour
-            foreDatesEnd <- foreDates + varTimeStep*3600
+            foreDatesEnd <- foreDates + varTimeStep * 3600
       } else {
             varTimeStep <- difftime(foreDates[2], foreDates[1])
             foreDatesEnd <- foreDates + varTimeStep

@@ -28,7 +28,7 @@ getTimeDomainForecast <- function(gcs, season, years, leadMonth) {
       }
       # Month to take the initialization 
       validMonth <- season[1] - leadMonth 
-      if (season[1] - leadMonth < 1) {
+      if ((season[1] - leadMonth) < 1) {
             validMonth <- validMonth + 12
             years <- years - 1 
       }
