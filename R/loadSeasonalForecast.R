@@ -19,9 +19,11 @@ loadSeasonalForecast = function(dataset = c("System4_seasonal_15", "System4_seas
       } else {
             dic <- NULL
       }
-      season <- as.integer(season)
-      if (min(season) < 1 | max(season) > 12) {
-            stop("Invalid season definition")
+      if (!is.null(season)) {
+            season <- as.integer(season)
+            if (min(season) < 1 | max(season) > 12) {
+                  stop("Invalid season definition")
+            }
       }
       leadMonth <- as.integer(leadMonth)
       if (leadMonth < 1) {
