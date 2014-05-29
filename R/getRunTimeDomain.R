@@ -1,15 +1,14 @@
-getTimeDomainForecast <- function(gcs, season, years, leadMonth) {
+getRunTimeDomain <- function(grid, season, years, leadMonth) {
+      gcs <- grid$getCoordinateSystem()
       if (is.null(season)) {
-            auxDateString <- gsub("\\[|]", "", unlist(strsplit(gcs$getTimeAxisForRun(0L)$getCalendarDates()$toString(), ", ")))
-            season <- 1:length(unique(as.POSIXlt(strptime(auxDateString, format = "%Y-%m-%dT%H:%M:%SZ"))$mon))
-            rm(auxDateString)
+            season <- unique(javaCalendarDate2rPOSIXlt(gcs$getTimeAxisForRun(0L)$getCalendarDates())$mon + 1)
       }
-      charRunTimes <- gsub("\\[|]|\\s", "", unlist(strsplit(gcs$getRunTimeAxis()$getCalendarDates()$toString(), ","),""))
-      runDatesAll <- strptime(gsub("\\[|]|\\s", "", unlist(strsplit(charRunTimes, ","))), format = "%Y-%m-%dT%H:%M:%SZ")
-      rm(charRunTimes)
-      startDay <- runDatesAll[1]
+      rt.axis <- gcs$getRunTimeAxis()
+      runDatesAll <- javaCalendarDate2rPOSIXlt(rt.axis$getCalendarDates())
+      startDay <- javaCalendarDate2rPOSIXlt(rt.axis$getCalendarDateRange()$getStart())
+      endDay <- javaCalendarDate2rPOSIXlt(rt.axis$getCalendarDateRange()$getEnd())
       startYear <- startDay$year + 1900
-      endYear <- runDatesAll[length(runDatesAll)]$year + 1900
+      endYear <- endDay$year + 1900
       allYears <- startYear : endYear
       if (is.null(years)) {
             years <- allYears
