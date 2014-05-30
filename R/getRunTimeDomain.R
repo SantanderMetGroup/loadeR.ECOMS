@@ -43,6 +43,18 @@ getRunTimeDomain <- function(grid, season, years, leadMonth) {
       } else {
             year.cross.ind <- NULL
       }
-      return(list("validMonth" = validMonth, "years" = years, "season" = season, "year.cross" = year.cross.ind, "runDatesAll" = runDatesAll))
+      runTimesAll <- which(runDatesAll$mon == (validMonth - 1))
+      if (length(runTimesAll) == 0) {
+            stop(paste("Incompatible 'leadMonth' and 'season' argument values.\nInitializations in", paste(month.name[unique(timePars$runDatesAll$mon + 1)], collapse = ", ")))
+      }
+      runDatesValidMonth <- runDatesAll[runTimesAll]
+      runTimes <- runTimesAll[which((runDatesValidMonth$year + 1900) %in% years)]
+      rm(runDatesValidMonth, runTimesAll)
+      runDates <- runDatesAll[runTimes]
+      # java ranges
+      runTimeRanges <- lapply(1:length(runTimes), function(x) {
+            .jnew("ucar/ma2/Range", as.integer(runTimes[x] - 1), as.integer(runTimes[x] - 1))
+            })
+      return(list("validMonth" = validMonth, "years" = years, "season" = season, "year.cross" = year.cross.ind, "runDates" = runDates, "runTimeRanges" = runTimeRanges))
 }
 # End
