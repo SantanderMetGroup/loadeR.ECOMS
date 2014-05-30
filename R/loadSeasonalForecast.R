@@ -1,23 +1,17 @@
-loadSeasonalForecast = function(dataset = c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15", "CFSv2_seasonal_16"), var, dictionary = TRUE, members = NULL, lonLim = NULL, latLim = NULL, season = NULL, years = NULL, leadMonth = 1) {
-      dataset <- match.arg(dataset)
-      if (dataset == "System4_seasonal_15") {
-            data.url <- "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Seasonal_15Members.ncml"
-      }
-      if (dataset == "System4_seasonal_51") {
-            data.url <- "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Seasonal_51Members.ncml"
-      }
-      if (dataset == "System4_annual_15") {
-            data.url <- "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Annual_15Members.ncml"
-      }
-      if (dataset == "CFSv2_seasonal_16") {
-            data.url <- "http://www.meteo.unican.es/tds5/dodsC/cfs/agg/cfsAgg_fmrc.ncd"
-      }
+#' Loads user-defined subsets of hindcast datasets stored at ECOMS-UDG
+#' 
+
+loadSeasonalForecast <- function(dataset, var, dictionary = TRUE, 
+                                members = NULL, lonLim = NULL, latLim = NULL, season = NULL, years = NULL, leadMonth = 1,
+                                verifTime = c(NULL, 0, 6, 12, 18), aggr = c("none", "mean", "min", "max", "sum")) {
+      url <- dataURL(dataset)
+      dic <- NULL
       if (isTRUE(dictionary)) {
-            dicPath <- paste(find.package("ecomsUDG.Raccess"), "dictionaries", sep = "/")
-            dic <- dictionaryLookup(list.files(dicPath, pattern = dataset, full.names = TRUE), var)
-            var <- dic$short_name
-      } else {
-            dic <- NULL
+            #dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
+            # OJO PROVISIONAL
+            dicPath <- "./inst/dictionaries/System4_seasonal_15.dic"
+            dic <- dictionaryLookup(dicPath, var)
+            var <- dic$short_name      
       }
       if (!is.null(season)) {
             season <- as.integer(season)
@@ -29,22 +23,18 @@ loadSeasonalForecast = function(dataset = c("System4_seasonal_15", "System4_seas
       if (leadMonth < 1) {
             stop("Invalid lead time definition")
       }
-      gds <- J("ucar.nc2.dt.grid.GridDataset")$open(data.url)
+      gds <- J("ucar.nc2.dt.grid.GridDataset")$open(url$URL)
       grid <- gds$findGridByShortName(var)
       if (is.null(grid)) {
             stop("Variable requested not found.\nCheck variables using 'datasetInventory'")
       }
-      gcs <- grid$getCoordinateSystem()
-      latLon <- getLatLonDomain(gcs, lonLim, latLim)
-      timePars <- getTimeDomainForecast(gcs, season, years, leadMonth)
+      latLon <- getLatLonDomainForecast(grid, lonLim, latLim)
+      runTimePars <- getRunTimeDomain(grid, season, years, leadMonth)
       if (grepl("^System4", dataset)) {
-            out <- loadSeasonalForecast.S4(dataset, var, grid, gcs, dic, members, latLon, timePars)
-      }
-      if (grepl("^CFS", dataset)) {
-            out <- loadSeasonalForecast.CFS(grid, var, gcs, dic, members, latLon, timePars)
+            out <- loadSeasonalForecast.S4(dataset, var, grid, dic, members, latLon, runTimePars, verifTime)
       }
       gds$close()
       message("[",Sys.time(),"]", " Done")
       return(out)
-}
+}      
 # End
