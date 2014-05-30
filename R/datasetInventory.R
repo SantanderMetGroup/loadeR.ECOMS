@@ -1,4 +1,4 @@
-datasetInventory <- function(dataset = c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15", "CFSv2_seasonal_16")) {
+datasetInventory <- function(dataset) {
       url <- dataURL(dataset)
       gds <- J("ucar.nc2.dt.grid.GridDataset")$open(url$URL)
       varNames <- javaString2rChar(gds$getGrids()$toString())
