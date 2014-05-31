@@ -48,21 +48,25 @@ getForecastTimeDomain.S4 <- function (grid, runTimePars, verifTime) {
             deaccumFromFirst <- FALSE
             rm(auxDates)
       }
-      foreDates <- do.call("c", foreDatesList)
       # Sub-routine for setting stride and shift along time dimension    
-      
-      if (!is.null(verifTime)) { 
-            verifTimeInd <- which(foreDatesList[[i]]$hour == verifTime)
-            if (length(verifTimeInd) == 0) {
-                  stop("Non-existing verification time selected.\nCheck value of argument 'verifTime'")
-            }
-            foreTimeShift <- as.integer(-(verifTimeInd[1] - 1))
-            foreDatesList[[i]] <- foreDatesList[[i]][verifTimeInd]
-            # Meter Stride
-      } else {
+      if (is.null(verifTime)) { 
             foreTimeStride <- 1L
             foreTimeShift <- 0L
+      } else {
+            verifTimeIndList <- lapply(1:length(foreDatesList), function(x) {
+                  which(foreDatesList[[x]]$hour == verifTime)
+            })
+            if (length(verifTimeIndList[[1]]) == 0) {
+                  stop("Non-existing verification time selected.\nCheck value of argument 'verifTime'")
+            }
+            foreDatesList <- lapply(1:length(foreDatesList), function(x) {
+                  foreDatesList[[x]][verifTimeIndList[[x]]]
+            })
+            foreTimeStride <- as.integer(diff(verifTimeIndList[[1]])[1])
+            foreTimeShift <- as.integer(-(verifTimeIndList[[1]][1] - 1))
+            rm(verifTimeIndList)
       }
+      foreDates <- do.call("c", foreDatesList)
       rm(foreDatesList)
       # Sub-routine for adjusting times in case of deaccumulation
       deaccumFromFirst <- NULL
