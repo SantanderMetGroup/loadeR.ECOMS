@@ -1,4 +1,4 @@
-getRunTimeDomain <- function(grid, season, years, leadMonth) {
+getRunTimeDomain <- function(dataset, grid, season, years, leadMonth) {
       gcs <- grid$getCoordinateSystem()
       if (is.null(season)) {
             season <- unique(javaCalendarDate2rPOSIXlt(gcs$getTimeAxisForRun(0L)$getCalendarDates())$mon + 1)
@@ -43,18 +43,13 @@ getRunTimeDomain <- function(grid, season, years, leadMonth) {
       } else {
             year.cross.ind <- NULL
       }
-      runTimesAll <- which(runDatesAll$mon == (validMonth - 1))
-      if (length(runTimesAll) == 0) {
-            stop(paste("Incompatible 'leadMonth' and 'season' argument values.\nInitializations in", paste(month.name[unique(timePars$runDatesAll$mon + 1)], collapse = ", ")))
+      # runtime parameters depending on model
+      if (grepl("CFSv2", dataset)) {
+            rtPars <- getRunTimeDomain.CFS(runDatesAll, validMonth, members)  
       }
-      runDatesValidMonth <- runDatesAll[runTimesAll]
-      runTimes <- runTimesAll[which((runDatesValidMonth$year + 1900) %in% years)]
-      rm(runDatesValidMonth, runTimesAll)
-      runDates <- runDatesAll[runTimes]
-      # java ranges
-      runTimeRanges <- lapply(1:length(runTimes), function(x) {
-            .jnew("ucar/ma2/Range", as.integer(runTimes[x] - 1), as.integer(runTimes[x] - 1))
-            })
-      return(list("validMonth" = validMonth, "years" = years, "season" = season, "year.cross" = year.cross.ind, "runDates" = runDates, "runTimeRanges" = runTimeRanges))
+      if (grepl("^System4", dataset)) {
+            rtPars <- getRunTimeDomain.S4(runDatesAll, validMonth)  
+      }
+      return(list("validMonth" = validMonth, "years" = years, "season" = season, "year.cross" = year.cross.ind, "runDates" = rtPars$runDates, "runTimeRanges" = rtPars$runTimeRanges))
 }
 # End
