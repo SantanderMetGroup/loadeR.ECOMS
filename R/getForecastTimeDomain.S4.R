@@ -83,12 +83,12 @@ getForecastTimeDomain.S4 <- function (grid, runTimePars, verifTime) {
             }
       }
       # Sub-routine for calculation of time bounds
-      forecastDates <- timeBounds(dic, foreDates)
+      foreDates <- timeBounds(dic, foreDates)
       # Java forecast time ranges list along rt axes
       foreTimeRangesList <- lapply(1:length(foreTimesList), function(x) {
             .jnew("ucar/ma2/Range", as.integer(foreTimesList[[x]][1] - 1), as.integer(foreTimesList[[x]][length(foreTimesList[[x]])] - 1), foreTimeStride)$shiftOrigin(foreTimeShift)
             
       })
-      return(list("forecastDates" = forecastDates, "ForeTimeRangesList" = foreTimeRangesList, "deaccumFromFirst" = deaccumFromFirst))
+      return(list("forecastDates" = foreDates, "ForeTimeRangesList" = foreTimeRangesList, "deaccumFromFirst" = deaccumFromFirst))
 }
 # End
