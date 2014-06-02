@@ -24,7 +24,11 @@ loadSeasonalForecast.S4 <- function(dataset, var, grid, dic, members, latLon, ru
       if (isTRUE(latLon$revLat)) {
             mdArray <- revArrayLatDim(mdArray, grid)
       }
-      return(list("VarName" = var,
+      isStandard <- TRUE
+      if (is.null(dic)) {
+            isStandard <- FALSE
+      }
+      return(list("Variable" = list("varName" = var, "isStandard" = isStandard),
                   "Data" = mdArray,
                   "xyCoords" = c(latLon$xyCoords, "CRS_string" = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), 
                   "ForecastDates" = foreTimePars$forecastDates,
