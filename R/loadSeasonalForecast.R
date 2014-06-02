@@ -9,9 +9,11 @@ loadSeasonalForecast <- function(dataset, var, dictionary = TRUE,
       if (isTRUE(dictionary)) {
             #dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
             # OJO PROVISIONAL
-            dicPath <- "./inst/dictionaries/System4_seasonal_15.dic"
+            dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
             dic <- dictionaryLookup(dicPath, var)
-            var <- dic$short_name      
+            shortName <- dic$short_name      
+      } else {
+            shortName <- var
       }
       if (!is.null(season)) {
             season <- as.integer(season)
@@ -24,16 +26,22 @@ loadSeasonalForecast <- function(dataset, var, dictionary = TRUE,
             stop("Invalid lead time definition")
       }
       gds <- J("ucar.nc2.dt.grid.GridDataset")$open(url$URL)
-      grid <- gds$findGridByShortName(var)
+      grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
             stop("Variable requested not found.\nCheck variables using 'datasetInventory'")
       }
       latLon <- getLatLonDomainForecast(grid, lonLim, latLim)
-      runTimePars <- getRunTimeDomain(grid, season, years, leadMonth)
+      runTimePars <- getRunTimeDomain(dataset, grid, season, years, leadMonth)
+      # S4
       if (grepl("^System4", dataset)) {
             out <- loadSeasonalForecast.S4(dataset, var, grid, dic, members, latLon, runTimePars, verifTime)
       }
+      # CFSv2
+      if (grepl("CFSv2", dataset)) {
+            out <- loadSeasonalForecast.CFS(var, grid, dic, latLon, runTimePars, verifTime)
+      }
       gds$close()
+      out <- c(out, "Members" = list(paste("Member_", members, sep = "")))
       message("[",Sys.time(),"]", " Done")
       return(out)
 }      
