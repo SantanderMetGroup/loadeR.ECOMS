@@ -55,7 +55,7 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
             dimNames <- dimNamesRef[-which(dim(mdArray) == 1)]
             mdArray <- drop(mdArray)
       }
-      if (grep("run", dimNames) > 0) {
+      if (!is.na(match("run", dimNames))) {
             dimNames <- gsub("run", "member", dimNames)
       }
       attr(mdArray, "dimensions") <- dimNames
