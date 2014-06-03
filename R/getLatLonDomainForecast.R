@@ -25,6 +25,9 @@ getLatLonDomainForecast <- function(grid, lonLim, latLim) {
       }
       if (is.null(lonLim)) {
             lonLim <- c(bboxDataset$getLonMin(), bboxDataset$getLonMax())
+            if (any(lonLim > 180)) {
+                  lonLim <- lonLim - 180      
+            }
       }
       if (is.null(latLim)) {
             latLim <- c(bboxDataset$getLatMin(), bboxDataset$getLatMax())
@@ -40,14 +43,7 @@ getLatLonDomainForecast <- function(grid, lonLim, latLim) {
             llRanges[[1]] <- gcs$getRangesFromLatLonRect(.jnew("ucar/unidata/geoloc/LatLonRect", spec1))
             llRanges[[2]] <- gcs$getRangesFromLatLonRect(.jnew("ucar/unidata/geoloc/LatLonRect", spec2))
       } else {
-#             if (bboxDataset$getLonMin() < 0 & bboxDataset$getLonMax() >= 0 & bboxRequest$crossDateline()) {
-#                   .jnew("java/lang/String", paste(latLim[1], lonLim[1], deltaLat, 180 - lonLim[1], sep = ", "))
-#                   .jnew("java/lang/String", paste(latLim[1], lonLim[1], deltaLat, lonLim[1] - 180, sep = ", "))
-#                   llRanges[[1]] <- gcs$getRangesFromLatLonRect(.jnew("ucar/unidata/geoloc/LatLonRect", spec1))
-#                   llRanges[[2]] <- gcs$getRangesFromLatLonRect(.jnew("ucar/unidata/geoloc/LatLonRect", spec2))
-#             } else {
             llRanges[[1]] <- gcs$getRangesFromLatLonRect(.jnew("ucar/unidata/geoloc/LatLonRect", spec))
-#             }
       }
       # Coordinates
       if (pointXYindex[1] >= 0) {
@@ -64,8 +60,10 @@ getLatLonDomainForecast <- function(grid, lonLim, latLim) {
                   } 
             }
             lonSlice <- do.call("c", lonAux)      
-      }    
+      }
+      
       lonSlice[which(lonSlice > 180)] <- lonSlice[which(lonSlice > 180)] - 360
+      lonSlice <- sort(lonSlice)
       aux <- grid$makeSubset(.jnull(), .jnull(), .jnull(), .jnull(), llRanges[[1]]$get(0L), llRanges[[1]]$get(1L))
       revLat <- FALSE
       if (pointXYindex[2] >= 0) {
