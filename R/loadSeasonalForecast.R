@@ -31,7 +31,7 @@ loadSeasonalForecast <- function(dataset, var, dictionary = TRUE,
             stop("Variable requested not found.\nCheck variables using 'datasetInventory'")
       }
       latLon <- getLatLonDomainForecast(grid, lonLim, latLim)
-      runTimePars <- getRunTimeDomain(dataset, grid, season, years, leadMonth)
+      runTimePars <- getRunTimeDomain(dataset, grid, members, season, years, leadMonth)
       # S4
       if (grepl("^System4", dataset)) {
             out <- loadSeasonalForecast.S4(dataset, var, grid, dic, members, latLon, runTimePars, verifTime)

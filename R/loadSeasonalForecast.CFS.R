@@ -1,6 +1,6 @@
 loadSeasonalForecast.CFS = function(var, grid, dic, latLon, runTimePars, verifTime) {
       gcs <- grid$getCoordinateSystem()
-      foreTimePars <- getForecastTimeDomain.CFS(grid, runTimePars, verifTime)
+      foreTimePars <- getForecastTimeDomain.CFS(grid, dic, runTimePars, verifTime)
       mdArray <- makeSubset.CFS(grid, latLon, runTimePars, foreTimePars)
       mdArray <- dictionaryTransformForecast(dic, foreTimePars, mdArray)
       if (isTRUE(latLon$revLat)) {

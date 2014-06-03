@@ -18,7 +18,7 @@
 
 loadSeasonalForecast.S4 <- function(dataset, var, grid, dic, members, latLon, runTimePars, verifTime) {    
       memberRangeList <- getMemberDomain.S4(grid, dataset, members)
-      foreTimePars <- getForecastTimeDomain.S4(grid, runTimePars, verifTime)
+      foreTimePars <- getForecastTimeDomain.S4(grid, dataset, dic, runTimePars, verifTime)
       mdArray <- makeSubset.S4(grid, latLon, runTimePars, memberRangeList, foreTimePars)
       mdArray <- dictionaryTransformForecast(dic, foreTimePars, mdArray)
       if (isTRUE(latLon$revLat)) {

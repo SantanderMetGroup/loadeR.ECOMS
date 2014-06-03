@@ -4,6 +4,7 @@
 #' 
 #' @param runDatesAll A POSIXlt vector with all runtime dates in the dataset    
 #' @param validMonth Integer. Initialization month.
+#' @param years Numeric vector of years selected
 #' @return A list with two elements:
 #' \begin{itemize}
 #' \item runDates a POSIXlt vector of initialization dates
@@ -13,10 +14,10 @@
 #' different ensemble member configuration
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com}
 #' 
-getRunTimeDomain.S4 <- function(runDatesAll, validMonth) {
+getRunTimeDomain.S4 <- function(runDatesAll, validMonth, years) {
       runTimesAll <- which(runDatesAll$mon == (validMonth - 1))
       if (length(runTimesAll) == 0) {
-            stop(paste("Incompatible 'leadMonth' and 'season' argument values.\nInitializations in", paste(month.name[unique(timePars$runDatesAll$mon + 1)], collapse = ", ")))
+            stop(paste("Incompatible 'leadMonth' and 'season' argument values.\nInitializations in", paste(month.name[unique(runDatesAll$mon + 1)], collapse = ", ")))
       }
       runDatesValidMonth <- runDatesAll[runTimesAll]
       runTimes <- runTimesAll[which((runDatesValidMonth$year + 1900) %in% years)]

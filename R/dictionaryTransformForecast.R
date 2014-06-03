@@ -21,7 +21,7 @@ dictionaryTransformForecast <- function(dic, foreTimePars, mdArray) {
 	            foreTimePars$ForeTimeRangesList[[x]]$length()})))
             dff <- foreTimePars$deaccumFromFirst
             if (length(dimNames) == 1) {
-                  mdArray <- deaccum(x, t.ranges, dff)
+                  mdArray <- deaccum(mdArray, t.ranges, dff)
                   attr(mdArray, "dimensions") <- dimNames
             } else {
                   margin <- c(1:length(dim(mdArray)))[-grep("^time", dimNames)]  

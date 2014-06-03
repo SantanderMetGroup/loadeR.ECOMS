@@ -17,7 +17,7 @@
 #' \end{itemize}
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com} 
 #' 
-getForecastTimeDomain.CFS <- function (grid, runTimePars, verifTime) {
+getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, verifTime) {
       gcs <- grid$getCoordinateSystem()
       foreTimesList <- rep(list(bquote(), length(runTimePars$runTimeRanges))) 
       foreDatesList <- foreTimesList

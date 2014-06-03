@@ -17,7 +17,7 @@
 #' @references \url{http://meteo.unican.es/ecoms-udg/DataServer/Datasets/CFSv2}      
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com}
 
-getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members) {
+getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years) {
       if (is.null(members)) {
             members <- 1:16      
       }

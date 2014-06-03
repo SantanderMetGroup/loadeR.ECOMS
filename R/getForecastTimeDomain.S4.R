@@ -2,8 +2,11 @@
 #' 
 #' This is a subroutine of \code{\link{loadSeasonalForecast.S4}}
 #' 
-#' @param gcs a java \sQuote{GridCoordinateSystem}
+#' @param grid a java \sQuote{GeoGrid}
+#' @param dataset character string of the dataset
+#' @param dictionary dictionary information
 #' @param runTimePars A list of elements as returned by \code{\link{getRunTimeDomain}}
+#' @param verifTime Numeric or NULL. Verification time.
 #' @return A list with the following elements:
 #' \begin{itemize}
 #' \item{forecastDates}{A list with POSIXlt dates defining the start and end of the 
@@ -19,7 +22,7 @@
 #' \end{itemize}
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com} 
 
-getForecastTimeDomain.S4 <- function (grid, runTimePars, verifTime) {
+getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, verifTime) {
       gcs <- grid$getCoordinateSystem()
       foreTimesList <- rep(list(bquote()), length(runTimePars$runTimeRanges))
       foreDatesList <- foreTimesList
@@ -28,12 +31,12 @@ getForecastTimeDomain.S4 <- function (grid, runTimePars, verifTime) {
             ind <- which((auxDates$mon + 1) %in% runTimePars$season)
             if (grepl("51$", dataset)) {
                   if (!is.null(runTimePars$year.cross)) {
-                        rm.ind <- which((auxDates$mon + 1) == runTimePars$season[timePars$year.cross] & (auxDates$year + 1900) == (timePars$years[i] + 1))
+                        rm.ind <- which((auxDates$mon + 1) == runTimePars$season[runTimePars$year.cross] & (auxDates$year + 1900) == (runTimePars$years[i] + 1))
                   } else {
-                        if (timePars$season[1] < runTimePars$validMonth) {
-                              rm.ind <- which((auxDates$mon + 1) %in% runTimePars$season & (auxDates$year + 1900) != (timePars$years[i] + 1))
+                        if (runTimePars$season[1] < runTimePars$validMonth) {
+                              rm.ind <- which((auxDates$mon + 1) %in% runTimePars$season & (auxDates$year + 1900) != (runTimePars$years[i] + 1))
                         } else {
-                              rm.ind <- which((auxDates$mon + 1) %in% runTimePars$season & (auxDates$year + 1900) != (timePars$years[i]))
+                              rm.ind <- which((auxDates$mon + 1) %in% runTimePars$season & (auxDates$year + 1900) != (runTimePars$years[i]))
                         }
                   }
                   if (length(rm.ind) > 0) {
@@ -86,7 +89,7 @@ getForecastTimeDomain.S4 <- function (grid, runTimePars, verifTime) {
       foreDates <- timeBounds(dic, foreDates)
       # Java forecast time ranges list along rt axes
       foreTimeRangesList <- lapply(1:length(foreTimesList), function(x) {
-            .jnew("ucar/ma2/Range", as.integer(foreTimesList[[x]][1] - 1), as.integer(foreTimesList[[x]][length(foreTimesList[[x]])] - 1), foreTimeStride)$shiftOrigin(foreTimeShift)
+            .jnew("ucar/ma2/Range", as.integer(foreTimesList[[x]][1] - 1), as.integer(tail(foreTimesList[[x]], 1L) - 1), foreTimeStride)$shiftOrigin(foreTimeShift)
             
       })
       return(list("forecastDates" = foreDates, "ForeTimeRangesList" = foreTimeRangesList, "deaccumFromFirst" = deaccumFromFirst))

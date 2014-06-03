@@ -1,4 +1,4 @@
-getRunTimeDomain <- function(dataset, grid, season, years, leadMonth) {
+getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
       gcs <- grid$getCoordinateSystem()
       if (is.null(season)) {
             season <- unique(javaCalendarDate2rPOSIXlt(gcs$getTimeAxisForRun(0L)$getCalendarDates())$mon + 1)
@@ -45,10 +45,10 @@ getRunTimeDomain <- function(dataset, grid, season, years, leadMonth) {
       }
       # runtime parameters depending on model
       if (grepl("CFSv2", dataset)) {
-            rtPars <- getRunTimeDomain.CFS(runDatesAll, validMonth, members)  
+            rtPars <- getRunTimeDomain.CFS(runDatesAll, validMonth, members, years)  
       }
       if (grepl("^System4", dataset)) {
-            rtPars <- getRunTimeDomain.S4(runDatesAll, validMonth)  
+            rtPars <- getRunTimeDomain.S4(runDatesAll, validMonth, years)  
       }
       return(list("validMonth" = validMonth, "years" = years, "season" = season, "year.cross" = year.cross.ind, "runDates" = rtPars$runDates, "runTimeRanges" = rtPars$runTimeRanges))
 }
