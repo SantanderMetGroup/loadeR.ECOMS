@@ -50,7 +50,6 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
             rm(aux.list1)
       }
       mdArray <- do.call("abind", aux.list)
-      str(mdArray)
       rm(aux.list)
       if (any(dim(mdArray) == 1)) {
             dimNames <- dimNamesRef[-which(dim(mdArray) == 1)]
