@@ -15,6 +15,6 @@ dataURL <- function(dataset) {
             "System4_seasonal_15" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Seasonal_15Members_alpha.ncml", "excludeVars" = c("zsfc", "sd_nc", "sd", "u10m", "v10m","u850mb", "u925mb", "v850mb", "v925mb", "z1000mb", "z700mb")),
             "System4_seasonal_51" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Seasonal_51Members.ncml", "excludeVars" = NULL),
             "System4_annual_15" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Annual_15Members.ncml", "excludeVars" = NULL),
-            "CFSv2_seasonal_16" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/cfs/agg/cfsAgg_fmrc.ncd", "excludeVars" = NULL))
+            "CFSv2_seasonal_16" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/cfs/agg/cfsAgg_fmrc.ncd", "excludeVars" = "Pressure_reduced_to_MSL_msl"))
 }
 # End
