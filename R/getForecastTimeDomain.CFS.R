@@ -19,7 +19,7 @@
 #' 
 getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, verifTime) {
       gcs <- grid$getCoordinateSystem()
-      foreTimesList <- rep(list(bquote(), length(runTimePars$runTimeRanges))) 
+      foreTimesList <- rep(list(bquote()), length(runTimePars$runTimeRanges)) 
       foreDatesList <- foreTimesList
       for (x in 1:length(runTimePars$runTimeRanges)) {
             aux.foreTimesList <- rep(list(bquote()), length(runTimePars$runTimeRanges[[x]]))
