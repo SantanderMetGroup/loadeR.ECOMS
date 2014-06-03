@@ -3,14 +3,17 @@ getLatLonDomainForecast <- function(grid, lonLim, latLim) {
       bboxDataset <- gcs$getLatLonBoundingBox()
       pointXYindex <- c(-1L, -1L)
       if (length(lonLim) == 1 | length(latLim) == 1) {
+            if (bboxDataset$getLonMin() >= 0) {
+                  lon.aux <- lonLim[which(lonLim < 0)] + 360
+            }
             if (length(lonLim) == 1) {
-                  pointXYindex[1] <- gcs$findXYindexFromCoord(lonLim, latLim[1], .jnull())[1]
+                  pointXYindex[1] <- gcs$findXYindexFromCoord(lon.aux, latLim[1], .jnull())[1]
                   if (pointXYindex[1] < 0) {
                         stop("Selected X point coordinate is out of range")
                   }
             }
             if (length(latLim) == 1) {
-                  pointXYindex[2] <- gcs$findXYindexFromCoord(lonLim[1], latLim, .jnull())[2]
+                  pointXYindex[2] <- gcs$findXYindexFromCoord(lon.aux[1], latLim, .jnull())[2]
                   if (pointXYindex[2] < 0) {
                         stop("Selected Y point coordinate is out of range")
                   }
