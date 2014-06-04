@@ -3,7 +3,7 @@ datasetInventory <- function(dataset) {
       gds <- J("ucar.nc2.dt.grid.GridDataset")$open(url$URL)
       varNames <- javaString2rChar(gds$getGrids()$toString())
       if (!is.null(url$excludeVars)) {
-            varNames <- varNames[-match(url$excludeVars, varNames)]
+            varNames <- varNames[-na.omit(match(url$excludeVars, varNames))] # na.omit just in case any var is removed from server
       }
       message("[",Sys.time(),"] The dataset contains ", length(varNames), " variables")
       var.list <- list()
