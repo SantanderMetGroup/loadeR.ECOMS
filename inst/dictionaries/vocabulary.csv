@@ -13,3 +13,10 @@ snld,snow depth,mm
 huss,2-meter specific humidity,kg.kg-1
 hurs,2-meter relative humidity,%
 ps,surface air pressure,Pa
+wss,near-surface wind speed,m.s-1
+ua@850,eastward wind at 850 mb isobaric surface,m
+ua@925,eastward wind at 925 mb isobaric surface,m
+va@850,northward wind at 850 mb isobaric surface,m
+va@925,northward wind at 925 mb isobaric surface,m
+zg@700,geopotential height at 700 mb isobaric surface,m
+zg@1000,geopotential height at 1000 mb isobaric surface,m
