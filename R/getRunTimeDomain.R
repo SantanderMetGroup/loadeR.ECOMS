@@ -1,4 +1,5 @@
 getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
+      message("[", Sys.time(), "] Defining initialization time parameters")
       gcs <- grid$getCoordinateSystem()
       if (is.null(season)) {
             season <- unique(javaCalendarDate2rPOSIXlt(gcs$getTimeAxisForRun(0L)$getCalendarDates())$mon + 1)
