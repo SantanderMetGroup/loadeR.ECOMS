@@ -28,5 +28,5 @@ getRunTimeDomain.S4 <- function(runDatesAll, validMonth, years) {
             .jnew("ucar/ma2/Range", as.integer(runTimes[x] - 1), as.integer(runTimes[x] - 1))
       })
       return(list("runDates" = runDates, "runTimeRanges" = runTimeRanges))
-      
 }
+# End
