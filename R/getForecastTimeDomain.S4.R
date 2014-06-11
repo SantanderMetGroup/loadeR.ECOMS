@@ -6,7 +6,7 @@
 #' @param dataset character string of the dataset
 #' @param dictionary dictionary information
 #' @param runTimePars A list of elements as returned by \code{\link{getRunTimeDomain}}
-#' @param verifTime Numeric or NULL. Verification time.
+#' @param time Verification time.
 #' @return A list with the following elements:
 #' \begin{itemize}
 #' \item{forecastDates}{A list with POSIXlt dates defining the start and end of the 
@@ -19,10 +19,12 @@
 #' \item{deaccumFromFirst}{NULL if no deaccumulation is performed. TRUE or FALSE if deaccumulation is performed from
 #' the first time of the runtime axis or not respectively. If FALSE, an additional runtime is added at the beginning
 #' of each element of the runTimeList to avoid losing the first day when performing deaccumulation.}
+#' \item{doDailyMean}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
+#' to \code{\link{makeSubset.S4}} to undertake the pertinent aggregation if TRUE.
 #' \end{itemize}
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com} 
 
-getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, verifTime) {
+getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time) {
       gcs <- grid$getCoordinateSystem()
       foreTimesList <- rep(list(bquote()), length(runTimePars$runTimeRanges))
       foreDatesList <- foreTimesList
@@ -49,28 +51,37 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, verifTime
             }
             foreDatesList[[i]] <- auxDates[foreTimesList[[i]]]
             deaccumFromFirst <- FALSE
-            rm(auxDates)
+            auxDates <- NULL
       }
       # Sub-routine for setting stride and shift along time dimension    
-      if (is.null(verifTime)) { 
+      if (is.null(dic) & time != "none") {
+            stop("Time resolution especification incompatible with non-standard variable requests\nUse the dictionary or set the 'time' argument to NULL")
+      }
+      if (is.null(dic) | isTRUE(dic$doDailyMean)) {
             foreTimeStride <- 1L
             foreTimeShift <- 0L
       } else {
-            verifTimeIndList <- lapply(1:length(foreDatesList), function(x) {
-                  which(foreDatesList[[x]]$hour == verifTime)
-            })
-            if (length(verifTimeIndList[[1]]) == 0) {
-                  stop("Non-existing verification time selected.\nCheck value of argument 'verifTime'")
+            if (time == "DD" | time == "none") {
+                  foreTimeStride <- 1L
+                  foreTimeShift <- 0L
+            } else {
+                  time <- as.integer(time)
+                  timeIndList <- lapply(1:length(foreDatesList), function(x) {
+                        which(foreDatesList[[x]]$hour == time)
+                  })
+                  if (length(timeIndList[[1]]) == 0) {
+                        stop("Non-existing verification time selected.\nCheck value of argument 'time'")
+                  }
+                  foreDatesList <- lapply(1:length(foreDatesList), function(x) {
+                        foreDatesList[[x]][timeIndList[[x]]]
+                  })
+                  foreTimeStride <- as.integer(diff(timeIndList[[1]])[1])
+                  foreTimeShift <- as.integer(-(timeIndList[[1]][1] - 1))
+                  timeIndList <- NULL
             }
-            foreDatesList <- lapply(1:length(foreDatesList), function(x) {
-                  foreDatesList[[x]][verifTimeIndList[[x]]]
-            })
-            foreTimeStride <- as.integer(diff(verifTimeIndList[[1]])[1])
-            foreTimeShift <- as.integer(-(verifTimeIndList[[1]][1] - 1))
-            rm(verifTimeIndList)
       }
       foreDates <- do.call("c", foreDatesList)
-      rm(foreDatesList)
+      foreDatesList <- NULL
       # Sub-routine for adjusting times in case of deaccumulation
       deaccumFromFirst <- NULL
       if (!is.null(dic)) {
@@ -92,6 +103,6 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, verifTime
             .jnew("ucar/ma2/Range", as.integer(foreTimesList[[x]][1] - 1), as.integer(tail(foreTimesList[[x]], 1L) - 1), foreTimeStride)$shiftOrigin(foreTimeShift)
             
       })
-      return(list("forecastDates" = foreDates, "ForeTimeRangesList" = foreTimeRangesList, "deaccumFromFirst" = deaccumFromFirst))
+      return(list("forecastDates" = foreDates, "ForeTimeRangesList" = foreTimeRangesList, "deaccumFromFirst" = deaccumFromFirst, "doDailyMean" = dic$doDailyMean))
 }
 # End

@@ -17,6 +17,7 @@
 #' @author J Bedia \email{joaquin.bedia@@gmail.com} and A. Cofi\~no
 #' 
 makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
+      message("[", Sys.time(), "] Retrieving data subset ..." )
       gcs <- grid$getCoordinateSystem()
       dimNames <- rev(names(scanVarDimensions(grid))) # reversed!
       z <- .jnew("ucar/ma2/Range", 0L, 0L)
@@ -44,7 +45,13 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
                         }
                         aux.list2[[k]] <- array(subSet$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray(), dim = shapeArray)
                   }
-                  aux.list1[[j]] <- do.call("abind", c(aux.list2, along = 1))
+                  # Sub-routine for daily aggregation from 6h data
+                  if (isTRUE(foreTimePars$doDailyMean)) {
+                        aux.list1[[j]] <- toDD(do.call("abind", c(aux.list2, along = 1)), dimNamesRef)
+                        dimNamesRef <- attr(aux.list1[[j]], "dimensions")
+                  } else {
+                        aux.list1[[j]] <- do.call("abind", c(aux.list2, along = 1))
+                  }
             }
             aux.list[[i]] <- do.call("abind", c(aux.list1, along = grep("^time", dimNamesRef)))
             rm(aux.list1)
@@ -58,6 +65,7 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
       if (!is.na(match("run", dimNames))) {
             dimNames <- gsub("run", "member", dimNames)
       }
+      dimNames <- gsub("^time.*", "time", dimNames)
       attr(mdArray, "dimensions") <- dimNames
       return(mdArray)
 }

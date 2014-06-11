@@ -14,10 +14,12 @@
 #' \item{deaccumFromFirst}{NULL if no deaccumulation is performed. TRUE or FALSE if deaccumulation is performed from
 #' the first time of the runtime axis or not respectively. If FALSE, an additional runtime is added at the beginning
 #' of each element of the runTimeList to avoid losing the first day when performing deaccumulation.}
+#' \item{doDailyMean}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
+#' to \code{\link{makeSubset.CFS}} to undertake the pertinent aggregation if TRUE.
 #' \end{itemize}
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com} 
 #' 
-getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, verifTime) {
+getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, time) {
       gcs <- grid$getCoordinateSystem()
       foreTimesList <- rep(list(bquote()), length(runTimePars$runTimeRanges)) 
       foreDatesList <- foreTimesList
@@ -29,32 +31,40 @@ getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, verifTime) {
                   ind <- which((auxDates$mon + 1) %in% runTimePars$season)
                   aux.foreTimesList[[i]] <- ind
                   aux.foreDatesList[[i]] <- auxDates[aux.foreTimesList[[i]]]
-                  rm(auxDates)
+                  auxDates <- NULL
             }
             foreTimesList[[x]] <- aux.foreTimesList
             foreDatesList[[x]] <- aux.foreDatesList
       }
-      deaccumFromFirst <- FALSE
       # Sub-routine for setting stride and shift along time dimension    
-      if (is.null(verifTime)) { 
+      if (is.null(dic) & time != "none") {
+            stop("Time resolution especification incompatible with non-standard variable requests\nUse the dictionary or set the 'time' argument to NULL")
+      }
+      if (is.null(dic) | isTRUE(dic$doDailyMean)) {
             foreTimeStride <- 1L
             foreTimeShift <- 0L
       } else {
-            verifTimeInd <- which(foreDatesList[[1]][[1]]$hour == verifTime)
-            if (length(verifTimeInd) == 0) {
-                  stop("Non-existing verification time selected.\nCheck value of argument 'verifTime'")
-            }
-            for (i in 1:length(foreDatesList)) {
-                  for (j in 1:length(foreDatesList[[i]])) {
-                        foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][verifTimeInd]      
+            if (time == "DD" | time == "none") {
+                  foreTimeStride <- 1L
+                  foreTimeShift <- 0L
+            } else {
+                  time <- as.integer(time)
+                  timeInd <- which(foreDatesList[[1]][[1]]$hour == time)
+                  if (length(timeInd) == 0) {
+                        stop("Non-existing verification time selected.\nCheck value of argument 'time'")
                   }
+                  for (i in 1:length(foreDatesList)) {
+                        for (j in 1:length(foreDatesList[[i]])) {
+                              foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][timeInd]      
+                        }
+                  }
+                  foreTimeStride <- as.integer(diff(timeInd)[1])
+                  foreTimeShift <- as.integer(-(timeInd[1]-1))
+                  timeInd <- NULL
             }
-            foreTimeStride <- as.integer(diff(verifTimeInd)[1])
-            foreTimeShift <- as.integer(-(verifTimeInd[1]-1))
-            rm(verifTimeInd)
       }
       foreDates <- do.call("c", foreDatesList[[1]])
-      rm(foreDatesList)
+      foreDatesList <- NULL
       # Sub-routine for adjusting times in case of deaccumulation (unused so far in CFS)
       deaccumFromFirst <- NULL
       if (!is.null(dic)) {
@@ -81,6 +91,6 @@ getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, verifTime) {
                   foreTimesList[[i]][[j]] <- .jnew("ucar/ma2/Range", start, end, foreTimeStride)$shiftOrigin(foreTimeShift)
             }
       }
-      return(list("forecastDates" = foreDates, "ForeTimeRangesList" = foreTimesList, "deaccumFromFirst" = deaccumFromFirst))
+      return(list("forecastDates" = foreDates, "ForeTimeRangesList" = foreTimesList, "deaccumFromFirst" = deaccumFromFirst, "doDailyMean" = dic$doDailyMean))
 }
 # End
