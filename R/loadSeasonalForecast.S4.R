@@ -12,13 +12,13 @@
 #'  @param latLon A list of geolocation parameters as returned by \code{getLatLonDomainForecast}
 #'  @param runTimePars A list of parameters defining de initializations to be taken and other.
 #'  auxiliary parameters, as returned by \code{getRunTimeDomain}.
-#'  @param verifTime Verification time. See \code{\link{loadSeasonalForecast}}
+#'  @param time Verification time. See \code{\link{loadSeasonalForecast}}
 #'  @return A list of components, as returned by \code{\link{loadSeasonalForecast}}.
 #'  @author J. Bedia \email{joaquin.bedia@@gmail.com}
 
-loadSeasonalForecast.S4 <- function(dataset, var, grid, dic, members, latLon, runTimePars, verifTime) {    
+loadSeasonalForecast.S4 <- function(dataset, var, grid, dic, members, latLon, runTimePars, time) {    
       memberRangeList <- getMemberDomain.S4(grid, dataset, members)
-      foreTimePars <- getForecastTimeDomain.S4(grid, dataset, dic, runTimePars, verifTime)
+      foreTimePars <- getForecastTimeDomain.S4(grid, dataset, dic, runTimePars, time)
       mdArray <- makeSubset.S4(grid, latLon, runTimePars, memberRangeList, foreTimePars)
       mdArray <- dictionaryTransformForecast(dic, foreTimePars, mdArray)
       if (isTRUE(latLon$revLat)) {
