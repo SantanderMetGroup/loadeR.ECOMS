@@ -10,11 +10,11 @@
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com}
 
 dataURL <- function(dataset) {
-      dataset <- match.arg(dataset, c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15", "CFSv2_seasonal_16"))
-      switch(dataset, 
-            "System4_seasonal_15" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Seasonal_15Members.ncml", "excludeVars" = NULL),
+      x <- switch(dataset, 
+            "System4_seasonal_15" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Seasonal_15Members.ncml", "excludeVars" = c("u925mb","u850mb","v925mb","v850mb","z1000mb","z700mb")),
             "System4_seasonal_51" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Seasonal_51Members.ncml", "excludeVars" = NULL),
             "System4_annual_15" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Annual_15Members.ncml", "excludeVars" = NULL),
             "CFSv2_seasonal_16" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/cfs/agg/cfsAgg_fmrc.ncd", "excludeVars" = "Pressure_reduced_to_MSL_msl"))
+      return(x)
 }
 # End

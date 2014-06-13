@@ -5,14 +5,15 @@
 
 loadSeasonalForecast <- function(dataset, var, dictionary = TRUE, 
                                 members = NULL, lonLim = NULL, latLim = NULL, season = NULL,
-                                years = NULL, leadMonth = 1, time = NULL) {
+                                years = NULL, leadMonth = 1, time = "none") {
+      dataset <- match.arg(dataset, c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15", "CFSv2_seasonal_16"))
       time <- match.arg(time, choices = c("none", "00", "06", "12", "18", "DD"))
       url <- dataURL(dataset)
       dic <- NULL
       if (isTRUE(dictionary)) {
-            #dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
-            # OJO PROVISIONAL
-            dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
+            dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
+            # devel
+            # dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
             dic <- dictionaryLookup(dicPath, var, time)
             shortName <- dic$short_name      
       } else {
@@ -35,11 +36,9 @@ loadSeasonalForecast <- function(dataset, var, dictionary = TRUE,
       }
       latLon <- getLatLonDomainForecast(grid, lonLim, latLim)
       runTimePars <- getRunTimeDomain(dataset, grid, members, season, years, leadMonth)
-      # S4
       if (grepl("^System4", dataset)) {
             out <- loadSeasonalForecast.S4(dataset, var, grid, dic, members, latLon, runTimePars, time)
       }
-      # CFSv2
       if (grepl("CFSv2", dataset)) {
             out <- loadSeasonalForecast.CFS(var, grid, dic, latLon, runTimePars, time)
             names(out$InitializationDates) <- paste("Member_", members, sep = "")
