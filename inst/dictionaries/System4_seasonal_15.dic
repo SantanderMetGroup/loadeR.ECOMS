@@ -16,9 +16,3 @@ hurs,hurs,24h,0,0,none,0,1,0,1,deriveSurfaceRelativeHumidity
 huss,huss,24h,0,0,none,0,1,0,1,deriveSurfaceSpecificHumidity
 wss,wss,6h,0,6,mean,0,1,0,1,deriveWindSpeed
 zsfc,zsfc,static,0,0,static,0,1,0,0,
-ua@850,u850mb,12h,0,0,none,0,1,0,0,
-ua@925,u925mb,12h,0,0,none,0,1,0,0,
-va@850,v850mb,12h,0,0,none,0,1,0,0,
-va@925,v925mb,12h,0,0,none,0,1,0,0,
-zg@1000,z1000mb,12h,0,0,none,0,0.102040816,0,0,
-zg@700,z700mb,12h,0,0,none,0,0.102040816,0,0,
