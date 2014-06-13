@@ -1,6 +1,4 @@
 import("rJava")
-#importFrom("sp", CRS, SpatialPolygonsDataFrame, SpatialPoints, SpatialGrid)
-#importFrom("sp", SpatialLines)
 import("abind")
 export("datasetInventory",
        "loadSeasonalForecast",
