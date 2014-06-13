@@ -10,10 +10,9 @@ A simple interface for accesing and retrieving dimensional slices of the various
 
 
 \usage{
-loadSeasonalForecast(dataset = c("System4_seasonal_15", "System4_seasonal_51",
-  "System4_annual_15", "CFSv2_seasonal_16"), var, dictionary = TRUE,
-  members = NULL, lonLim = NULL, latLim = NULL,
-  season = NULL, years = NULL, leadMonth = 1)
+loadSeasonalForecast(dataset, var, dictionary = TRUE, members = NULL,
+                  lonLim = NULL, latLim = NULL, season = NULL, years = NULL,
+                  leadMonth = 1, time = "none") 
 }
 
 
@@ -24,7 +23,7 @@ loadSeasonalForecast(dataset = c("System4_seasonal_15", "System4_seasonal_51",
 Variable code (character string). This is the name of the variable either as coded in the dataset (i.e. as provided by \code{datasetInventory}) or according to the identifier code in the dictionary if provided (see the next argument).
 }
   \item{dictionary}{
-A logical flag indicating if a dictionary is being used. Default (recommended) is set to \code{TRUE}, meaning that the function will internally perform the necessary conversions to return the standard variables defined in the vocabulary. See details. 
+A logical flag indicating if a dictionary is being used. Default (strongly recommended) is set to \code{TRUE}, meaning that the function will internally perform the necessary conversions to return the standard variables defined in the vocabulary. See details. 
 }
   \item{members}{
 A vector of integers indicating the members to be loaded. Default to \code{NULL}, which loads the default members (see the Note below). For instance, \code{members=1:5} will retrieve the first five members of the hindcast. 
@@ -42,22 +41,23 @@ An integer vector specifying the desired season (in months, January = 1 ...). Op
 Optional vector of years to select. Default to all available years. See details. 
 }
   \item{leadMonth}{
-Integer value indicating the lead forecast time, relative to the first month of \code{season}. Note that \code{leadMonth=1} for \code{season=1} (January) corresponds to the December initialization. Default to 1 (i.e., 1 lead month forecast).} %The effect of the lead time in the forecast for a particular season can be analyzed by just changing this parameter. 
+Integer value indicating the lead forecast time, relative to the first month of \code{season}. Note that \code{leadMonth=1} for \code{season=1} (January) corresponds to the December initialization. Default to 1 (i.e., 1 lead month forecast).}
+\item{time}{A character vector indicating the temporal filtering/aggregation of the output data. Default to \code{none}, which returns the original time series as stored in the dataset. For sub-daily variables, instantantaneous data at selected verification times can be filtered using one of the character strings \code{00}, \code{06}, \code{12} and \code{18}. If daily mean data are required use \code{DD}. See details.
+}
 }
 
 
 \value{
 A list with the following elements providing the necessary information for data representation and analysis:
-\item{VarName}{A character string indicating which is the variable returned. Same as value provided for argument \code{var}}
-\item{isStandard}{Logical value indicating whether the variable returned is standard or not (i.e., wether the dictionary has been used -the default- or not.)}
-\item{MemberData}{A list of length \emph{n}, where \emph{n} = number of members of the ensemble indicated in the \code{member} argument. Each element of the dataset is a 2-D matrix of \emph{i} rows x \emph{j} columns, of \emph{i} forecast times and \emph{j} grid-points. The list is named following the scheme: \emph{Member_X}, where \dQuote{X} is the member name.}
-\item{LonLatCoords}{A \sQuote{SpatialPoints} or \sQuote{SpatialGrid} class object (package \pkg{sp}) for single point or rectangular domains respectively. See details.}
-\item{RunDates}{A \link[base]{POSIXlt} time object corresponding to the initialization times selected. See details.}
-\item{ForecastDates}{A list with two POSIXlt time elements of length \emph{i}, corresponding to the rows of each matrix in \code{MemberData}, defining the time boundaries of the time axis coordinates in the interval \emph{[start, end)}:}
-      \itemize{ 
-      \item \code{Start} Starting times of the verification period of the variable
-      \item \code{End} time of the verification period of the variable
-      }
+\item{Variable}{A list with two elements:}
+\itemize{ 
+      \item \code{varName} A character string indicating which is the variable returned. Same as value provided for argument \code{var}
+      \item \code{isStandard} Logical value indicating whether the variable returned is standard or not (i.e., wether the dictionary has been used -the default- or not.)}
+\item{Data}{A N-dimensional array. The number of dimensions (N) depends on the type of request given that dimensions of length one are dropped. Thus, N can take values from 4 (several members for a rectangular domain with different values for longitude, latitude, ensemble and time dimensions) to 1 (atomic vector), for single-point and single-member selections, for which only the time dimension is required. The dimensions are labelled by the \dQuote{dimnames} attribute. Note that the order of the dimensions is not fixed.}
+\item{xyCoords}{A list with \code{x} and \code{y} components, as required by many standard mapping functions in R (see e.g. \code{\link[graphics]{image}}. In addition, the \code{CRS_string} element provides geo-referencing information for more advanced spatial operations/conversions, in the form of a character string following the \href{http://trac.osgeo.org/proj/}{PROJ.4 specifications}.}
+\item{ForecastDates}{A list with two POSIXlt time elements of the same length as the \sQuote{time} dimension in \code{Data}, defining the time boundaries of the time axis coordinates in the interval \emph{[start, end)}:}
+\item{InitializationDates}{A \link[base]{POSIXlt} time object corresponding to the initialization times selected. See details.}
+\item{Members}{A character vector with the names of the ensemble members returned, in the same order as arranged in the \code{Data} array.}
 }
 %%  ~Describe the value returned
 %%  If it is a LIST, use
@@ -86,9 +86,9 @@ The different nature of the various databases, models and variables, and the idi
 Regarding the selection of the spatial domain, it is possible to select the whole spatial domain of the datasets (currently global for all hindcasts available). In this case \code{lonLim=NULL} and \code{latLim=NULL}. More often, rectangular domains are defined by the minimum and maximum coordinates in longitude and latitude (for instance \code{lonLim=c(-10,10)} and \code{latLim=c(35,45)} indicates a rectangular window centered in the Iberian Peninsula), and single grid-cell values (for instance \code{lonLim=-3.21} and \code{latLim=41.087} for retrieving the data in the closest grid point to the point coordinate -3.21E, 41.087N. In the last two cases, the function operates by finding the nearest (euclidean distance) grid-points to the coordinates introduced.
 
 
-The returned value by \code{LonLatCoords} varies accordingly: in case of single point selections, it is a \link[sp]{SpatialPoints} object, while in case of rectangular domains it is a \link[sp]{SpatialGrid}, which is a more efficient way of defining gridded data. Note that for retrieving the coordinates of a grid, a simple call to \link[sp]{coordinates} will suffice to obtain the entire coordinates matrix. See \link[sp]{coordinatevalues} or \link[grDevices]{xy.coords} for obtaining the coordinates in other common R formats.
+The returned value by \code{xyCoords} varies accordingly, and it fits the common data structure of many R plotting functions (see \link[grDevices]{xy.coords} for obtaining a more detailed info).
 
-The spatial definition of the data is associated to a specific coordinate reference system via the \sQuote{proj4string} slot of \code{LonLatCoords}, thus enabling the direct application of geospatial operations such as projection transformations (e.g. \link[sp]{spTransform}), spatial overlay methods (e.g. \link[sp]{over}) etc.
+The spatial definition of the data is associated to a specific coordinate reference system via the \sQuote{proj4string} slot of \code{xyCoords}, thus enabling the direct application of geospatial operations such as projection transformations, spatial overlay methods etc with the appropriate R methods.
 
 
 \strong{Definition of temporal slices}
@@ -101,13 +101,21 @@ In case the whole year is needed (instead of a particular season), the argument 
 
 \strong{Initialization times}
 
-The characteristics of the \code{RunDates} output vary depending on the dataset. In the case of models that have simultaneous initializations for different members (e.g. System4), there is an initialization time associated to each forecast time. Despite redundancy, this may be helpful for certain data analyses. Thus, in this case the length of the \code{ForecastDates} and \code{RunDates} vectors are identical. Unlike the simultaneous initializations scheme, the lagged runtime configuration of members used by some other models (e.g. CFSv2) results in different initialization times for the same forecast times of different members. In this case, the \code{RunDates} output does not match the \code{ForecastTimes} length, and returns a vector with each unique initialization date. This behaviour may change in future versions.
+The characteristics of the \code{InitializationDates} output vary depending on the dataset. In the case of models that have simultaneous initializations for different members (e.g. System4), the output is just a vector of initialization times (one per year selected). Unlike the simultaneous initializations scheme, the lagged runtime configuration of members used by some other models (e.g. CFSv2) results in different initialization times for the same forecast times of different members. In this case, the \code{InitializationDates} are included in a list whose elements are named as the corresponding member.
+
+By default, 16 members are returned for the CFSv2 hindcast for better comparability with the 15 members returned by the ECMWF's System4 seasonal hindcast. However, note that up to 24 members can be obtained from the CFSv2 hindcast (i.e., \code{members=1:24}), and 28 in the case of the November initializations. See the \href{http://meteo.unican.es/ecoms-udg/DataServer/Datasets/CFSv2}{technical documentation} at the ECOMS-UDG wiki for more details on the lagged runtimes configuration of the CFSv2 hindcast.  
 
 
-By default, 16 members are returned for the CFSv2 hindcast for better comparability with the 15 members returned by the ECMWF's System4 seasonal hindcast. However, note that up to 24 members can be obtained from the CFSv2 hindcast (i.e., \code{members=1:24}), and 28 in the case of the November initializations.
+\strong{Temporal filtering / aggregation}
+
+The argument \code{time} control the temporal filtering / aggregation (if any) applied to the returned output. In case of daily mean data, this can be obtained in two different ways:
+\enumerate{
+\item For variables that are already stored as daily means in the dataset, both \code{DD} and \code{NULL} return the required daily output
+\item In case of 6-hourly data, if \code{DD} is chosen, the function will compute the daily mean as the averaged 6-houtly outputs for each day, printing an information message on screen.
+\item In case of 12-hourly data, daily mean data won't be computed, and the function will raise an error if requested. In this particular case, the only acceptable \code{time} argument values would be \code{NULL}, \code{00} and \code{12}.
+}
 
 
-See the \href{http://meteo.unican.es/ecoms-udg/DataServer/Datasets/CFSv2}{technical documentation} at the ECOMS-UDG wiki for more details on the lagged runtimes configuration of the CFSv2 hindcast.  
 }
 
 \references{

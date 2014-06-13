@@ -11,12 +11,11 @@ Returns summary information about the main characteristics of hindcast datasets 
 }
 
 \usage{
-datasetInventory(dataset = c("System4_seasonal_15", "System4_seasonal_51",
-  "System4_annual_15", "CFSv2_seasonal_16"))
+datasetInventory(dataset)
 }
 
 \arguments{
-  \item{dataset}{A character string indicating the hindcast database. Currently four datasets available (See details).}
+  \item{dataset}{A character string indicating the hindcast database to be accessed. Currently accepted values are \code{System4_seasonal_15}, \code{System4_seasonal_51}, \code{System4_annual_15} and \code{CFSv2_seasonal_16}, where the notation indicates the GCM name, the temporal range and the default number of ensemble members returned respectively, separated by the lower bars.}
 }
 
 \details{
@@ -28,12 +27,12 @@ A list of length \emph{n}, where \emph{n} is the number of variables stored at t
 \item{Description}{Description of the variable}
 \item{DataType}{Character string indicating data type (i.e. float ...)}
 \item{Units}{Character string indicating the units of the variable}
-\item{TimeStep}{A \link[base]{difftime} class object representing the time interval between consecutive values in the time dimension axis} 
 \item{Dimensions}{A list of length x, containing the following information for each of the x dimensions:}
 \itemize{
 \item \code{Type} Character vector indicating the type of dimension (e.g. runtime, Lon...)
 \item \code{Units}: Character vector indicating the units of the dimension axis
-\item \code{Values}: A vector containing all the dimension values. In the case of runtimes, this is a vector of \link[base]{POSIXlt} times. For the forecast times, the time span of the whole hindcast is indicated by a character string with the time range.
+\item \code{Values}: A vector containing all the dimension values. In the case of the forecast time dimension, the time span of the whole hindcast is indicated by a character \code{\link[base]{POSIXlt}} vector of length 2 with start and end. Additionally, for the time dimension, a fourth element is added to the list:
+\item \code{TimeStep}: A character string indicating the time step between consecutive data along the time axis. Only for forecast time dimensions.
 }
 }
 
