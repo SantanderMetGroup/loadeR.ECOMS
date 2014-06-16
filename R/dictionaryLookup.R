@@ -37,7 +37,7 @@ dictionaryLookup <- function(dicPath, var, time) {
             if ((time == "06" | time == "18") & dictionary$time_step[dicRow] == "12h") {
                   stop("Requested 'time' value (\"",time,"\") not available for 12-h data")
             }
-            if ((time != "none" | time != "DD") & (dictionary$time_step[dicRow] == "24h")) {
+            if ((time != "none" & time != "DD") & (dictionary$time_step[dicRow] == "24h")) {
                   stop("Subdaily data not available for variable \"", var,"\". Check value of argument 'time'")
             }
             if (time == "DD") {
