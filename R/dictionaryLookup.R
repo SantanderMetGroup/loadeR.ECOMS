@@ -40,6 +40,9 @@ dictionaryLookup <- function(dicPath, var, time) {
             if ((time != "none" & time != "DD") & (dictionary$time_step[dicRow] == "24h")) {
                   stop("Subdaily data not available for variable \"", var,"\". Check value of argument 'time'")
             }
+            if (time == "DD" & dictionary$time_step[dicRow] == "24h") {
+                  time <- "none"
+            }
             if (time == "DD") {
                   doDailyMean <- TRUE
                   message("NOTE: daily mean will be calculated from the 6-h instantaneous model output")
