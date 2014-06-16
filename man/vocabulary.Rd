@@ -23,6 +23,6 @@ print(vocabulary)
 }
 
 \seealso{
-\code{\link{datasetInventory}}
+\code{\link{loadECOMS}}
 }
 \keyword{ datasets }

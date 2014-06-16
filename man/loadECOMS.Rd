@@ -1,32 +1,31 @@
-\name{loadSeasonalForecast}
-\alias{loadSeasonalForecast}
+\name{loadECOMS}
+\alias{loadECOMS}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Remote access to hindcast model data stored at the ECOMS-UDG.
+Remote access to climate databases stored at the ECOMS-UDG.
 }
 \description{
-A simple interface for accesing and retrieving dimensional slices of the various seasonal forecast databases stored at the ECOMS User Data Gateway.
+A simple interface for accesing and retrieving dimensional slices of the various climate databases stored at the ECOMS User Data Gateway (Forecasts, gridded observations and reanalysis).
 }
 
 
 \usage{
-loadSeasonalForecast(dataset, var, dictionary = TRUE, members = NULL,
-                  lonLim = NULL, latLim = NULL, season = NULL, years = NULL,
-                  leadMonth = 1, time = "none") 
+loadECOMS(dataset, var, dictionary = TRUE, members = NULL, lonLim = NULL, 
+      latLim = NULL, season = NULL, years = NULL, leadMonth = NULL, time = "none") 
 }
 
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{dataset}{A character string indicating the hindcast database to be accessed. Currently accepted values are \code{System4_seasonal_15}, \code{System4_seasonal_51}, \code{System4_annual_15} and \code{CFSv2_seasonal_16}, where the notation indicates the GCM name, the temporal range and the default number of ensemble members returned respectively, separated by the lower bars. See Details}
+  \item{dataset}{A character string indicating the database to be accessed. Currently accepted values are \code{System4_seasonal_15}, \code{System4_seasonal_51}, \code{System4_annual_15} and \code{CFSv2_seasonal_16} for hindcasts (where the notation indicates the GCM name, the temporal range and the default number of ensemble members returned respectively, separated by the lower bars), and \code{WFDEI} for the WATCH Forcing Dataset (gridded observations). See Details}
   \item{var}{
-Variable code (character string). This is the name of the variable either as coded in the dataset (i.e. as provided by \code{datasetInventory}) or according to the identifier code in the dictionary if provided (see the next argument).
+Variable code (character string). This is the name of the variable either as originally coded in the dataset (i.e. not the standard name in R, not recommended) or according to the R standard naming (see the next argument).
 }
   \item{dictionary}{
 A logical flag indicating if a dictionary is being used. Default (strongly recommended) is set to \code{TRUE}, meaning that the function will internally perform the necessary conversions to return the standard variables defined in the vocabulary. See details. 
 }
   \item{members}{
-A vector of integers indicating the members to be loaded. Default to \code{NULL}, which loads the default members (see the Note below). For instance, \code{members=1:5} will retrieve the first five members of the hindcast. 
+A vector of integers indicating the members to be loaded. Default to \code{NULL}, which loads the default members (see the Note below). For instance, \code{members=1:5} will retrieve the first five members of the hindcast. If the requested dataset is not a forecast, the argument will be ignored.
 }
   \item{lonLim}{
 Vector of length = 2, with minimum and maximum longitude coordinates, in decimal degrees, of the bounding box selected. For single-point queries, a numeric value with the longitude coordinate. If \code{NULL} (default), the whole longitudinal range is selected (Note that this may lead to a large output object size). See details. 
@@ -41,7 +40,7 @@ An integer vector specifying the desired season (in months, January = 1 ...). Op
 Optional vector of years to select. Default to all available years. See details. 
 }
   \item{leadMonth}{
-Integer value indicating the lead forecast time, relative to the first month of \code{season}. Note that \code{leadMonth=1} for \code{season=1} (January) corresponds to the December initialization. Default to 1 (i.e., 1 lead month forecast).}
+Integer value indicating the lead forecast time, relative to the first month of \code{season}. Note that \code{leadMonth=1} for \code{season=1} (January) corresponds to the December initialization. Default to 1 (i.e., 1 lead month forecast). If the dataset is not a forecast, it will be ignored, and a message will be printed on screen if its value is different from \code{NULL}.}
 \item{time}{A character vector indicating the temporal filtering/aggregation of the output data. Default to \code{none}, which returns the original time series as stored in the dataset. For sub-daily variables, instantantaneous data at selected verification times can be filtered using one of the character strings \code{00}, \code{06}, \code{12} and \code{18}. If daily mean data are required use \code{DD}. See details.
 }
 }
@@ -55,9 +54,9 @@ A list with the following elements providing the necessary information for data 
       \item \code{isStandard} Logical value indicating whether the variable returned is standard or not (i.e., wether the dictionary has been used -the default- or not.)}
 \item{Data}{A N-dimensional array. The number of dimensions (N) depends on the type of request given that dimensions of length one are dropped. Thus, N can take values from 4 (several members for a rectangular domain with different values for longitude, latitude, ensemble and time dimensions) to 1 (atomic vector), for single-point and single-member selections, for which only the time dimension is required. The dimensions are labelled by the \dQuote{dimnames} attribute. Note that the order of the dimensions is not fixed.}
 \item{xyCoords}{A list with \code{x} and \code{y} components, as required by many standard mapping functions in R (see e.g. \code{\link[graphics]{image}}. In addition, the \code{CRS_string} element provides geo-referencing information for more advanced spatial operations/conversions, in the form of a character string following the \href{http://trac.osgeo.org/proj/}{PROJ.4 specifications}.}
-\item{ForecastDates}{A list with two POSIXlt time elements of the same length as the \sQuote{time} dimension in \code{Data}, defining the time boundaries of the time axis coordinates in the interval \emph{[start, end)}:}
-\item{InitializationDates}{A \link[base]{POSIXlt} time object corresponding to the initialization times selected. See details.}
-\item{Members}{A character vector with the names of the ensemble members returned, in the same order as arranged in the \code{Data} array.}
+\item{Dates}{A list with two POSIXlt time elements of the same length as the \sQuote{time} dimension in \code{Data}, defining the time boundaries of the time axis coordinates in the interval \emph{[start, end)}:}
+\item{InitializationDates}{A \link[base]{POSIXlt} time object corresponding to the initialization times selected. Only for forecast datasets. See details.}
+\item{Members}{A character vector with the names of the ensemble members returned, in the same order as arranged in the \code{Data} array. Only for forecast datasets. See details.}
 }
 %%  ~Describe the value returned
 %%  If it is a LIST, use
@@ -71,13 +70,19 @@ A list with the following elements providing the necessary information for data 
 \strong{Available datasets}
 
 
-For details on the different hindcast datasets available go to \url{http://meteo.unican.es/ecoms-udg/DataServer/Datasets}.
+For details on the different hindcast datasets available go to \url{http://meteo.unican.es/ecoms-udg/DataServer/Datasets}. Currently, there are four different seasonal to annual hindcasts and one observational gridded dataset available at ECOMS-UDG. All of them are available through the common interface \code{loadECOMS}, and therefore the argument values may vary slightly. For instance, arguments \code{members} and \code{leadMonth} do not apply in the case of the observational gridded dataset (WFDEI), and are therefore ignored if their value is not NULL. Similarly, the output structure may vary consequently, and forecast data types include the initialization dates and the names of the chosen members, while this information is not included for other types of gridded data.
+
+
+\strong{Available variables}
+
+
+For the possible values that the argument \code{var} can take for each dataset at ECOMS-UDG, check the first column of the \href{http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables}{variables table}, that is continuously updated as new variables are made available. The table also contains further details regarding the temporal aggregation/resolution of each variable and the possible vertical levels (to be included soon).
 
 
 \strong{Variable homogeneization}
 
 
-The different nature of the various databases, models and variables, and the idiosyncratic naming and storage conventions often applied by the different modelling centres, makes necessary a previous homogeneization across datasets in order to implement a truly user-friendly toolbox for data access. This package achieves this aim by defining a common \code{\link{vocabulary}} to all climate datasets. The particular variables of each dataset (as returned by \code{\link{datasetInventory}}) are translated -and transformed if necessary- to the standard variables by means of a dictionary, provided by the argument \code{dictionary}. In essence, the \file{dictionary} is a csv file particular for each individual dataset, containing the necessary information for performing the unit conversions to match the standard variable definitions contained in the \code{\link{vocabulary}}. This feature is described in more detail in \href{http://meteo.unican.es/trac/wiki/EcomsUdg/RPackage/Homogeneization}{this section} of the ECOMS UDG wiki. 
+The different nature of the various databases, models and variables, and the idiosyncratic naming and storage conventions often applied by the different modelling centres, makes necessary a previous homogeneization across datasets in order to implement a truly user-friendly toolbox for data access. This package achieves this aim by defining a common \code{\link{vocabulary}} to all climate datasets. The particular variables of each dataset are translated -and transformed if necessary- to the standard variables by means of a dictionary, provided by the argument \code{dictionary}. In essence, the \file{dictionary} is a csv file particular for each individual dataset, containing the necessary information for performing the unit conversions to match the standard variable definitions contained in the \code{\link{vocabulary}}. This feature is described in more detail in \href{http://meteo.unican.es/trac/wiki/EcomsUdg/RPackage/Homogeneization}{this section} of the ECOMS UDG wiki. 
 
 
 \strong{Definition of spatial domains}
@@ -122,7 +127,7 @@ The argument \code{time} control the temporal filtering / aggregation (if any) a
 
 \url{http://meteo.unican.es/ecoms-udg}
 
-Saha, S. et al., 2013. The NCEP Climate Forecast System Version 2. J Clim. DOI: 10.1175/JCLI-D-12-00823.1.
+%Saha, S. et al., 2013. The NCEP Climate Forecast System Version 2. J Clim. DOI: 10.1175/JCLI-D-12-00823.1.
 
 }
 
@@ -133,6 +138,6 @@ Saha, S. et al., 2013. The NCEP Climate Forecast System Version 2. J Clim. DOI: 
 
 
 \seealso{
-\code{\link{vocabulary}}, \code{\link{datasetInventory}}
+\code{\link{vocabulary}}
 }
 
