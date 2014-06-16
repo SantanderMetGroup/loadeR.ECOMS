@@ -9,8 +9,9 @@ timeBounds <- function(dic, foreDates) {
                   ltb <- as.difftime(dic$lower_time_bound, format = "%H", units = "hours")
                   utb <- as.difftime(dic$upper_time_bound, format = "%H", units = "hours")
             }
-            foreDates <- as.POSIXlt(foreDates - ltb)
+            foreDatesStart <- as.POSIXlt(foreDates + ltb)
             foreDatesEnd <- as.POSIXlt(foreDates + utb)
+            foreDates <- foreDatesStart
       } else {
             varTimeStep <- difftime(foreDates[2], foreDates[1])
             foreDatesEnd <- foreDates + varTimeStep
