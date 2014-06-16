@@ -53,7 +53,10 @@ makeSubset <- function(grid, tRanges, zRange, latLon) {
       if (any(dim(mdArray) == 1)) {
             dimNames <- dimNamesRef[-which(dim(mdArray) == 1)]    
             mdArray <- drop(mdArray)
+      } else {
+            dimNames <- dimNamesRef
       }
+      mdArray <- unname(mdArray)
       attr(mdArray, "dimensions") <- dimNames
       return(mdArray)
 }

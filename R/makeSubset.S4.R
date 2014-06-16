@@ -61,8 +61,11 @@ makeSubset.S4 <- function(grid, latLon, runTimePars, memberRangeList, foreTimePa
       if (any(dim(mdArray) == 1)) {
             dimNames <- dimNamesRef[-which(dim(mdArray) == 1)]
             mdArray <- drop(mdArray)
+      } else {
+            dimNames <- dimNamesRef
       }
       dimNames <- gsub("^time.*", "time", dimNames)
+      mdArray <- unname(mdArray)
       attr(mdArray, "dimensions") <- dimNames
       return(mdArray)
 }

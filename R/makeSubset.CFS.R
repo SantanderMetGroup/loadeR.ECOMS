@@ -61,11 +61,14 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
       if (any(dim(mdArray) == 1)) {
             dimNames <- dimNamesRef[-which(dim(mdArray) == 1)]
             mdArray <- drop(mdArray)
+      } else {
+            dimNames <- dimNamesRef
       }
       if (!is.na(match("run", dimNames))) {
             dimNames <- gsub("run", "member", dimNames)
       }
       dimNames <- gsub("^time.*", "time", dimNames)
+      mdArray <- unname(mdArray)
       attr(mdArray, "dimensions") <- dimNames
       return(mdArray)
 }
