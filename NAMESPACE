@@ -1,5 +1,3 @@
 import("rJava")
 import("abind")
-export("datasetInventory",
-       "loadSeasonalForecast",
-       "loginECOMS_UDG")
+export("loadECOMS", "loginECOMS_UDG")
