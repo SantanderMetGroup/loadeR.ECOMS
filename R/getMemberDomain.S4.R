@@ -13,16 +13,16 @@
 
 getMemberDomain.S4 <- function(grid, dataset, members) {
       gcs <- grid$getCoordinateSystem()
-      if (grepl("15$", dataset) & !all(members %in% 1:15)) {
-            stop("Accepted values for argument 'members' are integers in the range [1,15]")
-      }
-      if (grepl("51$", dataset) & !all(members %in% 1:51)) {
-            stop("Accepted values for argument 'members' are integers in the range [1,51]")
-      }
       if (is.null(members)) {
             members <- as.integer(javaString2rChar(gcs$getEnsembleAxis()$getNames()$toString()))
       } else {
             members <- as.integer(members - 1)
+      }
+      if (grepl("15$", dataset) & !all(members %in% 0:14)) {
+            stop("Accepted values for argument 'members' are integers in the range [1,15]")
+      }
+      if (grepl("51$", dataset) & !all(members %in% 0:50)) {
+            stop("Accepted values for argument 'members' are integers in the range [1,51]")
       }
       memberRangeList <- lapply(1:length(members), function(x) {
             .jnew("ucar/ma2/Range", members[x], members[x])

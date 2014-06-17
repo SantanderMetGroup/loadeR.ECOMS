@@ -33,6 +33,7 @@ loadSeasonalForecast.S4 <- function(dataset, var, grid, dic, members, latLon, ru
                   "Data" = mdArray,
                   "xyCoords" = c(latLon$xyCoords, "CRS_string" = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), 
                   "Dates" = foreTimePars$forecastDates,
-                  "InitializationDates" = runTimePars$runDates))
+                  "InitializationDates" = runTimePars$runDates,
+                  "Members" = names(memberRangeList)))
 }
 # End

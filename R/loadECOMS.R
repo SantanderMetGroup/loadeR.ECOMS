@@ -36,6 +36,9 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             latLon <- getLatLonDomain(grid, lonLim, latLim)
             out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon)
       } else {
+            if (!is.null(members)) {
+                  members <- sort(members)
+            }
             if (is.null(leadMonth)) {
                   stop("A lead month for forecast initialization must be specified")
             }
@@ -49,10 +52,12 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   out <- loadSeasonalForecast.S4(dataset, var, grid, dic, members, latLon, runTimePars, time)
             }
             if (grepl("CFSv2", dataset)) {
+                  if (is.null(members)) {
+                        members <- 1:16
+                  }
                   out <- loadSeasonalForecast.CFS(var, grid, dic, latLon, runTimePars, time)
-                  names(out$InitializationDates) <- paste("Member_", members, sep = "")
             }
-            out <- c(out, "Members" = list(paste("Member_", members, sep = "")))
+#             out <- c(out, "Members" = list(paste("Member_", members, sep = "")))
       }
       gds$close()
       message("[",Sys.time(),"]", " Done")

@@ -15,6 +15,7 @@ loadSeasonalForecast.CFS = function(var, grid, dic, latLon, runTimePars, time) {
                   "Data" = mdArray,
                   "xyCoords" = c(latLon$xyCoords, "CRS_string" = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), 
                   "Dates" = foreTimePars$forecastDates,
-                  "InitializationDates" = runTimePars$runDates))
+                  "InitializationDates" = runTimePars$runDates,
+                  "Members" = names(runTimePars$runTimeRanges)))
 }
 # End

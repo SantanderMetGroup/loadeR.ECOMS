@@ -54,6 +54,7 @@ getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years) {
             runTimes[which(runDates$year + 1900 == x)[members]]
       }))
       runDatesEnsList <- rep(list(bquote()), length(members))
+      names(runDatesEnsList) <- paste("Member_", members, sep = "")
       runTimesEnsList <- runDatesEnsList
       for (i in 1:length(members)) {
             ind <- seq.int(i, by = length(members), length.out = length(unique(runDates$year)))
