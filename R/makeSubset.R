@@ -23,6 +23,7 @@
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com} and A. Cofin\~no.
 
 makeSubset <- function(grid, tRanges, zRange, latLon) {
+      message("[", Sys.time(), "] Retrieving data subset ..." )
       gcs <- grid$getCoordinateSystem()
       dimNames <- rev(names(scanVarDimensions(grid)))
       aux.list <- list()
