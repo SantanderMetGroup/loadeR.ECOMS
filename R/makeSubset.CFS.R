@@ -54,10 +54,10 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
                   }
             }
             aux.list[[i]] <- do.call("abind", c(aux.list1, along = grep("^time", dimNamesRef)))
-            rm(aux.list1)
+            aux.list1 <- NULL
       }
       mdArray <- do.call("abind", aux.list)
-      rm(aux.list)
+      aux.list <- NULL
       if (any(dim(mdArray) == 1)) {
             dimNames <- dimNamesRef[-which(dim(mdArray) == 1)]
             mdArray <- drop(mdArray)
