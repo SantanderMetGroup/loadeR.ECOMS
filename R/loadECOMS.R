@@ -15,11 +15,21 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       } else {
             shortName <- var
       }
-      if (!is.null(season)) {
-            season <- as.integer(season)
-            if (min(season) < 1 | max(season) > 12) {
-                  stop("Invalid season definition")
-            }
+      if (is.null(season)) {
+            stop("Argument 'season' must be provided")
+      }
+      if (min(season) < 1 | max(season) > 12) {
+            stop("Invalid season definition")
+      }
+      # Season range constraints
+      if (grepl("CFSv2", dataset) & (length(season) + leadMonth) > 9) {
+            stop("Max. forecast extent is 9 months. Reduce season length or lead month value accordingly")            
+      }
+      if (grepl("System4_seasonal", dataset) & (length(season) + leadMonth) > 7) {
+            stop("Max. forecast extent is 7 months. Reduce season length or lead month value accordingly")            
+      }
+      if (grepl("System4_annual", dataset) & (length(season) + leadMonth) > 13) {
+            stop("Max. forecast extent is 13 months. Reduce season length or lead month value accordingly")            
       }
       if (dataset == "WFDEI" & !is.null(leadMonth)) {
             message("NOTE: The dataset is not a forecast. Argument 'leadMonth' will be ignored")
@@ -42,8 +52,11 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             if (is.null(leadMonth)) {
                   stop("A lead month for forecast initialization must be specified")
             }
-            if (leadMonth < 1) {
+            if (leadMonth < 0) {
                   stop("Invalid lead time definition")
+            }
+            if (leadMonth == 0) {
+                  message("NOTE: 'leadMonth = 0' selected")
             }
             leadMonth <- as.integer(leadMonth)
             latLon <- getLatLonDomainForecast(grid, lonLim, latLim)      
@@ -57,7 +70,6 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   }
                   out <- loadSeasonalForecast.CFS(var, grid, dic, latLon, runTimePars, time)
             }
-#             out <- c(out, "Members" = list(paste("Member_", members, sep = "")))
       }
       gds$close()
       message("[",Sys.time(),"]", " Done")
