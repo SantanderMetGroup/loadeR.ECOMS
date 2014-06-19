@@ -8,7 +8,7 @@
 #' @author J Bedia \email{joaquin.bedia@@gmail}
 #' 
 toDD <- function(NDarray, dimNamesRef) {
-      mar <- c(1:length(dimNamesRef))[-grep("^time", dimNamesRef)]
+      mar <- grep("^time", dimNamesRef, invert = TRUE)
       NDarray <- unname(apply(NDarray, MARGIN = mar, FUN = aggr6hToDailyMean))
       dimNamesRef <- c(grep("^time", dimNamesRef ,value = TRUE), dimNamesRef[-grep("^time", dimNamesRef)])
       attr(NDarray, "dimensions") <- dimNamesRef
