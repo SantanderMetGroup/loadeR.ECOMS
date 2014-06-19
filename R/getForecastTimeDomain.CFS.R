@@ -63,6 +63,26 @@ getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, time) {
                   timeInd <- NULL
             }
       }
+      
+      ####
+      # Ensure matching for daily aggregation (full days only)
+      if(isTRUE(dic$doDailyMean)) {
+            for (i in 1:length(foreDatesList)) {
+                  for (j in 1:length(foreDatesList[[i]])) {
+                        # Ensure foredates start at 00:00
+                        if (foreDatesList[[i]][[j]][1]$hour != 0) {
+                              start.ind <- which(foreDatesList[[i]][[j]]$hour == 0)[1]
+                              foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][start:length(foreDatesList[[i]][[j]])]
+                        }
+                        # Ensure full days and remove uncomplete days if any at the end
+                        len <- length(foreDatesList[[i]][[j]]) 
+                        if (len %% 4 != 0) {
+                              ntail <- len %% 4
+                              foreDatesList[[i]][[j]] <- head(foreDatesList[[i]][[j]], n = len - ntail)
+                        }
+                  }
+            }
+      }                  
       foreDates <- do.call("c", foreDatesList[[1]])
       foreDatesList <- NULL
       # Sub-routine for adjusting times in case of deaccumulation (unused so far in CFS)
