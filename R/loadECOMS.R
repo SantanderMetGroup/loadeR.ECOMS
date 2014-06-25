@@ -1,7 +1,7 @@
 loadECOMS <- function(dataset, var, dictionary = TRUE, 
                      members = NULL, lonLim = NULL, latLim = NULL, season = NULL,
                      years = NULL, leadMonth = NULL, time = "none") {
-      dataset <- match.arg(dataset, c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15", "CFSv2_seasonal_16", "WFDEI"))
+      dataset <- match.arg(dataset, c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15", "CFSv2_seasonal_16", "WFDEI", "NCEP"))
       time <- match.arg(time, choices = c("none", "00", "06", "12", "18", "DD"))
       level <- findVerticalLevel(var)
       url <- dataURL(dataset)
