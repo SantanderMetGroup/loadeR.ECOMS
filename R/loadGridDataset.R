@@ -25,8 +25,8 @@
 
 loadGridDataset <- function(var, grid, dic, level, season, years, time, latLon) {
       timePars <- getTimeDomain(grid, dic, season, years, time)
-      levelPars <- getVerticalLevelPars(grid, level)
-      mdArray <- makeSubset(grid, timePars$tRanges, levelPars$zRange, latLon)
+      levelPars <- getVerticalLevelPars.ECOMS(grid, level)
+      mdArray <- makeSubset(grid, timePars, levelPars$zRange, latLon)
       if (!is.null(dic)) {
             isStandard <- TRUE
             mdArray <- dictionaryTransformGrid(dic, timePars, mdArray)
@@ -36,7 +36,7 @@ loadGridDataset <- function(var, grid, dic, level, season, years, time, latLon) 
       if (isTRUE(latLon$revLat)) {
             mdArray <- revArrayLatDim(mdArray, grid)
       }
-      return(list("Variable" = list("varName" = var, "isStandard" = isStandard),
+      return(list("Variable" = list("varName" = var, "isStandard" = isStandard, "level" = level),
             "Data" = mdArray,
             "xyCoords" = c(latLon$xyCoords, "CRS_string" = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), 
             "Dates" = timePars$dateSlice))
