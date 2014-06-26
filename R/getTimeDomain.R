@@ -88,31 +88,28 @@ getTimeDomain <- function(grid, dic, season, years, time) {
       if (is.null(dic) & time != "none") {
             stop("Time resolution especification incompatible with non-standard variable requests\nUse the dictionary or set the 'time' argument to NULL")
       }
-      if (is.null(dic) | isTRUE(dic$doDailyMean)) {
+      if (is.null(dic) | !is.na(dic$dailyAggr)) {
             timeStride <- 1L
-            timeShift <- 0L
       } else {
             if (time == "DD" | time == "none") {
                   timeStride <- 1L
-                  timeShift <- 0L
             } else {
                   time <- as.integer(time)
-                  timeIndList <- lapply(1:length(dateSliceList), function(x) {
-                        which(dateSliceList[[x]]$hour == time)
-                  })
+                  for (x in 1:length(timeIndList)) {
+                        timeIndList[[x]] <- timeIndList[[x]][which(dateSliceList[[x]]$hour == time)]
+                        dateSliceList[[x]] <- dateSliceList[[x]][which(dateSliceList[[x]]$hour == time)]
+                  }
                   if (length(timeIndList[[1]]) == 0) {
                         stop("Non-existing verification time selected.\nCheck value of argument 'time'")
                   }
-                  dateSliceList <- lapply(1:length(dateSliceList), function(x) {
-                        dateSliceList[[x]][timeIndList[[x]]]
-                  })
                   timeStride <- as.integer(diff(timeIndList[[1]])[1])
-                  timeShift <- as.integer(-(timeIndList[[1]][1] - 1))
-                  timeIndList <- NULL
             }
       }
       dateSlice <- do.call("c", dateSliceList)
       dateSliceList <- NULL
+      if (!is.na(dic$dailyAggr)) {
+            dateSlice <- dateSlice[which(dateSlice$hour == 12)]
+      }
       # Sub-routine for adjusting times in case of deaccumulation
       deaccumFromFirst <- NULL
       if (!is.null(dic)) {
@@ -129,7 +126,9 @@ getTimeDomain <- function(grid, dic, season, years, time) {
       }
       # Sub-routine for calculation of time bounds
       dateSlice <- timeBounds(dic, dateSlice)
-      tRanges <- lapply(1:length(timeIndList), function(j) .jnew("ucar/ma2/Range", as.integer(timeIndList[[j]][1]), as.integer(tail(timeIndList[[j]], 1L)), timeStride)$shiftOrigin(timeShift))
-      return(list("dateSlice" = dateSlice, "timeResInSeconds" = timeResInSeconds, "tRanges" = tRanges))
+      tRanges <- lapply(1:length(timeIndList), function(j) .jnew("ucar/ma2/Range", as.integer(timeIndList[[j]][1]), as.integer(tail(timeIndList[[j]], 1L)), timeStride))# $shiftOrigin(timeShift))
+      timeIndList <- NULL
+      return(list("dateSlice" = dateSlice, "timeResInSeconds" = timeResInSeconds, "tRanges" = tRanges, "deaccumFromFirst" = deaccumFromFirst, "dailyAggr" = dic$dailyAggr))
 }
 # End
+
