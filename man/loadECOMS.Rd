@@ -17,7 +17,7 @@ loadECOMS(dataset, var, dictionary = TRUE, members = NULL, lonLim = NULL,
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{dataset}{A character string indicating the database to be accessed. Currently accepted values are \code{System4_seasonal_15}, \code{System4_seasonal_51}, \code{System4_annual_15} and \code{CFSv2_seasonal_16} for hindcasts (where the notation indicates the GCM name, the temporal range and the default number of ensemble members returned respectively, separated by the lower bars), and \code{WFDEI} for the WATCH Forcing Dataset (gridded observations). See Details}
+  \item{dataset}{A character string indicating the database to be accessed. Currently accepted values are \code{System4_seasonal_15}, \code{System4_seasonal_51}, \code{System4_annual_15} and \code{CFSv2_seasonal_16} for hindcasts (where the notation indicates the GCM name, the temporal range and the default number of ensemble members returned respectively, separated by the lower bars), \code{WFDEI} for the WATCH Forcing Dataset (gridded observations) and \code{NCEP} for the NCEP/NCAR reanalysis. See Details}
   \item{var}{
 Variable code (character string). This is the name of the variable either as originally coded in the dataset (i.e. not the standard name in R, not recommended) or according to the R standard naming (see the next argument).
 }
@@ -48,13 +48,14 @@ Integer value indicating the lead forecast time, relative to the first month of 
 
 \value{
 A list with the following elements providing the necessary information for data representation and analysis:
-\item{Variable}{A list with two elements:}
+\item{Variable}{A list with three elements:}
 \itemize{ 
       \item \code{varName} A character string indicating which is the variable returned. Same as value provided for argument \code{var}
-      \item \code{isStandard} Logical value indicating whether the variable returned is standard or not (i.e., wether the dictionary has been used -the default- or not.)}
+      \item \code{isStandard} Logical value indicating whether the variable returned is standard or not (i.e., wether the dictionary has been used -the default- or not.)
+      \item \code{level} A numeric value indicating the vertical level of the variable (\code{NULL} for surface variables or variables without vertical level definition)}
 \item{Data}{A N-dimensional array. The number of dimensions (N) depends on the type of request given that dimensions of length one are dropped. Thus, N can take values from 4 (several members for a rectangular domain with different values for longitude, latitude, ensemble and time dimensions) to 1 (atomic vector), for single-point and single-member selections, for which only the time dimension is required. The dimensions are labelled by the \dQuote{dimnames} attribute. Note that the order of the dimensions is not fixed.}
 \item{xyCoords}{A list with \code{x} and \code{y} components, as required by many standard mapping functions in R (see e.g. \code{\link[graphics]{image}}. In addition, the \code{CRS_string} element provides geo-referencing information for more advanced spatial operations/conversions, in the form of a character string following the \href{http://trac.osgeo.org/proj/}{PROJ.4 specifications}.}
-\item{Dates}{A list with two POSIXlt time elements of the same length as the \sQuote{time} dimension in \code{Data}, defining the time boundaries of the time axis coordinates in the interval \emph{[start, end)}:}
+\item{Dates}{A list with two POSIXlt time elements of the same length as the \sQuote{time} dimension in \code{Data}, defining the time boundaries of the time axis coordinates in the interval \emph{[start, end)}. See details.}
 \item{InitializationDates}{A \link[base]{POSIXlt} time object corresponding to the initialization times selected. Only for forecast datasets. See details.}
 \item{Members}{A character vector with the names of the ensemble members returned, in the same order as arranged in the \code{Data} array. Only for forecast datasets. See details.}
 }
@@ -90,7 +91,6 @@ The different nature of the various databases, models and variables, and the idi
 
 Regarding the selection of the spatial domain, it is possible to select the whole spatial domain of the datasets (currently global for all hindcasts available). In this case \code{lonLim=NULL} and \code{latLim=NULL}. More often, rectangular domains are defined by the minimum and maximum coordinates in longitude and latitude (for instance \code{lonLim=c(-10,10)} and \code{latLim=c(35,45)} indicates a rectangular window centered in the Iberian Peninsula), and single grid-cell values (for instance \code{lonLim=-3.21} and \code{latLim=41.087} for retrieving the data in the closest grid point to the point coordinate -3.21E, 41.087N. In the last two cases, the function operates by finding the nearest (euclidean distance) grid-points to the coordinates introduced.
 
-
 The returned value by \code{xyCoords} varies accordingly, and it fits the common data structure of many R plotting functions (see \link[grDevices]{xy.coords} for obtaining a more detailed info).
 
 The spatial definition of the data is associated to a specific coordinate reference system via the \sQuote{proj4string} slot of \code{xyCoords}, thus enabling the direct application of geospatial operations such as projection transformations, spatial overlay methods etc with the appropriate R methods.
@@ -113,14 +113,13 @@ By default, 16 members are returned for the CFSv2 hindcast for better comparabil
 
 \strong{Temporal filtering / aggregation}
 
-The argument \code{time} control the temporal filtering / aggregation (if any) applied to the returned output. In case of daily mean data, this can be obtained in two different ways:
+The argument \code{time} controls the temporal filtering/aggregation options that may apply for a variable. In case of daily mean data, this can be obtained in two different ways:
 \enumerate{
 \item For variables that are already stored as daily means in the dataset, both \code{DD} and \code{NULL} return the required daily output
-\item In case of 6-hourly data, if \code{DD} is chosen, the function will compute the daily mean as the averaged 6-houtly outputs for each day, printing an information message on screen.
-\item In case of 12-hourly data, daily mean data won't be computed, and the function will raise an error if requested. In this particular case, the only acceptable \code{time} argument values would be \code{NULL}, \code{00} and \code{12}.
+\item In case of 6-hourly data, if \code{DD} is chosen, the function will compute the daily mean as the averaged 6-hourly outputs for each day, printing an information message on screen. If the variable is precipitation (\code{var = "tp"}), the result of the aggregation will be the sum rather than the average (i.e., it will return the daily accumulated value).
+\item In case of 12-hourly data, daily mean data (\code{DD}) won't be computed, and the function will raise an error. In this particular case, the only accepted \code{time} argument values will be \code{NULL}, \code{00} and \code{12}.
 }
-
-
+In daily aggregations, the returned \code{Dates} for each day will be centered at the 12:00 time.
 }
 
 \references{
