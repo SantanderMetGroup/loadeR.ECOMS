@@ -50,16 +50,20 @@ getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years) {
       if (validMonth != 11 & (length(members) > 24 | any(members > 24))) {
             stop("Maximum number of members in this initialization is 24")
       }
+      
       runTimes <- unlist(lapply(unique(runDates$year + 1900), function(x) {
             runTimes[which(runDates$year + 1900 == x)[members]]
       }))
+      runDates.aux <- unlist(lapply(unique(runDates$year + 1900), function(x) {
+            format(as.POSIXct(runDates[which(runDates$year + 1900 == x)[members]], tz = "GMT"), format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
+      }))
       runDatesEnsList <- rep(list(bquote()), length(members))
-      names(runDatesEnsList) <- paste("Member_", members, sep = "")
+      names(runDatesEnsList) <- paste("Member", members, sep = "_")
       runTimesEnsList <- runDatesEnsList
       for (i in 1:length(members)) {
             ind <- seq.int(i, by = length(members), length.out = length(unique(runDates$year)))
             runTimesEnsList[[i]] <- runTimes[ind]
-            runDatesEnsList[[i]] <- runDates[ind]
+            runDatesEnsList[[i]] <- runDates.aux[ind]
             rm(ind)
       }
       for (i in 1:length(runTimesEnsList)) {
