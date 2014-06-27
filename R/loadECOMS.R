@@ -1,15 +1,18 @@
 loadECOMS <- function(dataset, var, dictionary = TRUE, 
                      members = NULL, lonLim = NULL, latLim = NULL, season = NULL,
-                     years = NULL, leadMonth = NULL, time = "none") {
+                     years = NULL, leadMonth = 1, time = "none") {
       dataset <- match.arg(dataset, c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15", "CFSv2_seasonal_16", "WFDEI", "NCEP"))
       time <- match.arg(time, choices = c("none", "00", "06", "12", "18", "DD"))
-      level <- findVerticalLevel(var)
+      aux.level <- findVerticalLevel(var)
+      var <- aux.level$var
+      level <- aux.level$level
       url <- dataURL(dataset)
       dic <- NULL
       if (isTRUE(dictionary)) {
-            dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
+            # dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
             # devel
-            # dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
+            dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
+            #
             dic <- dictionaryLookup(dicPath, var, time)
             shortName <- dic$short_name      
       } else {
@@ -42,7 +45,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       if (is.null(grid)) {
             stop("Variable requested not found")#.\nCheck variables using 'datasetInventory'")
       }
-      if (dataset == "WFDEI") {
+      if (dataset == "WFDEI" | dataset == "NCEP") {
             latLon <- getLatLonDomain(grid, lonLim, latLim)
             out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon)
       } else {

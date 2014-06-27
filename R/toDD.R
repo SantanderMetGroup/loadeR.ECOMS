@@ -6,10 +6,10 @@
 #' @details Because of the re-ordering of dimensions after using \code{apply}, the 
 #' vector of dimension names is needed for re-arranging accordingly
 #' @author J Bedia \email{joaquin.bedia@@gmail}
-#' 
-toDD <- function(NDarray, dimNamesRef) {
+
+toDD <- function(NDarray, dimNamesRef, dailyAggr) {
       mar <- grep("^time", dimNamesRef, invert = TRUE)
-      NDarray <- unname(apply(NDarray, MARGIN = mar, FUN = aggr6hToDailyMean))
+      NDarray <- unname(apply(NDarray, MARGIN = mar, FUN = aggr6hToDailyMean, aggr.fun = dailyAggr))
       dimNamesRef <- c(grep("^time", dimNamesRef ,value = TRUE), dimNamesRef[-grep("^time", dimNamesRef)])
       attr(NDarray, "dimensions") <- dimNamesRef
       return(NDarray)

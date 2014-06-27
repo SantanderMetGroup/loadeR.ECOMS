@@ -103,6 +103,6 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time) {
             .jnew("ucar/ma2/Range", as.integer(foreTimesList[[x]][1] - 1), as.integer(tail(foreTimesList[[x]], 1L) - 1), foreTimeStride)$shiftOrigin(foreTimeShift)
             
       })
-      return(list("forecastDates" = foreDates, "ForeTimeRangesList" = foreTimeRangesList, "deaccumFromFirst" = deaccumFromFirst, "doDailyMean" = dic$doDailyMean))
+      return(list("forecastDates" = foreDates, "ForeTimeRangesList" = foreTimeRangesList, "deaccumFromFirst" = deaccumFromFirst, "dailyAggr" = dic$dailyAggr))
 }
 # End

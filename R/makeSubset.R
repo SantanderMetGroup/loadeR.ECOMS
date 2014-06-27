@@ -4,8 +4,7 @@
 #' the original GeoGrid.
 #' 
 #' @param A grid of the java class \sQuote{ucar.nc2.dt.grid.GeoGrid}
-#' @param tRanges A list of java ranges (\sQuote{ucar.ma2.Range} class) indicating
-#'  the index positions in the time axis, as returned by \code{getTimeDomain}.
+#' @param timePars A list of time parameters as returnde by \code{getTimeDomain}.
 #' @param zRange A \sQuote{ucar.ma2.Range} or a null reference, as returned by
 #'  \code{getVerticalLevelPars}
 #' @param latLon A list of geospatial parameters, as returned by
@@ -22,16 +21,16 @@
 #' @references \url{https://www.unidata.ucar.edu/software/thredds/current/netcdf-java/v4.0/javadocAll/ucar/nc2/dt/grid/GeoGrid.html}
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com} and A. Cofin\~no.
 
-makeSubset <- function(grid, tRanges, zRange, latLon) {
+makeSubset <- function(grid, timePars, zRange, latLon) {
       message("[", Sys.time(), "] Retrieving data subset ..." )
       gcs <- grid$getCoordinateSystem()
       dimNames <- rev(names(scanVarDimensions(grid)))
       aux.list <- list()
-      for (i in 1:length(tRanges)) {
+      for (i in 1:length(timePars$tRanges)) {
             dimNamesRef <- dimNames
             aux.list2 <- list()    
             for (j in 1:length(latLon$llbbox)) {
-                  subSet <- grid$makeSubset(tRanges[[i]], zRange, latLon$llbbox[[j]], 1L, 1L, 1L)
+                  subSet <- grid$makeSubset(timePars$tRanges[[i]], zRange, latLon$llbbox[[j]], 1L, 1L, 1L)
                   shapeArray <- rev(subSet$getShape()) # Reversed!!
                   # shape of the output depending on spatial selection
                   if (latLon$pointXYindex[1] >= 0) {
@@ -46,7 +45,13 @@ makeSubset <- function(grid, tRanges, zRange, latLon) {
                   }        
                   aux.list2[[j]] <- array(subSet$readDataSlice(-1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray(), dim = shapeArray)
             }
-            aux.list[[i]] <- do.call("abind", c(aux.list2, along = 1))
+            # Sub-routine for daily aggregation from 6h data
+            if (!is.na(timePars$dailyAggr)) {
+                  aux.list[[i]] <- toDD(do.call("abind", c(aux.list2, along = 1)), dimNamesRef, timePars$dailyAggr)
+                  dimNamesRef <- attr(aux.list[[i]], "dimensions")
+            } else {
+                  aux.list[[i]] <- do.call("abind", c(aux.list2, along = 1))
+            }
             aux.list2 <- NULL
       }
       mdArray <- do.call("abind", c(aux.list, along = grep("^time", dimNamesRef)))

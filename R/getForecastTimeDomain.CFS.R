@@ -111,6 +111,6 @@ getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, time) {
                   foreTimesList[[i]][[j]] <- .jnew("ucar/ma2/Range", start, end, foreTimeStride)$shiftOrigin(foreTimeShift)
             }
       }
-      return(list("forecastDates" = foreDates, "ForeTimeRangesList" = foreTimesList, "deaccumFromFirst" = deaccumFromFirst, "doDailyMean" = dic$doDailyMean))
+      return(list("forecastDates" = foreDates, "ForeTimeRangesList" = foreTimesList, "deaccumFromFirst" = deaccumFromFirst, "dailyAggr" = dic$dailyAggr))
 }
 # End

@@ -29,6 +29,8 @@ loadSeasonalForecast.S4 <- function(dataset, var, grid, dic, members, latLon, ru
       if (isTRUE(latLon$revLat)) {
             mdArray <- revArrayLatDim(mdArray, grid)
       }
+      # formatting initialization dates
+      runTimePars$runDates <- format(as.POSIXct(runTimePars$runDates, tz = "GMT"), format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
       return(list("Variable" = list("varName" = var, "isStandard" = isStandard),
                   "Data" = mdArray,
                   "xyCoords" = c(latLon$xyCoords, "CRS_string" = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), 

@@ -46,8 +46,8 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
                         aux.list2[[k]] <- array(subSet$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray(), dim = shapeArray)
                   }
                   # Sub-routine for daily aggregation from 6h data
-                  if (isTRUE(foreTimePars$doDailyMean)) {
-                        aux.list1[[j]] <- toDD(do.call("abind", c(aux.list2, along = 1)), dimNamesRef)
+                  if (!is.na(foreTimePars$dailyAggr)) {
+                        aux.list1[[j]] <- toDD(do.call("abind", c(aux.list2, along = 1)), dimNamesRef, foreTimePars$dailyAggr)
                         dimNamesRef <- attr(aux.list1[[j]], "dimensions")
                   } else {
                         aux.list1[[j]] <- do.call("abind", c(aux.list2, along = 1))
