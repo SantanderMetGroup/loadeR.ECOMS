@@ -8,7 +8,6 @@ Remote access to climate databases stored at the ECOMS-UDG.
 A simple interface for accesing and retrieving dimensional slices of the various climate databases stored at the ECOMS User Data Gateway (Forecasts, gridded observations and reanalysis).
 }
 
-
 \usage{
 loadECOMS(dataset, var, dictionary = TRUE, members = NULL, lonLim = NULL, 
       latLim = NULL, season = NULL, years = NULL, leadMonth = NULL, time = "none") 
@@ -18,30 +17,39 @@ loadECOMS(dataset, var, dictionary = TRUE, members = NULL, lonLim = NULL,
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{dataset}{A character string indicating the database to be accessed. Currently accepted values are \code{System4_seasonal_15}, \code{System4_seasonal_51}, \code{System4_annual_15} and \code{CFSv2_seasonal_16} for hindcasts (where the notation indicates the GCM name, the temporal range and the default number of ensemble members returned respectively, separated by the lower bars), \code{WFDEI} for the WATCH Forcing Dataset (gridded observations) and \code{NCEP} for the NCEP/NCAR reanalysis. See Details}
+  
   \item{var}{
-Variable code (character string). This is the name of the variable either as originally coded in the dataset (i.e. not the standard name in R, not recommended) or according to the R standard naming (see the next argument).
+Variable code (character string). This is the name of the variable either as originally coded in the dataset (i.e. not the standard name in R, not recommended) or according to the R standard naming (see the next argument). For variables with several vertical levels, the vertical level is specified next to the variable name followed by the @ symbol (e.g. \code{var = "z@700"} for geopotential heigth at 700 mb isobaric surface pressure level)
 }
+
   \item{dictionary}{
 A logical flag indicating if a dictionary is being used. Default (strongly recommended) is set to \code{TRUE}, meaning that the function will internally perform the necessary conversions to return the standard variables defined in the vocabulary. See details. 
 }
+
   \item{members}{
-A vector of integers indicating the members to be loaded. Default to \code{NULL}, which loads the default members (see the Note below). For instance, \code{members=1:5} will retrieve the first five members of the hindcast. If the requested dataset is not a forecast, the argument will be ignored.
+A vector of integers indicating the members to be loaded. Default to \code{NULL}, which loads the default members (see the Note below). For instance, \code{members=1:5} will retrieve the first five members of the hindcast. Discontinuous member selections (e.g. \code{members=c(1,5,7)}) are allowed. If the requested dataset is not a forecast it will be ignored.
 }
+
   \item{lonLim}{
 Vector of length = 2, with minimum and maximum longitude coordinates, in decimal degrees, of the bounding box selected. For single-point queries, a numeric value with the longitude coordinate. If \code{NULL} (default), the whole longitudinal range is selected (Note that this may lead to a large output object size). See details. 
 }
   \item{latLim}{
 Same as \code{lonLim}, but for the selection of the latitudinal range.
 }
+
   \item{season}{
-An integer vector specifying the desired season (in months, January = 1 ...). Options include one to several (contiguous) months. If \code{NULL} (default), the function will return all possible months given the lead month. See details. 
+An integer vector specifying the desired season (in months, January = 1 ..., December = 12). Options include one to several (contiguous) months. For full year selections (not possible for all datasets, e.g. seasonal forecasts), the argument value must be set to \code{season = 1:12}. See details. 
 }
+
   \item{years}{
 Optional vector of years to select. Default to all available years. See details. 
 }
+
   \item{leadMonth}{
-Integer value indicating the lead forecast time, relative to the first month of \code{season}. Note that \code{leadMonth=1} for \code{season=1} (January) corresponds to the December initialization. Default to 1 (i.e., 1 lead month forecast). If the dataset is not a forecast, it will be ignored, and a message will be printed on screen if its value is different from \code{NULL}.}
-\item{time}{A character vector indicating the temporal filtering/aggregation of the output data. Default to \code{none}, which returns the original time series as stored in the dataset. For sub-daily variables, instantantaneous data at selected verification times can be filtered using one of the character strings \code{00}, \code{06}, \code{12} and \code{18}. If daily mean data are required use \code{DD}. See details.
+Integer value indicating the lead forecast time, relative to the first month of \code{season}. Note that \code{leadMonth=1} for \code{season=1} (January) corresponds to the December initialization. Default to 1 (i.e., 1 lead month forecast). If the dataset is not a forecast, it will be ignored, and a message will be printed on screen if its value is different from \code{NULL}.
+}
+
+  \item{time}{A character vector indicating the temporal filtering/aggregation of the output data. Default to \code{none}, which returns the original time series as stored in the dataset. For sub-daily variables, instantantaneous data at selected verification times can be filtered using one of the character strings \code{00}, \code{06}, \code{12} and \code{18}. If daily aggregated data are required use \code{DD}. See details.
 }
 }
 
@@ -77,7 +85,7 @@ For details on the different hindcast datasets available go to \url{http://meteo
 \strong{Available variables}
 
 
-For the possible values that the argument \code{var} can take for each dataset at ECOMS-UDG, check the first column of the \href{http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables}{variables table}, that is continuously updated as new variables are made available. The table also contains further details regarding the temporal aggregation/resolution of each variable and the possible vertical levels (to be included soon).
+For the possible values that the argument \code{var} can take for each dataset at ECOMS-UDG, check the first column of the \href{http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables}{variables table}, that is continuously updated as new variables are made available. The table also contains further details regarding the temporal aggregation/resolution of each variable and the available vertical levels.
 
 
 \strong{Variable homogeneization}
@@ -116,7 +124,7 @@ By default, 16 members are returned for the CFSv2 hindcast for better comparabil
 The argument \code{time} controls the temporal filtering/aggregation options that may apply for a variable. In case of daily mean data, this can be obtained in two different ways:
 \enumerate{
 \item For variables that are already stored as daily means in the dataset, both \code{DD} and \code{NULL} return the required daily output
-\item In case of 6-hourly data, if \code{DD} is chosen, the function will compute the daily mean as the averaged 6-hourly outputs for each day, printing an information message on screen. If the variable is precipitation (\code{var = "tp"}), the result of the aggregation will be the sum rather than the average (i.e., it will return the daily accumulated value).
+\item In case of 6-hourly data, if \code{DD} is chosen, the function will compute the daily mean as the averaged 6-hourly outputs for each day, printing an information message on screen. If the variable is precipitation or a radiation (\code{var} = \code{"tp"}, \code{"rsds"} or \code{"rlds"}), the result of the aggregation will be the sum rather than the mean (i.e., it will return the daily accumulated value).
 \item In case of 12-hourly data, daily mean data (\code{DD}) won't be computed, and the function will raise an error. In this particular case, the only accepted \code{time} argument values will be \code{NULL}, \code{00} and \code{12}.
 }
 In daily aggregations, the returned \code{Dates} for each day will be centered at the 12:00 time.
