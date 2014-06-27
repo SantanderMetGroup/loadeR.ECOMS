@@ -26,7 +26,7 @@ getTimeDomain <- function(grid, dic, season, years, time) {
       endDay <- timeDates[length(timeDates)]
 	startYear <- startDay$year + 1900
 	endYear <- endDay$year + 1900
-	if (is.null(years)) {
+      if (is.null(years)) {
 	      years <- as.integer(startYear : endYear)
 	}
 	if (years[1] < startYear | years[length(years)] > endYear) {
@@ -46,7 +46,7 @@ getTimeDomain <- function(grid, dic, season, years, time) {
 			stop("Invalid season definition")
 		}
 	}
-      if (!isTRUE(identical(season, sort(season)))) {
+      if (!identical(season, sort(season))) {
 		if (years[1] == startYear) {
 			warning(paste("First date in dataset: ", startDay, ". Seasonal data for the first year requested not available", sep = ""))
 		} else {
@@ -93,23 +93,24 @@ getTimeDomain <- function(grid, dic, season, years, time) {
       } else {
             if (time == "DD" | time == "none") {
                   timeStride <- 1L
+                  for (x in 1:length(dateSliceList)) {
+                        dateSliceList[[x]] <- as.POSIXct(dateSliceList[[x]], tz = "GMT")
+                  }
             } else {
                   time <- as.integer(time)
                   for (x in 1:length(timeIndList)) {
                         timeIndList[[x]] <- timeIndList[[x]][which(dateSliceList[[x]]$hour == time)]
-                        dateSliceList[[x]] <- dateSliceList[[x]][which(dateSliceList[[x]]$hour == time)]
+                        dateSliceList[[x]] <- as.POSIXct(dateSliceList[[x]][which(dateSliceList[[x]]$hour == time)], tz = "GMT")
                   }
                   if (length(timeIndList[[1]]) == 0) {
                         stop("Non-existing verification time selected.\nCheck value of argument 'time'")
                   }
                   timeStride <- as.integer(diff(timeIndList[[1]])[1])
+                  
             }
       }
-      dateSlice <- do.call("c", dateSliceList)
+      dateSlice <- format(do.call("c", dateSliceList), tz = "GMT")
       dateSliceList <- NULL
-      if (!is.na(dic$dailyAggr)) {
-            dateSlice <- dateSlice[which(dateSlice$hour == 12)]
-      }
       # Sub-routine for adjusting times in case of deaccumulation
       deaccumFromFirst <- NULL
       if (!is.null(dic)) {
