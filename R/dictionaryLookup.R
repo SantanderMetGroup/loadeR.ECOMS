@@ -1,7 +1,8 @@
 #' Searches variable string in the dictionary
 #' 
 #' Searches variable string provided in the dictionary to map it in the vocabulary, in order to get
-#' all the necessary information for variable homogenization.
+#' all the necessary information for variable homogenization. It also includes a new column specifying the
+#' aggregation function to be applied (if any).
 #' 
 #' @param dicPath Full path to the dictionary file (a csv file with extension \sQuote{.dic}).
 #' @param var Character string with the (standard) name of the variable
@@ -24,8 +25,6 @@ dictionaryLookup <- function(dicPath, var, time) {
                   if (length(dicRow) == 0) {
                         dicRow <- grep(paste("^", var, "$", sep = ""), dictionary$identifier)                  
                         dicRow <- dicRow[dictionary$time_step[dicRow] == "6h"]
-                        #doDailyMean <- TRUE
-                        #message("NOTE: daily mean will be calculated from the 6-h instantaneous model output")
                   }
             } else {
                   dicRow <- dicRow[dictionary$time_step[dicRow] == "6h"]
