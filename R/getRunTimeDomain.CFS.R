@@ -50,7 +50,6 @@ getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years) {
       if (validMonth != 11 & (length(members) > 24 | any(members > 24))) {
             stop("Maximum number of members in this initialization is 24")
       }
-      
       runTimes <- unlist(lapply(unique(runDates$year + 1900), function(x) {
             runTimes[which(runDates$year + 1900 == x)[members]]
       }))
