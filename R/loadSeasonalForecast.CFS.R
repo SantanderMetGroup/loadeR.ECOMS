@@ -11,6 +11,10 @@ loadSeasonalForecast.CFS = function(var, grid, dic, latLon, runTimePars, time) {
       if (isTRUE(latLon$revLat)) {
             mdArray <- revArrayLatDim(mdArray, grid)
       }
+      # formatting initialization dates
+      for (x in 1:length(runTimePars$runDates)){
+            runTimePars$runDates[[x]] <- format(as.POSIXct(runTimePars$runDates[[x]], tz = "GMT"), format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
+      }
       return(list("Variable" = list("varName" = var, "isStandard" = isStandard),
                   "Data" = mdArray,
                   "xyCoords" = c(latLon$xyCoords, "CRS_string" = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), 
@@ -19,3 +23,4 @@ loadSeasonalForecast.CFS = function(var, grid, dic, latLon, runTimePars, time) {
                   "Members" = names(runTimePars$runTimeRanges)))
 }
 # End
+
