@@ -11,10 +11,15 @@
 #' @references \url{http://stackoverflow.com/questions/18434305/apply-a-function-to-every-n-elements-of-a-vector}
 #' @author J Bedia \email{joaquin.bedia@@gmail.com}
 
-aggr6hToDailyMean <- function(x) {
+aggr6hToDailyMean <- function(x, aggr.fun) {
       stopifnot(length(x) %% 4 == 0L)
-      dm <- tapply(x, rep(1 : (length(x) / 4), each = 4), mean)
+      if (aggr.fun == "sum") {
+            dm <- tapply(x, rep(1 : (length(x) / 4), each = 4), sum)
+      } else {
+            dm <- tapply(x, rep(1 : (length(x) / 4), each = 4), mean)
+      }
       return(dm)
 }
 # End
+
 

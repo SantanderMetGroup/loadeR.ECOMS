@@ -17,15 +17,15 @@ dictionaryLookup <- function(dicPath, var, time) {
       if (length(dicRow) == 0) {
             stop("Variable requested does not match any identifier in the dictionary")
       }
-      doDailyMean <- FALSE
+      dailyAggr <- NA
       if (length(dicRow) > 1) {
             if (time == "DD") {
                   dicRow <- dicRow[dictionary$time_step[dicRow] == "24h"]
                   if (length(dicRow) == 0) {
                         dicRow <- grep(paste("^", var, "$", sep = ""), dictionary$identifier)                  
                         dicRow <- dicRow[dictionary$time_step[dicRow] == "6h"]
-                        doDailyMean <- TRUE
-                        message("NOTE: daily mean will be calculated from the 6-h instantaneous model output")
+                        #doDailyMean <- TRUE
+                        #message("NOTE: daily mean will be calculated from the 6-h instantaneous model output")
                   }
             } else {
                   dicRow <- dicRow[dictionary$time_step[dicRow] == "6h"]
@@ -35,20 +35,25 @@ dictionaryLookup <- function(dicPath, var, time) {
                   stop("Cannot compute daily mean from 12-h data")
             }
             if ((time == "06" | time == "18") & dictionary$time_step[dicRow] == "12h") {
-                  stop("Requested 'time' value (\"",time,"\") not available for 12-h data")
+                  stop("Requested 'time' value (\"", time, "\") not available for 12-h data")
             }
             if ((time != "none" & time != "DD") & (dictionary$time_step[dicRow] == "24h")) {
-                  stop("Subdaily data not available for variable \"", var,"\". Check value of argument 'time'")
+                  stop("Subdaily data not available for variable \"", var, "\". Check value of argument 'time'")
             }
             if (time == "DD" & dictionary$time_step[dicRow] == "24h") {
                   time <- "none"
             }
             if (time == "DD") {
-                  doDailyMean <- TRUE
-                  message("NOTE: daily mean will be calculated from the 6-h instantaneous model output")
+                  dailyAggr <- "mean"
+                  if (var == "tp" | var == "rlds" | var == "rsds") {
+                        dailyAggr <- "sum"
+                        message("NOTE: daily accumulated will be calculated from the 6-h model output")
+                  } else {
+                        message("NOTE: daily mean will be calculated from the 6-h model output")
+                  }
             }
       }
-      dic <- cbind.data.frame(dictionary[dicRow, ], doDailyMean)
+      dic <- cbind.data.frame(dictionary[dicRow, ], "dailyAggr" = I(dailyAggr))
       return(dic)
 }
 # End
