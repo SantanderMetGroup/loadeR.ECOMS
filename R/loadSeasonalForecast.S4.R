@@ -16,7 +16,7 @@
 #'  @return A list of components, as returned by \code{\link{loadSeasonalForecast}}.
 #'  @author J. Bedia \email{joaquin.bedia@@gmail.com}
 
-loadSeasonalForecast.S4 <- function(dataset, var, grid, dic, members, latLon, runTimePars, time) {    
+loadSeasonalForecast.S4 <- function(dataset, var, grid, dic, members, latLon, runTimePars, time, level) {    
       memberRangeList <- getMemberDomain.S4(grid, dataset, members)
       foreTimePars <- getForecastTimeDomain.S4(grid, dataset, dic, runTimePars, time)
       mdArray <- makeSubset.S4(grid, latLon, runTimePars, memberRangeList, foreTimePars)
@@ -31,7 +31,7 @@ loadSeasonalForecast.S4 <- function(dataset, var, grid, dic, members, latLon, ru
       }
       # formatting initialization dates
       runTimePars$runDates <- format(as.POSIXct(runTimePars$runDates, tz = "GMT"), format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
-      return(list("Variable" = list("varName" = var, "isStandard" = isStandard),
+      return(list("Variable" = list("varName" = var, "isStandard" = isStandard, "level" = level),
                   "Data" = mdArray,
                   "xyCoords" = c(latLon$xyCoords, "CRS_string" = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), 
                   "Dates" = foreTimePars$forecastDates,

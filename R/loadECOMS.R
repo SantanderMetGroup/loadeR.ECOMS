@@ -14,7 +14,11 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
             #
             dic <- dictionaryLookup(dicPath, var, time)
-            shortName <- dic$short_name      
+            shortName <- dic$short_name
+            # Exception for S4 variables with vertical levels
+            if (dataset == "System4_seasonal_15" & (shortName == "u" | shortName == "v" | shortName == "z")) {
+                  shortName <- paste(dic$short_name, level, "mb", sep = "")
+            }
       } else {
             shortName <- var
       }
@@ -65,13 +69,13 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             latLon <- getLatLonDomainForecast(grid, lonLim, latLim)      
             runTimePars <- getRunTimeDomain(dataset, grid, members, season, years, leadMonth)
             if (grepl("^System4", dataset)) {
-                  out <- loadSeasonalForecast.S4(dataset, var, grid, dic, members, latLon, runTimePars, time)
+                  out <- loadSeasonalForecast.S4(dataset, var, grid, dic, members, latLon, runTimePars, time, level)
             }
             if (grepl("CFSv2", dataset)) {
                   if (is.null(members)) {
                         members <- 1:16
                   }
-                  out <- loadSeasonalForecast.CFS(var, grid, dic, latLon, runTimePars, time)
+                  out <- loadSeasonalForecast.CFS(var, grid, dic, latLon, runTimePars, time, level)
             }
       }
       gds$close()
