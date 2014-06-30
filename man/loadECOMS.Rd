@@ -2,7 +2,7 @@
 \alias{loadECOMS}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Remote access to climate databases stored at the ECOMS-UDG.
+Remote access to climate databases stored at the ECOMS-UDG
 }
 \description{
 A simple interface for accesing and retrieving dimensional slices of the various climate databases stored at the ECOMS User Data Gateway (Forecasts, gridded observations and reanalysis).
@@ -19,15 +19,15 @@ loadECOMS(dataset, var, dictionary = TRUE, members = NULL, lonLim = NULL,
   \item{dataset}{A character string indicating the database to be accessed. Currently accepted values are \code{System4_seasonal_15}, \code{System4_seasonal_51}, \code{System4_annual_15} and \code{CFSv2_seasonal_16} for hindcasts (where the notation indicates the GCM name, the temporal range and the default number of ensemble members returned respectively, separated by the lower bars), \code{WFDEI} for the WATCH Forcing Dataset (gridded observations) and \code{NCEP} for the NCEP/NCAR reanalysis. See Details}
   
   \item{var}{
-Variable code (character string). This is the name of the variable either as originally coded in the dataset (i.e. not the standard name in R, not recommended) or according to the R standard naming (see the next argument). For variables with several vertical levels, the vertical level is specified next to the variable name followed by the @ symbol (e.g. \code{var = "z@700"} for geopotential heigth at 700 mb isobaric surface pressure level)
+Variable code (character string). This is the name of the variable according to the R standard naming (see the next argument). For variables with vertical levels, the vertical level is specified next to the variable name followed by the \dQuote{@} symbol (e.g. \code{var = "z@700"} for geopotential heigth at 700 mb isobaric surface pressure level). It is also possible to enter the variable name as originally coded in the dataset when working with non-homogenized variable (although this is not recommended, see the next argument). 
 }
 
   \item{dictionary}{
-A logical flag indicating if a dictionary is being used. Default (strongly recommended) is set to \code{TRUE}, meaning that the function will internally perform the necessary conversions to return the standard variables defined in the vocabulary. See details. 
+A logical flag indicating if a dictionary is used for variable homogenization. Default (strongly recommended) is set to \code{TRUE}, meaning that the function will internally perform the necessary homogenization steps to return the standard variables defined in the vocabulary (e.g. variable transformation, deaccumulation...). See details. 
 }
 
   \item{members}{
-A vector of integers indicating the members to be loaded. Default to \code{NULL}, which loads the default members (see the Note below). For instance, \code{members=1:5} will retrieve the first five members of the hindcast. Discontinuous member selections (e.g. \code{members=c(1,5,7)}) are allowed. If the requested dataset is not a forecast it will be ignored.
+A vector of integers indicating the members to be loaded. Default to \code{NULL}, which loads the default members (see the Note below). For instance, \code{members=1:5} will retrieve the first five members of the hindcast. Discontinuous member selection (e.g. \code{members=c(1,5,7)}) is allowed. If the requested dataset is not a forecast it will be ignored.
 }
 
   \item{lonLim}{
@@ -63,8 +63,8 @@ A list with the following elements providing the necessary information for data 
       \item \code{level} A numeric value indicating the vertical level of the variable (\code{NULL} for surface variables or variables without vertical level definition)}
 \item{Data}{A N-dimensional array. The number of dimensions (N) depends on the type of request given that dimensions of length one are dropped. Thus, N can take values from 4 (several members for a rectangular domain with different values for longitude, latitude, ensemble and time dimensions) to 1 (atomic vector), for single-point and single-member selections, for which only the time dimension is required. The dimensions are labelled by the \dQuote{dimnames} attribute. Note that the order of the dimensions is not fixed.}
 \item{xyCoords}{A list with \code{x} and \code{y} components, as required by many standard mapping functions in R (see e.g. \code{\link[graphics]{image}}. In addition, the \code{CRS_string} element provides geo-referencing information for more advanced spatial operations/conversions, in the form of a character string following the \href{http://trac.osgeo.org/proj/}{PROJ.4 specifications}.}
-\item{Dates}{A list with two POSIXlt time elements of the same length as the \sQuote{time} dimension in \code{Data}, defining the time boundaries of the time axis coordinates in the interval \emph{[start, end)}. See details.}
-\item{InitializationDates}{A \link[base]{POSIXlt} time object corresponding to the initialization times selected. Only for forecast datasets. See details.}
+\item{Dates}{A list with two POSIXct time elements of the same length as the \sQuote{time} dimension in \code{Data}, defining the time boundaries of the time axis coordinates in the interval \emph{[start, end)}. See details.}
+\item{InitializationDates}{A \link[base]{POSIXct} time object corresponding to the initialization times selected. Only for forecast datasets. See details.}
 \item{Members}{A character vector with the names of the ensemble members returned, in the same order as arranged in the \code{Data} array. Only for forecast datasets. See details.}
 }
 %%  ~Describe the value returned
