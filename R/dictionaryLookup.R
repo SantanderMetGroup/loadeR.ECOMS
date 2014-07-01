@@ -25,7 +25,7 @@ dictionaryLookup <- function(dicPath, derInterface, time) {
       }
       dailyAggr <- NA
       if (length(dicRow) > 1) {
-            if (time == "DD" & is.null(derInterface$deriveInterface)) {
+            if (time == "DD" & derInterface$deriveInterface == "none") {
                   dicRow <- dicRow[dictionary$time_step[dicRow] == "24h"]
                   if (length(dicRow) == 0) {
                         dicRow <- grep(paste("^", derInterface$origVar, "$", sep = ""), dictionary$identifier)                  
@@ -57,7 +57,7 @@ dictionaryLookup <- function(dicPath, derInterface, time) {
                   }
             }
       }
-      if (is.null(derInterface$deriveInterface)) {
+      if (derInterface$deriveInterface == "none") {
             dic <- cbind.data.frame(dictionary[dicRow, ], "dailyAggr" = I(dailyAggr))
       } else {
             dicRow2 <- grep(paste("^", derInterface$origVar, "$", sep = ""), dictionary$identifier)
