@@ -1,3 +1,22 @@
+#' Compute wind speed from wind components in System4 datasets
+#' 
+#' Performs a basic calculation of wind speed from eastward and northward wind components while minimizing
+#' the amount of data simultaneously loaded in memory.
+#' 
+#' @param gds A java \dQuote{GridDataset}. This is used to load all input java \dQuote{GeoGrid}'s to derive the target variable.
+#' @param grid An input java GeoGrid. This is the grid of the \sQuote{leading var} (\code{leadVar}) previously loaded
+#' for subsetting parameter retrieval (see \code{\link{deriveInterface}} for details).
+#' @param latLon A list of geolocation parameters, as returned by getLatLonDomainForecast
+#' @param memberRangeList A list of ensemble java ranges as returned by getMemberDomain.S4
+#' @param runTimePars A list of run time definition parameters, as returned by getRunTimeDomain
+#' @param foreTimePars A list of forecast time definition parameters, as returned by getForecastTimeDomain.S4
+#' @return A n-dimensional array. Dimensions are labelled by the \dQuote{dimnames} attribute
+#' @details The function essentially follows the same approach as \code{\link{makeSubset.S4}}, excepting that at each time step
+#' it loads more than one \dQuote{GeoGrid} in order to compute wind velocity. Within the code, \code{grid}
+#'  corresponds to uas, and \code{grid1} to vas.
+#' @references \url{https://www.unidata.ucar.edu/software/thredds/current/netcdf-java/v4.0/javadocAll/ucar/nc2/dt/grid/GeoGrid.html}
+#' \url{http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables}
+#' @author J Bedia \email{joaquin.bedia@@gmail.com} 
 
 deriveSurfaceWindSpeed.S4 <- function(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars) {
       message("[", Sys.time(), "] Retrieving data subset ..." )
@@ -63,4 +82,3 @@ deriveSurfaceWindSpeed.S4 <- function(gds, grid, latLon, runTimePars, memberRang
       return(mdArray)
 }
 # End
-
