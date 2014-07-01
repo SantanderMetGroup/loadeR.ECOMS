@@ -13,6 +13,8 @@
 #'  or NULL if the variable is not derived}
 #' \item{leadVar}{First variable that will be loaded and whose subsetting parameters
 #' and metadata will be used as reference for the derived variable. See details.}
+#' \item{origVar}{Name of the variable requested. In case of applying an approximation function,
+#' this is the requested variable}
 #' \end{itemize}
 #' @details Currently in ECOMS there is only a reduced set of derived variables,
 #' corresponding to the S4-seasonal-15-member model, all at surface level, but the
@@ -20,11 +22,11 @@
 #'  derived variables from other datasets/models). The underlying idea of the function is
 #'  first arbitrarily loading one of the input variables (the \code{leadVar}), whose
 #'  geolocation and time subsetting definition are used subsequently for all other input
-#'  variables. For instance, if one needs surface wind speed (\code{"wss"}), the first 
-#'  variable being loaded is the eastward wind component (\code{"uas"}), and then all
-#'  its parameters passed to the subsequent functions for subsetting are recicled
-#'  for loading also the northward component \code{"vas"} needed to compute the
-#'  velocity module.
+#'  variables. For instance, if one needs the \sQuote(original var) surface wind speed (\code{"wss"}),
+#'  the first variable being loaded (i.e., the \sQuote{leading var}) is the eastward 
+#'  wind component (\code{"uas"}), and then all parameters are passed to the subsequent
+#'  functions for subsetting and are recicled for loading also the northward component \code{"vas"}
+#'   needed to compute the velocity module.
 #' @author J Bedia \email{joaquin.bedia@@gmail.com}
 
 deriveInterface <- function(dataset, var, dictionary) {
@@ -42,7 +44,7 @@ deriveInterface <- function(dataset, var, dictionary) {
             lev <- findVerticalLevel(var)$level
             leadVar <- switch(deriveInterface, 
                                     "deriveSurfacePressure" = "psl",
-                                    "deriveSurfaceRelativeHumidity" = "tdps",
+                                    "deriveSurfaceRelativeHumidity" = "tas",
                                     "deriveSurfaceSpecificHumidity" = "tdps",
                                     "deriveSurfaceWindSpeed" = "uas")
             if (!is.null(lev)) {
@@ -52,6 +54,6 @@ deriveInterface <- function(dataset, var, dictionary) {
             deriveInterface <- NULL
             leadVar <- var
       }
-      return(list("deriveInterface" = deriveInterface, "leadVar" = leadVar))
+      return(list("deriveInterface" = deriveInterface, "leadVar" = leadVar, "origVar" = var))
 }
 # End

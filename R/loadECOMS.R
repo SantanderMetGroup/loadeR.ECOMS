@@ -5,7 +5,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       time <- match.arg(time, choices = c("none", "00", "06", "12", "18", "DD"))
       derInterface <- deriveInterface(dataset, var, dictionary)
       var <- derInterface$leadVar
-      aux.level <- findVerticalLevel(var)
+      aux.level <- findVerticalLevel(derInterface$leadVar)
       var <- aux.level$var
       level <- aux.level$level
       url <- dataURL(dataset)
@@ -15,7 +15,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             # devel
             dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
             #
-            dic <- dictionaryLookup(dicPath, var, time)
+            dic <- dictionaryLookup(dicPath, derInterface, time)
             shortName <- dic$short_name
             # Exception for S4 variables with vertical levels
             if (dataset == "System4_seasonal_15" & (shortName == "u" | shortName == "v" | shortName == "z")) {

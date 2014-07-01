@@ -14,7 +14,7 @@
 #'  auxiliary parameters, as returned by \code{getRunTimeDomain}.
 #'  @param time Verification time. See \code{\link{loadSeasonalForecast}}
 #'  @param derInterface A list of components indicating the interface for derived variables,
-#'  when relevant. See details.
+#'   when relevant. See details.
 #'  @return A list of components, as returned by \code{\link{loadSeasonalForecast}}.
 #'  @details In the case of derived variables, these are computed on-the-fly applying the
 #'   appropriate method. The idea is computing the derived variable loading the minimum 

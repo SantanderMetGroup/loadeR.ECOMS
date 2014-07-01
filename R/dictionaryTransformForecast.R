@@ -1,7 +1,7 @@
 #' Performs variable transformation
 #' 
 #' Performs variable transformation according to dictionary specifications.
-#' Sub-routine of \code{loadGridDataset}.
+#' Sub-routine of the \code{loadSeasonalForecast} family.
 #' 
 #' @param dic Dictionary line for the variable, as returned by \code{dictionaryLookup}
 #' @param foreTimePars A list of time selection parameters, as returned by \code{getTimeDomain}

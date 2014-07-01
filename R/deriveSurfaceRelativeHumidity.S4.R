@@ -1,6 +1,6 @@
-#' Compute wind speed from wind components in System4 datasets
+#' Compute surface relative humidity in System4 datasets
 #' 
-#' Performs a basic calculation of wind speed from eastward and northward wind components while minimizing
+#' Performs a basic calculation of specific humidity while minimizing
 #' the amount of data simultaneously loaded in memory.
 #' 
 #' @param gds A java \dQuote{GridDataset}. This is used to load all input java \dQuote{GeoGrid}'s to derive the target variable.
@@ -12,16 +12,15 @@
 #' @param foreTimePars A list of forecast time definition parameters, as returned by getForecastTimeDomain.S4
 #' @return A n-dimensional array. Dimensions are labelled by the \dQuote{dimnames} attribute
 #' @details The function essentially follows the same approach as \code{\link{makeSubset.S4}}, excepting that at each time step
-#' it loads more than one \dQuote{GeoGrid} in order to compute wind velocity. Within the code, \code{grid}
-#'  corresponds to uas, and \code{grid1} to vas.
-#' @references \url{https://www.unidata.ucar.edu/software/thredds/current/netcdf-java/v4.0/javadocAll/ucar/nc2/dt/grid/GeoGrid.html}
-#' \url{http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables}
+#' it loads more than one \dQuote{GeoGrid} (both tas and tdps) in order to compute relative humidity. 
+#' @references \url{http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables}
 #' @author J Bedia \email{joaquin.bedia@@gmail.com} 
 
-deriveSurfaceWindSpeed.S4 <- function(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars) {
+deriveSurfaceRelativeHumidity.S4 <- function(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars) {
       message("[", Sys.time(), "] Retrieving data subset ..." )
-      # grid = uas
-      grid1 <- gds$findGridByName("v10m") # grid1 = vas
+      lv <- 2.5e+06
+      Rv <- 461.5
+      grid1 <- gds$findGridByName("dpt2m") # grid1 = dew point # grid = tas
       gcs <- grid$getCoordinateSystem()
       dimNames <- rev(names(scanVarDimensions(grid))) # reversed!
       z <- .jnew("ucar/ma2/Range", 0L, 0L)
@@ -33,7 +32,7 @@ deriveSurfaceWindSpeed.S4 <- function(gds, grid, latLon, runTimePars, memberRang
                   rt <- runTimePars$runTimeRanges[[j]]
                   ft <- foreTimePars$ForeTimeRangesList[[j]]
                   aux.list2 <- rep(list(bquote()), length(latLon$llRanges))
-                        for (k in 1:length(latLon$llRanges)) {
+                  for (k in 1:length(latLon$llRanges)) {
                         subSet <- grid$makeSubset(rt, ens, ft, z, latLon$llRanges[[k]]$get(0L), latLon$llRanges[[k]]$get(1L))
                         subSet1 <- grid1$makeSubset(rt, ens, ft, z, latLon$llRanges[[k]]$get(0L), latLon$llRanges[[k]]$get(1L))
                         shapeArray <- rev(subSet$getShape())
@@ -49,13 +48,13 @@ deriveSurfaceWindSpeed.S4 <- function(gds, grid, latLon, runTimePars, memberRang
                               dimNamesRef <- dimNamesRef[-rm.dim]
                         }
                         # Computation of derived wss from uas and vas
-                        uas <- subSet$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray()
-                        vas <- subSet1$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray()
-                        wss <- sqrt(uas^2 + vas^2)
-                        uas <- NULL
-                        vas <- NULL
-                        aux.list2[[k]] <- array(wss, dim = shapeArray)
-                        wss <- NULL
+                        tas <- subSet$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray()
+                        tdps <- subSet1$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray()
+                        hurs <- 100 * exp((lv / Rv) * ((1 / tas) - (1 / tdps)))
+                        tas <- NULL
+                        tdps <- NULL
+                        aux.list2[[k]] <- array(hurs, dim = shapeArray)
+                        hurs <- NULL
                   }
                   # Sub-routine for daily aggregation from 6h data
                   if (!is.na(foreTimePars$dailyAggr)) {
