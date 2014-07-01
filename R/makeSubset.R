@@ -16,7 +16,7 @@
 #'  \sQuote{readDataSlice} are converted to a 1D array (\sQuote{copyTo1DjavaArray} method),
 #' and then put back in a n-dimensional R array. This is achieved by reversing
 #' the GeoGrid dimension ordering. In addition, the particular case of single-coordinate selections
-#' (either in X and/or in Y dimensions) must be adequately handled given taht the \sQuote{makeSubset} output 
+#' (either in X and/or in Y dimensions) must be adequately handled given that the \sQuote{makeSubset} output 
 #' has in this case a different shape than the final output after \dQuote{slicing}.
 #' @references \url{https://www.unidata.ucar.edu/software/thredds/current/netcdf-java/v4.0/javadocAll/ucar/nc2/dt/grid/GeoGrid.html}
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com} and A. Cofin\~no.

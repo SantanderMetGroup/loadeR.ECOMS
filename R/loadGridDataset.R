@@ -3,23 +3,6 @@
 #' Loads a user-defined subset from a gridded dataset compliant with the Common
 #'  Data Model interface
 #' 
-#' @param dataset A complete URL to the file describing the dataset (usually a NcML)
-#' @param var A character string indicating the variable requested. This is usually
-#' a variable defined in the vocabulary. See details.
-#' @param vocabulary Type of vocabulary to be used for data homogeneization. Currently
-#' only two options are accepted: \dQuote{\code{standard}} (the default) or \dQuote{\code{none}}.
-#'  The latter is used only for original (non-homogenized) data retrieval. See details.
-#' @param dictionary Full path to the dictionary file (.dic). Default to \code{NULL},
-#'  indicating that the .dic file is in the same directory as the \code{dataset}. See details.
-#' @param lonLim
-#' @param latLim
-#' @param level A numeric value indicating the vertical level.
-#' @param season
-#' @param years 
-#' @return
-#' @export
-#' @details
-#' @seealso \code{\link{dataInventory}}
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com}
 #' @references \url{http://www.unidata.ucar.edu/software/thredds/current/netcdf-java/tutorial/GridDatatype.html}
 
@@ -38,7 +21,7 @@ loadGridDataset <- function(var, grid, dic, level, season, years, time, latLon) 
       }
       return(list("Variable" = list("varName" = var, "isStandard" = isStandard, "level" = level),
             "Data" = mdArray,
-            "xyCoords" = c(latLon$xyCoords, "CRS_string" = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"), 
+            "xyCoords" = latLon$xyCoords, 
             "Dates" = timePars$dateSlice))
 }
 # End

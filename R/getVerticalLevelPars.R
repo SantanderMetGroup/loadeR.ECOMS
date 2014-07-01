@@ -1,12 +1,12 @@
 #' Definition of vertical dimension slices
-#' 
+#'
 #' Returns the selected level value (if any) and a suitable java structure. This is a subroutine
-#' of \code{loadGridDataset}, whose output is passed to \code{makeSubset}. 
-#'  
+#' of \code{loadGridDataset}, whose output is passed to \code{makeSubset}.
+#'
 #' @param gcs An object of the java class \sQuote{GeoGrid})
 #' @param level Vertical level. Passed by \code{loadGridDataset}
 #' @return A list with the level value and either a java Range or a java null reference
-#' defining the index of the vertical axis (null if no vertical levels exist)
+#' defining the level index position along the vertical axis (null if no vertical levels exist)
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com}
 
 getVerticalLevelPars <- function(grid, level) {
@@ -25,7 +25,7 @@ getVerticalLevelPars <- function(grid, level) {
             warning("The variable selected has no vertical levels")
         }
         level <- NULL
-        zRange <- .jnull()    
+        zRange <- .jnull()
     }
     return(list("level" = level, "zRange" = zRange))
 }

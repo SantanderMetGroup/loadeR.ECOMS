@@ -3,6 +3,8 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                      years = NULL, leadMonth = 1, time = "none") {
       dataset <- match.arg(dataset, c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15", "CFSv2_seasonal_16", "WFDEI", "NCEP"))
       time <- match.arg(time, choices = c("none", "00", "06", "12", "18", "DD"))
+      derInterface <- deriveInterface(dataset, var, dictionary)
+      var <- derInterface$leadVar
       aux.level <- findVerticalLevel(var)
       var <- aux.level$var
       level <- aux.level$level
@@ -22,21 +24,30 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       } else {
             shortName <- var
       }
-      if (is.null(season)) {
-            stop("Argument 'season' must be provided")
-      }
-      if (min(season) < 1 | max(season) > 12) {
-            stop("Invalid season definition")
+      if (dic$time_step == "static") {
+            message("NOTE: The requested variable is static. All time-related arguments will be ignored")
+            season <- 1
+            years <- 2000
+            time <- "none"
+      } else {
+            if (is.null(season)) {
+                  stop("Argument 'season' must be provided")
+            }
+            if (min(season) < 1 | max(season) > 12) {
+                  stop("Invalid season definition")
+            }
       }
       # Season range constraints
-      if (grepl("CFSv2", dataset) & (length(season) + leadMonth) > 9) {
-            stop("Max. forecast extent is 9 months. Reduce season length or lead month value accordingly")            
-      }
-      if (grepl("System4_seasonal", dataset) & (length(season) + leadMonth) > 7) {
-            stop("Max. forecast extent is 7 months. Reduce season length or lead month value accordingly")            
-      }
-      if (grepl("System4_annual", dataset) & (length(season) + leadMonth) > 13) {
-            stop("Max. forecast extent is 13 months. Reduce season length or lead month value accordingly")            
+      if (dic$time_step != "static") {
+            if (grepl("CFSv2", dataset) & (length(season) + leadMonth) > 9) {
+                  stop("Max. forecast extent is 9 months. Reduce season length or lead month value accordingly")            
+            }
+            if (grepl("System4_seasonal", dataset) & (length(season) + leadMonth) > 7) {
+                  stop("Max. forecast extent is 7 months. Reduce season length or lead month value accordingly")            
+            }
+            if (grepl("System4_annual", dataset) & (length(season) + leadMonth) > 13) {
+                  stop("Max. forecast extent is 13 months. Reduce season length or lead month value accordingly")            
+            }
       }
       if (dataset == "WFDEI" & !is.null(leadMonth)) {
             message("NOTE: The dataset is not a forecast. Argument 'leadMonth' will be ignored")
@@ -53,23 +64,26 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             latLon <- getLatLonDomain(grid, lonLim, latLim)
             out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon)
       } else {
+            if (dic$time_step == "static") {
+                  members <- 1
+            }
             if (!is.null(members)) {
                   members <- sort(members)
             }
-            if (is.null(leadMonth)) {
+            if (is.null(leadMonth) & dic$time_step != "static") {
                   stop("A lead month for forecast initialization must be specified")
             }
-            if (leadMonth < 0) {
+            if (leadMonth < 0 & dic$time_step != "static") {
                   stop("Invalid lead time definition")
             }
-            if (leadMonth == 0) {
+            if (leadMonth == 0 & dic$time_step != "static") {
                   message("NOTE: 'leadMonth = 0' selected")
             }
             leadMonth <- as.integer(leadMonth)
             latLon <- getLatLonDomainForecast(grid, lonLim, latLim)      
             runTimePars <- getRunTimeDomain(dataset, grid, members, season, years, leadMonth)
             if (grepl("^System4", dataset)) {
-                  out <- loadSeasonalForecast.S4(dataset, var, grid, dic, members, latLon, runTimePars, time, level)
+                  out <- loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, derInterface)
             }
             if (grepl("CFSv2", dataset)) {
                   if (is.null(members)) {
@@ -80,6 +94,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       }
       gds$close()
       message("[",Sys.time(),"]", " Done")
+      attr(out$xyCoords, "projection") <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
       return(out)
 }      
 # End
