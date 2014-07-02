@@ -91,6 +91,9 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   }
                   out <- loadSeasonalForecast.CFS(var, grid, dic, latLon, runTimePars, time, level)
             }
+            if (derInterface$deriveInterface != "none") {
+                  out$Variable$varName <- derInterface$origVar
+            }
       }
       gds$close()
       message("[",Sys.time(),"]", " Done")
