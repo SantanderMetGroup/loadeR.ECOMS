@@ -11,13 +11,10 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       url <- dataURL(dataset)
       dic <- NULL
       if (isTRUE(dictionary)) {
-            # dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
-            # devel
-            dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
-            #
+            dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
+            # for devel only # dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
             dic <- dictionaryLookup(dicPath, derInterface, time)
             shortName <- dic$short_name
-            # Exception for S4 variables with vertical levels
             if (dataset == "System4_seasonal_15" & (shortName == "u" | shortName == "v" | shortName == "z")) {
                   shortName <- paste(dic$short_name, level, "mb", sep = "")
             }

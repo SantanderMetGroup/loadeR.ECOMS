@@ -33,9 +33,9 @@ deriveInterface <- function(dataset, var, dictionary) {
       if (!dictionary) {
             stop("The requested variable is derived. The dictionary must be used for homogenization and conversion of input variables\nGo to http://meteo.unican.es/ecoms-udg/ListOfVariables for details")
       }
-      # dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
+      dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
       # devel (comment before package building)
-      dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
+      # dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
       dictionary <- tryCatch({read.csv(dicPath, stringsAsFactors = FALSE)}, error = function(e) stop("Dictionary not found"))
       lev <- findVerticalLevel(var)$level
       var <- findVerticalLevel(var)$var
