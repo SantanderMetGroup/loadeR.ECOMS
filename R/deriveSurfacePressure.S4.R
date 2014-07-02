@@ -18,10 +18,6 @@
 
 deriveSurfacePressure.S4 <- function(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars) {
       message("[", Sys.time(), "] Retrieving data subset ..." )
-      # Constants
-      Rd <- 287.058 # dry air constant J/(K kg)
-      GammaST <- 0.0065 #(dT/dz)^st standard atmosphere vertical gradient of the temperature in the troposphere (0.0065 (K/m^-1))
-      g <- 9.80665 # (m/s^2)
       # grid = tas (K)
       grid.zs <- gds$findGridByName("zsfc") # surface geopotential (STATIC!) (m^2/s^2)
       grid.mslp <- gds$findGridByName("mslp") # sea level pressure (Pa)
@@ -36,10 +32,9 @@ deriveSurfacePressure.S4 <- function(gds, grid, latLon, runTimePars, memberRange
                   rt <- runTimePars$runTimeRanges[[j]]
                   ft <- foreTimePars$ForeTimeRangesList[[j]]
                   aux.list2 <- rep(list(bquote()), length(latLon$llRanges))
-                  static.range <- .jnew("ucar/ma2/Range", 0L, 0L)
                   for (k in 1:length(latLon$llRanges)) {
                         subSet <- grid$makeSubset(rt, ens, ft, z, latLon$llRanges[[k]]$get(0L), latLon$llRanges[[k]]$get(1L))
-                        subSet.zs <- grid.zs$makeSubset(static.range, static.range, static.range, z, latLon$llRanges[[k]]$get(0L), latLon$llRanges[[k]]$get(1L))
+                        subSet.zs <- grid.zs$makeSubset(z, z, z, z, latLon$llRanges[[k]]$get(0L), latLon$llRanges[[k]]$get(1L))
                         subSet.mslp <- grid.mslp$makeSubset(rt, ens, ft, z, latLon$llRanges[[k]]$get(0L), latLon$llRanges[[k]]$get(1L))
                         shapeArray <- rev(subSet$getShape())
                         dimNamesRef <- dimNames              
@@ -58,29 +53,8 @@ deriveSurfacePressure.S4 <- function(gds, grid, latLon, runTimePars, memberRange
                         zs.aux <- subSet.zs$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray()
                         zs <- rep(zs.aux, length(tas) / length(zs.aux))
                         zs.aux <- NULL
-                        To <- tas + GammaST * zs / g
-                        ind <- which(abs(zs) >= 0.001)
-                        ind1 <- intersect(intersect(which(To > 290.5), which(tas <= 290.5)), ind)
                         mslp <- subSet.mslp$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray()
-                        auxGamma <- mslp
-                        ps <- mslp
-                        auxGamma[ind1]<-g*(290.5-tas[ind1])/zs[ind1]
-                        ind <- setdiff(ind, ind1)
-                        ind1 <- intersect(intersect(which(To > 290.5), which(tas > 290.5)), ind)
-                        auxGamma[ind1] <- 0
-                        tas[ind1] <- 0.5 * (255 + tas[ind1])
-                        ind <- setdiff(ind, ind1)
-                        ind1 <- intersect(which(tas < 255), ind)
-                        auxGamma[ind1] <- GammaST
-                        tas[ind1] <- 0.5 * (255 + tas[ind1])
-                        ind <- setdiff(ind, ind1)
-                        auxGamma[ind] <- GammaST
-                        ind <- which(abs(zs) >= 0.001)
-                        ps[ind] <- mslp[ind] * exp((-zs[ind] / (Rd * tas[ind])) * (1 - 0.5 * (auxGamma[ind] * zs[ind]) / (g * tas[ind]) + (1 / 3) * ((auxGamma[ind] * zs[ind]) / (g * tas[ind])) ^ 2))
-                        tas <- NULL
-                        zs <- NULL
-                        mslp <- NULL
-                        auxGamma <- NULL
+                        ps <- mslp2ps(tas, zs, mslp)
                         aux.list2[[k]] <- array(ps, dim = shapeArray)
                         ps <- NULL
                   }
