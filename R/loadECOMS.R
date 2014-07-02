@@ -58,7 +58,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       gds <- J("ucar.nc2.dt.grid.GridDataset")$open(url$URL)
       grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
-            stop("Variable requested not found")#.\nCheck variables using 'datasetInventory'")
+            stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables")
       }
       if (dataset == "WFDEI" | dataset == "NCEP") {
             latLon <- getLatLonDomain(grid, lonLim, latLim)
