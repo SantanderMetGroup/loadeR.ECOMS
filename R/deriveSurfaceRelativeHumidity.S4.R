@@ -14,12 +14,12 @@
 #' @details The function essentially follows the same approach as \code{\link{makeSubset.S4}}, excepting that at each time step
 #' it loads more than one \dQuote{GeoGrid} (both tas and tdps) in order to compute relative humidity. 
 #' @references \url{http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables}
-#' @author J Bedia \email{joaquin.bedia@@gmail.com} 
+#' @author J Bedia \email{joaquin.bedia@@gmail.com}, borrowing some MatLab code from S. Herrera
 
 deriveSurfaceRelativeHumidity.S4 <- function(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars) {
       message("[", Sys.time(), "] Retrieving data subset ..." )
       lv <- 2.5e+06
-      Rv <- 461.5
+      Rv <- 461.5 # J/(K kg)
       grid1 <- gds$findGridByName("dpt2m") # grid1 = dew point # grid = tas
       gcs <- grid$getCoordinateSystem()
       dimNames <- rev(names(scanVarDimensions(grid))) # reversed!
@@ -47,7 +47,7 @@ deriveSurfaceRelativeHumidity.S4 <- function(gds, grid, latLon, runTimePars, mem
                               shapeArray <- shapeArray[-rm.dim]
                               dimNamesRef <- dimNamesRef[-rm.dim]
                         }
-                        # Computation of derived wss from uas and vas
+                        # Computation of derived hurs from tas and tdps
                         tas <- subSet$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray()
                         tdps <- subSet1$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray()
                         hurs <- 100 * exp((lv / Rv) * ((1 / tas) - (1 / tdps)))
