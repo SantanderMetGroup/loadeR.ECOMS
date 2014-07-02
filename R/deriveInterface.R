@@ -37,22 +37,23 @@ deriveInterface <- function(dataset, var, dictionary) {
       # devel (comment before package building)
       dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
       dictionary <- tryCatch({read.csv(dicPath, stringsAsFactors = FALSE)}, error = function(e) stop("Dictionary not found"))
+      lev <- findVerticalLevel(var)$level
+      var <- findVerticalLevel(var)$var
       dicRow <- grep(paste("^", var, "$", sep = ""), dictionary$identifier) 
       if (dictionary$derived[dicRow] == 1) {
             message("NOTE: The requested variable is not originally stored in model's database\nIt will be derived on-the-fly using an approximation\nGo to http://meteo.unican.es/ecoms-udg/ListOfVariables for details")
             deriveInterface <- dictionary$interface[dicRow]
-            lev <- findVerticalLevel(var)$level
             leadVar <- switch(deriveInterface, 
-                                    "deriveSurfacePressure" = "psl",
+                                    "deriveSurfacePressure" = "tas",
                                     "deriveSurfaceRelativeHumidity" = "tas",
-                                    "deriveSurfaceSpecificHumidity" = "tdps",
+                                    "deriveSurfaceSpecificHumidity" = "tas",
                                     "deriveSurfaceWindSpeed" = "uas")
-            if (!is.null(lev)) {
-                  leadVar <- paste(leadVar, lev, sep = "@")
-            }       
       } else {
-            deriveInterface <- NULL
+            deriveInterface <- "none"
             leadVar <- var
+      }
+      if (!is.null(lev)) {
+            leadVar <- paste(leadVar, lev, sep = "@")
       }
       return(list("deriveInterface" = deriveInterface, "leadVar" = leadVar, "origVar" = var))
 }

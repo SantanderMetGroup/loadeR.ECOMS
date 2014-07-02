@@ -19,7 +19,7 @@
 dictionaryLookup <- function(dicPath, derInterface, time) {
       message("[", Sys.time(), "] Defining homogeneization parameters for variable \"", derInterface$origVar, "\"")
       dictionary <- tryCatch({read.csv(dicPath, stringsAsFactors = FALSE)}, error = function(e) stop("Dictionary not found"))
-      dicRow <- grep(paste("^", derInterface$leadVar, "$", sep = ""), dictionary$identifier) 
+      dicRow <- grep(paste("^", findVerticalLevel(derInterface$leadVar)$var, "$", sep = ""), dictionary$identifier) 
       if (length(dicRow) == 0) {
             stop("Variable requested does not match any identifier in the dictionary")
       }
