@@ -47,14 +47,14 @@ dictionaryLookup <- function(dicPath, derInterface, time) {
             if (time == "DD" & dictionary$time_step[dicRow] == "24h") {
                   time <- "none"
             }
-            if (time == "DD") {
-                  dailyAggr <- "mean"
-                  if (derInterface$origVar == "tp" | derInterface$origVar == "rlds" | derInterface$origVar == "rsds") {
-                        dailyAggr <- "sum"
-                        message("NOTE: daily accumulated will be calculated from the 6-h model output")
-                  } else {
-                        message("NOTE: daily mean will be calculated from the 6-h model output")
-                  }
+      }
+      if (time == "DD") {
+            dailyAggr <- "mean"
+            if (derInterface$origVar == "tp" | derInterface$origVar == "rlds" | derInterface$origVar == "rsds") {
+                  dailyAggr <- "sum"
+                  message("NOTE: daily accumulated will be calculated from the 6-h model output")
+            } else {
+                  message("NOTE: daily mean will be calculated from the 6-h model output")
             }
       }
       if (derInterface$deriveInterface == "none") {
