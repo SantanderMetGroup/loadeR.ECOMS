@@ -55,6 +55,9 @@ deriveSurfacePressure.S4 <- function(gds, grid, latLon, runTimePars, memberRange
                         zs.aux <- NULL
                         mslp <- subSet.mslp$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray()
                         ps <- mslp2ps(tas, zs, mslp)
+                        zs <- NULL
+                        mslp <- NULL
+                        tas <- NULL
                         aux.list2[[k]] <- array(ps, dim = shapeArray)
                         ps <- NULL
                   }
