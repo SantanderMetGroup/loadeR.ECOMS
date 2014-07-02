@@ -10,7 +10,7 @@ A simple interface for accesing and retrieving dimensional slices of the various
 
 \usage{
 loadECOMS(dataset, var, dictionary = TRUE, members = NULL, lonLim = NULL, 
-      latLim = NULL, season = NULL, years = NULL, leadMonth = NULL, time = "none") 
+      latLim = NULL, season = NULL, years = NULL, leadMonth = 1, time = "none") 
 }
 
 
