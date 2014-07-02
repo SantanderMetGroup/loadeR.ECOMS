@@ -32,12 +32,11 @@ loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLo
       memberRangeList <- getMemberDomain.S4(grid, dataset, members)
       foreTimePars <- getForecastTimeDomain.S4(grid, dataset, dic, runTimePars, time)
       mdArray <- switch(derInterface$deriveInterface,
-                        "none" = makeSubset.S4(grid, latLon, runTimePars, memberRangeList, foreTimePars),
-                        "deriveSurfacePressure" = deriveSurfacePressure.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars),
-                        "deriveSurfaceRelativeHumidity" = deriveSurfaceRelativeHumidity.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars),
-                        "deriveSurfaceSpecificHumidity" = deriveSurfaceSpecificHumidity.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars),
-                        "deriveSurfaceWindSpeed" = deriveSurfaceWindSpeed.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars))
-#       mdArray <- makeSubset.S4(grid, latLon, runTimePars, memberRangeList, foreTimePars)
+                        none = makeSubset.S4(grid, latLon, runTimePars, memberRangeList, foreTimePars),
+                        deriveSurfacePressure = deriveSurfacePressure.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars),
+                        deriveSurfaceRelativeHumidity = deriveSurfaceRelativeHumidity.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars),
+                        deriveSurfaceSpecificHumidity = deriveSurfaceSpecificHumidity.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars),
+                        deriveSurfaceWindSpeed = deriveSurfaceWindSpeed.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars))
       if (!is.null(dic)) {
             isStandard <- TRUE
             mdArray <- dictionaryTransformForecast(dic, foreTimePars, mdArray)
