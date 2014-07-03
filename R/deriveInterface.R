@@ -40,6 +40,9 @@ deriveInterface <- function(dataset, var, dictionary) {
       lev <- findVerticalLevel(var)$level
       var <- findVerticalLevel(var)$var
       dicRow <- grep(paste("^", var, "$", sep = ""), dictionary$identifier) 
+      if (length(dicRow) == 0) {
+            stop("Variable requested not found\nCheck variable naming and availability in http://www.meteo.unican.es/ecoms-udg/DataServer/ListOfVariables")
+      }
       if (dictionary$derived[dicRow] == 1) {
             message("NOTE: The requested variable is not originally stored in model's database\nIt will be derived on-the-fly using an approximation\nGo to http://meteo.unican.es/ecoms-udg/ListOfVariables for details")
             deriveInterface <- dictionary$interface[dicRow]
