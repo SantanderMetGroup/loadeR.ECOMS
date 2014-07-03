@@ -46,11 +46,11 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   stop("Max. forecast extent is 13 months. Reduce season length or lead month value accordingly")            
             }
       }
-      if (dataset == "WFDEI" & !is.null(leadMonth)) {
+      if ((dataset == "WFDEI" | dataset == "NCEP") & !is.null(leadMonth)) {
             message("NOTE: The dataset is not a forecast. Argument 'leadMonth' will be ignored")
       }
-      if (dataset == "WFDEI" & !is.null(members)) {
-            message("NOTE: Argument 'members' will be ignored")
+      if ((dataset == "WFDEI" | dataset == "NCEP") & !is.null(members)) {
+            message("NOTE: The dataset is not a forecast. Argument 'members' will be ignored")
       }
       gds <- J("ucar.nc2.dt.grid.GridDataset")$open(url$URL)
       grid <- gds$findGridByShortName(shortName)
