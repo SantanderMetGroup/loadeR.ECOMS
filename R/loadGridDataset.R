@@ -19,7 +19,7 @@ loadGridDataset <- function(var, grid, dic, level, season, years, time, latLon) 
       if (isTRUE(latLon$revLat)) {
             mdArray <- revArrayLatDim(mdArray, grid)
       }
-      return(list("Variable" = list("varName" = var, "isStandard" = isStandard, "level" = level),
+      return(list("Variable" = list("varName" = var, "isStandard" = isStandard, "level" = levelPars$level),
             "Data" = mdArray,
             "xyCoords" = latLon$xyCoords, 
             "Dates" = timePars$dateSlice))
