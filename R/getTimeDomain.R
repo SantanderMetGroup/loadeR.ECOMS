@@ -109,7 +109,7 @@ getTimeDomain <- function(grid, dic, season, years, time) {
                   
             }
       }
-      dateSlice <- format(do.call("c", dateSliceList), tz = "GMT")
+      dateSlice <- do.call("c", dateSliceList)
       dateSliceList <- NULL
       # Sub-routine for adjusting times in case of deaccumulation
       deaccumFromFirst <- NULL
