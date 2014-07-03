@@ -22,7 +22,7 @@ getVerticalLevelPars.ECOMS <- function(grid, level) {
         zRange <- .jnew("ucar/ma2/Range", levelInd, levelInd)
     } else {
         if (!is.null(level)) {
-            warning("The variable selected has no vertical levels")
+            warning("The variable selected has no vertical levels: the '@level' specification was ignored")
         }
         level <- NULL
         zRange <- .jnull()    
