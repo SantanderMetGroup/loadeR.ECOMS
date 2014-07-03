@@ -9,7 +9,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       var <- aux.level$var
       level <- aux.level$level
       url <- dataURL(dataset)
-      dic <- NULL
+      # Dictionary/shortName search
       if (isTRUE(dictionary)) {
             dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
             # for devel only # dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
@@ -19,8 +19,10 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   shortName <- paste(dic$short_name, level, "mb", sep = "")
             }
       } else {
+            dic <- NULL
             shortName <- var
       }
+      # Static variable requests
       if (dic$time_step == "static") {
             message("NOTE: The requested variable is static. All time-related arguments will be ignored")
             season <- 1
@@ -46,20 +48,21 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   stop("Max. forecast extent is 13 months. Reduce season length or lead month value accordingly")            
             }
       }
-      if ((dataset == "WFDEI" | dataset == "NCEP") & !is.null(leadMonth)) {
-            message("NOTE: The dataset is not a forecast. Argument 'leadMonth' will be ignored")
-      }
+      # Note when loading gridded datasets
       if ((dataset == "WFDEI" | dataset == "NCEP") & !is.null(members)) {
-            message("NOTE: The dataset is not a forecast. Argument 'members' will be ignored")
+            message("NOTE: The dataset is not a forecast. Argument 'members' will be ignored")      
       }
+      # Discover dataset and open grid
       gds <- J("ucar.nc2.dt.grid.GridDataset")$open(url$URL)
       grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
             stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables")
       }
+      # Grid datasets
       if (dataset == "WFDEI" | dataset == "NCEP") {
             latLon <- getLatLonDomain(grid, lonLim, latLim)
             out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon)
+      # Forecasts
       } else {
             if (dic$time_step == "static") {
                   members <- 1
@@ -93,7 +96,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             }
       }
       gds$close()
-      message("[",Sys.time(),"]", " Done")
+      message("[", Sys.time(), "]", " Done")
       attr(out$xyCoords, "projection") <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
       return(out)
 }      
