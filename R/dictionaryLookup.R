@@ -8,7 +8,7 @@
 #' @param derInterface A list as returned by \code{\link{deriveInterface}}
 #' @param time Time specification.
 #' @return A data.frame of 1 row with the mapping information
-#' @details The function in somewhat tricky when dealing with derived variables. It applies the
+#' @details The function is somewhat tricky when dealing with derived variables. It applies the
 #' time adjustment and homogenization/transformation steps indicated in the \sQuote{original variable},
 #' (i.e., the variable to be derived) but at the end replaces the \code{shortName} by that of the
 #'  \sQuote{leading variable} (see \code{\link{deriveInterface}} for a description of this concept),
