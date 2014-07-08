@@ -36,18 +36,6 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   stop("Invalid season definition")
             }
       }
-      # Season range constraints
-      if (dic$time_step != "static") {
-            if (grepl("CFSv2", dataset) & (length(season) + leadMonth) > 9) {
-                  stop("Max. forecast extent is 9 months. Reduce season length or lead month value accordingly")            
-            }
-            if (grepl("System4_seasonal", dataset) & (length(season) + leadMonth) > 7) {
-                  stop("Max. forecast extent is 7 months. Reduce season length or lead month value accordingly")            
-            }
-            if (grepl("System4_annual", dataset) & (length(season) + leadMonth) > 13) {
-                  stop("Max. forecast extent is 13 months. Reduce season length or lead month value accordingly")            
-            }
-      }
       # Note when loading gridded datasets
       if ((dataset == "WFDEI" | dataset == "NCEP") & !is.null(members)) {
             message("NOTE: The dataset is not a forecast. Argument 'members' will be ignored")      
@@ -78,6 +66,18 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             }
             if (leadMonth == 0 & dic$time_step != "static") {
                   message("NOTE: 'leadMonth = 0' selected")
+            }
+            # Season range constraints
+            if (dic$time_step != "static") {
+                  if (grepl("CFSv2", dataset) & (length(season) + leadMonth) > 9) {
+                        stop("Max. forecast extent is 9 months. Reduce season length or lead month value accordingly")            
+                  }
+                  if (grepl("System4_seasonal", dataset) & (length(season) + leadMonth) > 7) {
+                        stop("Max. forecast extent is 7 months. Reduce season length or lead month value accordingly")            
+                  }
+                  if (grepl("System4_annual", dataset) & (length(season) + leadMonth) > 13) {
+                        stop("Max. forecast extent is 13 months. Reduce season length or lead month value accordingly")            
+                  }
             }
             leadMonth <- as.integer(leadMonth)
             latLon <- getLatLonDomainForecast(grid, lonLim, latLim)      
