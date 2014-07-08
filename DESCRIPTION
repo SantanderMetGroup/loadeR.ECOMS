@@ -4,7 +4,7 @@ Suggests: fields
 Type: Package
 Title: The R interface for accessing the ECOMS User Data Gateway
 Version: 2.1-0
-Date: 2014-07-02
+Date: 2014-07-08
 Author: Santander Meteorology Group <http://www.meteo.unican.es>
 Maintainer: Joaquin Bedia <bediaj@unican.es>
 BugReports: https://github.com/SantanderMetGroup/ecomsUDG.Raccess/issues
