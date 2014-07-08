@@ -1,3 +1,29 @@
+#' Computes run time definition according to the time specifications
+#' 
+#' This is a sub-routine of \code{\link{loadECOMS}}. Its output is passed to the loading functions
+#' (the \code{makeSubset\\.*} and \code{derive*} interfaces).
+#' 
+#' @param dataset Target hindcast dataset (see \code{\link{loadECOMS}})
+#' @param grid A java \dQuote{GeoGrid} containing the target(leading) variable
+#' @param members Member selection (see \code{\link{loadECOMS}})
+#' @param season Season selection (see \code{\link{loadECOMS}})
+#' @param years Years selected (see \code{\link{loadECOMS}})
+#' @param leadMonth Lead month (see \code{\link{loadECOMS}})
+#' @return A list of parameters:
+#' \begin{itemize}
+#' \item validMonth An integer in the range [1,12] indicating the month to take the initialization
+#' \item years A vector of years selected
+#' \item season Season
+#' \item year.cross An auxiliary integer value thet indicates the position of year-crossing
+#'  within the season vector. NULL if no year-crossing season has been chosen.
+#' \item runDates a POSIXlt vector of initialization dates
+#' \item runTimeRanges a list of of initialization times of the java class \dQuote{ucar.ma2.ranges}.
+#' \end{itemize}
+#' @details The function calls to specific subroutines for CFS or System4 requests, given their different
+#' runtime configurations. The function also takes care of selecting the appropriate initialization
+#' in the case of year-crossing seasons 
+#' @author J Bedia \email{joaquin.bedia@@gmail.com}
+
 getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
       message("[", Sys.time(), "] Defining initialization time parameters")
       gcs <- grid$getCoordinateSystem()
