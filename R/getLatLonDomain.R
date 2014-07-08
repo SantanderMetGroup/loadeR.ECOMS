@@ -32,6 +32,9 @@
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com} and A. Cofin\~no
 
 getLatLonDomain <- function(grid, lonLim, latLim) {
+      if (any(lonLim > 180) | any(lonLim < -180) | any(latLim > 90) | any(latLim < -90)) {
+            stop("Invalid geographical coordinates. Check 'lonLim' and/or 'latLim' argument values")
+      }
       message("[", Sys.time(), "] Defining geo-location parameters")
       gcs <- grid$getCoordinateSystem()
       bboxDataset <- gcs$getLatLonBoundingBox()
