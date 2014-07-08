@@ -1,3 +1,4 @@
-import("downscaleR.java")
+importFrom(downscaleR.java, javaString2rChar)
+importFrom(downscaleR.java, javaCalendarDate2rPOSIXlt)
 import("abind")
 export("loadECOMS", "loginECOMS_UDG")
