@@ -1,4 +1,3 @@
-import("rJava")
-import("abind")
 import("downscaleR.java")
+import("abind")
 export("loadECOMS", "loginECOMS_UDG")
