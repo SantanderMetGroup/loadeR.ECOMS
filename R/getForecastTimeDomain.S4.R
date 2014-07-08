@@ -36,7 +36,7 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time) {
             for (i in 1:length(runTimePars$runTimeRanges)) {
                   auxDates <- javaCalendarDate2rPOSIXlt(gcs$getTimeAxisForRun(runTimePars$runTimeRanges[[i]]$element(0L))$getCalendarDates())
                   ind <- which((auxDates$mon + 1) %in% runTimePars$season)
-                  if (grepl("51$", dataset)) {
+                  if (grepl("annual", dataset)) {
                         if (!is.null(runTimePars$year.cross)) {
                               rm.ind <- which((auxDates$mon + 1) == runTimePars$season[runTimePars$year.cross] & (auxDates$year + 1900) == (runTimePars$years[i] + 1))
                         } else {
