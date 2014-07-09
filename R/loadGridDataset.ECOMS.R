@@ -6,7 +6,7 @@
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com}
 #' @references \url{http://www.unidata.ucar.edu/software/thredds/current/netcdf-java/tutorial/GridDatatype.html}
 
-loadGridDataset <- function(var, grid, dic, level, season, years, time, latLon) {
+loadGridDataset.ECOMS <- function(var, grid, dic, level, season, years, time, latLon) {
       timePars <- getTimeDomain(grid, dic, season, years, time)
       levelPars <- getVerticalLevelPars.ECOMS(grid, level)
       mdArray <- makeSubset(grid, timePars, levelPars$zRange, latLon)

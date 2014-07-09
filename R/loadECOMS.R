@@ -49,7 +49,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       # Grid datasets
       if (dataset == "WFDEI" | dataset == "NCEP") {
             latLon <- getLatLonDomain(grid, lonLim, latLim)
-            out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon)
+            out <- loadGridDataset.ECOMS(var, grid, dic, level, season, years, time, latLon)
       # Forecasts
       } else {
             if (dic$time_step == "static") {
