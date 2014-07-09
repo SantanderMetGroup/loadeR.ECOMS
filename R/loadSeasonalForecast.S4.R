@@ -7,7 +7,7 @@
 #'  @param dataset character string indicating the dataset requested.
 #'  @param var character string indicating the variable to download.
 #'  @param grid A java GeoGrid.
-#'  @param dic A single-row data.frame, as returned by \code{dictionaryLookup}.
+#'  @param dic A single-row data.frame, as returned by \code{dictionaryLookup.ECOMS}.
 #'  @param members Numeric vector indicating the members to be retrieved.
 #'  @param latLon A list of geolocation parameters as returned by \code{getLatLonDomainForecast}
 #'  @param runTimePars A list of parameters defining de initializations to be taken and other.

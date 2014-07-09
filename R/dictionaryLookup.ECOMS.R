@@ -2,7 +2,7 @@
 #' 
 #' Searches variable string provided in the dictionary to map it in the vocabulary, in order to get
 #' all the necessary information for variable homogenization. It also includes a new column specifying the
-#' aggregation function to be applied (if any).
+#' aggregation function to be applied (if any). This funciton is ECOMS-UDG specific.
 #' 
 #' @param dicPath Full path to the dictionary file (a csv file with extension \sQuote{.dic}).
 #' @param derInterface A list as returned by \code{\link{deriveInterface}}
@@ -16,7 +16,7 @@
 #' @references \url{http://meteo.unican.es/ecoms-udg/RPackage/Homogeneization}
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com}
 
-dictionaryLookup <- function(dicPath, derInterface, time) {
+dictionaryLookup.ECOMS <- function(dicPath, derInterface, time) {
       message("[", Sys.time(), "] Defining homogeneization parameters for variable \"", derInterface$origVar, "\"")
       dictionary <- tryCatch({read.csv(dicPath, stringsAsFactors = FALSE)}, error = function(e) stop("Dictionary not found"))
       dicRow <- grep(paste("^", findVerticalLevel(derInterface$leadVar)$var, "$", sep = ""), dictionary$identifier) 

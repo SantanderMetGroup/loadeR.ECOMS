@@ -13,7 +13,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       if (isTRUE(dictionary)) {
             dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
             # for devel only # dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
-            dic <- dictionaryLookup(dicPath, derInterface, time)
+            dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)
             shortName <- dic$short_name
             if (dataset == "System4_seasonal_15" & (shortName == "u" | shortName == "v" | shortName == "z")) {
                   shortName <- paste(dic$short_name, level, "mb", sep = "")
