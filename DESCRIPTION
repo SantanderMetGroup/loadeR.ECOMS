@@ -3,8 +3,8 @@ Depends: utils, downscaleR.java, abind, R(>= 3.0.0)
 Suggests: fields
 Type: Package
 Title: The R interface for accessing the ECOMS User Data Gateway
-Version: 2.1-0
-Date: 08-Jul-2014
+Version: 2.1-1
+Date: 11 Jul 2014
 Author: Santander Meteorology Group <http://www.meteo.unican.es>
 Maintainer: Joaquin Bedia <bediaj@unican.es>
 BugReports: https://github.com/SantanderMetGroup/ecomsUDG.Raccess/issues
