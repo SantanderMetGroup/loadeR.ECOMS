@@ -4,10 +4,12 @@
 #' 
 #' @param dataset Character string indicating the dataset name. Passed by \code{\link{loadSeasonalForecast}}
 #' @return A list of length two:
-#' \begin{itemize}
-#' \item{URL}{URL path to the dataset}
-#' \item{excludeVars}{Character vector or NULL, indicating the variables in the dataset to be ignored}
+#' \itemize{
+#' \item \code{URL}. URL path to the dataset
+#' \item \code{excludeVars}. Character vector or NULL, indicating the variables in the dataset to be ignored
+#' }
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com}
+#' @keywords internal
 
 dataURL <- function(dataset) {
       x <- switch(dataset, 
