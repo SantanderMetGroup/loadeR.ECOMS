@@ -1,16 +1,19 @@
 .onAttach <- function(...) {
       pkgname <- "ecomsUDG.Raccess"
       lib <- system.file(package = pkgname)
-      ver <- packageVersion("ecomsUDG.Raccess")
-      builddate <- packageDescription("ecomsUDG.Raccess")$Date
+      ver <- packageVersion(pkgname)
+      builddate <- packageDescription(pkgname)$Date
       mess <- paste(pkgname, " version ", ver, " (", builddate,") is loaded", sep = "")                        
       packageStartupMessage(mess)
-#       jar <- "netcdfAll-4.3.jar"
-#       if (!file.exists(file.path(lib, "java", jar))) {
-#             packageStartupMessage("NetCDF-Java not available. Attempting download...")
-#             destdir <- file.path(lib, "java")
-#             dir.create(path = destdir)
-#             download.file("ftp://ftp.unidata.ucar.edu/pub/netcdf-java/v4.3/netcdfAll-4.3.jar", destfile = file.path(destdir, jar))
-#       }
+      url <- "https://raw.githubusercontent.com/SantanderMetGroup/ecomsUDG.Raccess/stable/DESCRIPTION"
+      a <- getURL(url)
+      b <- readLines(textConnection(a))
+      latest.ver <- package_version(gsub("Version: ", "", b[grep("Version", b)]))
+      if (ver < latest.ver) {
+            ver.mess1 <- "WARNING: Your current version of ecomsUDG.Raccess is not up-to-date"
+            ver.mess <- paste("Get the latest stable version", latest.ver, "at http://meteo.unican.es/ecoms-udg/RPackage#Versions")      
+            packageStartupMessage(ver.mess1)
+            packageStartupMessage(ver.mess)
+      }
 } 
 # End

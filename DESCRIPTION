@@ -1,5 +1,5 @@
 Package: ecomsUDG.Raccess
-Depends: utils, downscaleR.java, abind, R(>= 3.0.0)
+Depends: utils, RCurl, downscaleR.java, abind, R(>= 3.0.0)
 Suggests: fields
 Type: Package
 Title: The R interface for accessing the ECOMS User Data Gateway
