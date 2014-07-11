@@ -28,12 +28,15 @@ dictionaryLookup.ECOMS <- function(dicPath, derInterface, time) {
             morethanone <- TRUE
             if (time == "DD" & derInterface$deriveInterface == "none") {
                   dicRow <- dicRow[dictionary$time_step[dicRow] == "24h"]
+                  time <- "none"
                   if (length(dicRow) == 0) {
                         dicRow <- grep(paste("^", derInterface$origVar, "$", sep = ""), dictionary$identifier)                  
                         dicRow <- dicRow[dictionary$time_step[dicRow] == "6h"]
+                        time <- "DD"
                   }
             } else {
                   dicRow <- dicRow[dictionary$time_step[dicRow] == "6h"]
+                  morethanone <- FALSE
             }
       } else {
             morethanone <- FALSE
