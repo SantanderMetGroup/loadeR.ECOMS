@@ -43,6 +43,13 @@ deriveInterface <- function(dataset, var, dictionary) {
       if (length(dicRow) == 0) {
             stop("Variable requested not found\nCheck variable naming and availability in http://www.meteo.unican.es/ecoms-udg/DataServer/ListOfVariables")
       }
+      if (length(dicRow) > 1) {
+            if (time == "DD") {
+                  dicRow <- dicRow[grep("24h", dictionary$time_step[dicRow])]
+            } else {
+                  dicRow <- dicRow[grep("6h", dictionary$time_step[dicRow])]
+            }
+      }
       if (dictionary$derived[dicRow] == 1) {
             message("NOTE: The requested variable is not originally stored in model's database\nIt will be derived on-the-fly using an approximation\nGo to http://meteo.unican.es/ecoms-udg/ListOfVariables for details")
             deriveInterface <- dictionary$interface[dicRow]

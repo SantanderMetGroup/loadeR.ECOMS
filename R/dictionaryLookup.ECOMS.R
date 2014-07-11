@@ -25,6 +25,7 @@ dictionaryLookup.ECOMS <- function(dicPath, derInterface, time) {
       }
       dailyAggr <- NA
       if (length(dicRow) > 1) {
+            morethanone <- TRUE
             if (time == "DD" & derInterface$deriveInterface == "none") {
                   dicRow <- dicRow[dictionary$time_step[dicRow] == "24h"]
                   if (length(dicRow) == 0) {
@@ -35,6 +36,7 @@ dictionaryLookup.ECOMS <- function(dicPath, derInterface, time) {
                   dicRow <- dicRow[dictionary$time_step[dicRow] == "6h"]
             }
       } else {
+            morethanone <- FALSE
             if (dictionary$time_step[dicRow] == "12h" & time == "DD") {
                   stop("Cannot compute daily mean from 12-h data")
             }
@@ -48,7 +50,7 @@ dictionaryLookup.ECOMS <- function(dicPath, derInterface, time) {
                   time <- "none"
             }
       }
-      if (time == "DD") {
+      if (time == "DD" & !isTRUE(morethanone)) {
             dailyAggr <- "mean"
             if (derInterface$origVar == "tp" | derInterface$origVar == "rlds" | derInterface$origVar == "rsds") {
                   dailyAggr <- "sum"
