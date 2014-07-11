@@ -29,7 +29,7 @@
 #'   needed to compute the velocity module.
 #' @author J Bedia \email{joaquin.bedia@@gmail.com}
 
-deriveInterface <- function(dataset, var, dictionary) {
+deriveInterface <- function(dataset, var, dictionary, time) {
       if (!dictionary) {
             stop("The requested variable is derived. The dictionary must be used for homogenization and conversion of input variables\nGo to http://meteo.unican.es/ecoms-udg/ListOfVariables for details")
       }

@@ -3,7 +3,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                      years = NULL, leadMonth = 1, time = "none") {
       dataset <- match.arg(dataset, c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15", "CFSv2_seasonal_16", "WFDEI", "NCEP"))
       time <- match.arg(time, choices = c("none", "00", "06", "12", "18", "DD"))
-      derInterface <- deriveInterface(dataset, var, dictionary)
+      derInterface <- deriveInterface(dataset, var, dictionary, time)
       var <- derInterface$leadVar
       aux.level <- findVerticalLevel(derInterface$leadVar)
       var <- aux.level$var
