@@ -150,7 +150,4 @@ The argument \code{time} controls the temporal filtering/aggregation options tha
 }
 
 
-\seealso{
-\code{\link{vocabulary}}
-}
 

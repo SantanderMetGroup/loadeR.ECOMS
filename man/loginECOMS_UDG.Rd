@@ -49,17 +49,14 @@ Further details on registration for data access are provided in \url{http://mete
 username <- "myUsername" 
 password <- "myPassword" 
 \dontrun{
-loginECOMS_UDG("myUsername", "myPassword")}
+loginECOMS_UDG(myUsername, myPassword)}
 
 # In case the connection is performed via a proxy:
 
 proxyHost <- "proxy.host.com" # Your institution Proxy configuration: host
 proxyPort <- as.integer(1234) # and port
 \dontrun{
-loginECOMS_UDG("myUsername", "myPassword", proxy.host = proxyHost, proxy.port = proxyPort)}
-
-
-
+loginECOMS_UDG(myUsername, myPassword, proxy.host = proxyHost, proxy.port = proxyPort)}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

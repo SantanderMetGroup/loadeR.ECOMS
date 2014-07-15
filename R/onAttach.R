@@ -1,7 +1,7 @@
 .onAttach <- function(...) {
       pkgname <- "ecomsUDG.Raccess"
       lib <- system.file(package = pkgname)
-      ver <- packageVersion(pkgname)
+      ver <- packageDescription(pkgname)$Version
       builddate <- packageDescription(pkgname)$Date
       mess <- paste(pkgname, " version ", ver, " (", builddate,") is loaded", sep = "")                        
       packageStartupMessage(mess)
