@@ -31,7 +31,7 @@
 
 deriveInterface <- function(dataset, var, dictionary, time) {
       if (!dictionary) {
-            stop("The requested variable is derived. The dictionary must be used for homogenization and conversion of input variables\nGo to http://meteo.unican.es/ecoms-udg/ListOfVariables for details")
+            stop("The requested variable is non-standard. The dictionary must be used for homogenization and conversion of input variables\nGo to http://meteo.unican.es/ecoms-udg/ListOfVariables for details")
       }
       dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
       # devel (comment before package building)
