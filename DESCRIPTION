@@ -2,8 +2,8 @@ Package: ecomsUDG.Raccess
 Depends: downscaleR.java, downscaleR, R(>= 3.0.0)
 Type: Package
 Title: The R interface for accessing the ECOMS User Data Gateway
-Version: 2.2-0
-Date: 15 Jul 2014
+Version: 2.2-1
+Date: 5 Aug 2014
 Author: Santander Meteorology Group <http://www.meteo.unican.es>
 Maintainer: Joaquin Bedia <bediaj@unican.es>
 BugReports: https://github.com/SantanderMetGroup/ecomsUDG.Raccess/issues
