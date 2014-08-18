@@ -58,6 +58,12 @@ dictionaryLookup.ECOMS <- function(dicPath, derInterface, time) {
             if (derInterface$origVar == "tp" | derInterface$origVar == "rlds" | derInterface$origVar == "rsds") {
                   dailyAggr <- "sum"
                   message("NOTE: daily accumulated will be calculated from the 6-h model output")
+            } else if (grepl(".*max$", derInterface$origVar)) {
+                  dailyAggr <- "max"
+                  message("NOTE: daily maximum will be calculated from the 6-h model output")
+            } else if (grepl(".*min$", derInterface$origVar)) {
+                  dailyAggr <- "min"
+                  message("NOTE: daily minimum will be calculated from the 6-h model output")
             } else {
                   message("NOTE: daily mean will be calculated from the 6-h model output")
             }
@@ -72,3 +78,5 @@ dictionaryLookup.ECOMS <- function(dicPath, derInterface, time) {
       return(dic)
 }
 # End
+
+ 
