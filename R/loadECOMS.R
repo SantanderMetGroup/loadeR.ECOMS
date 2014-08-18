@@ -98,6 +98,17 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       gds$close()
       message("[", Sys.time(), "]", " Done")
       attr(out$xyCoords, "projection") <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
+      # Dimension ordering
+      tab <- c("member", "time", "level", "lat", "lon")
+      x <- attr(out$Data, "dimensions")
+      b <- na.exclude(match(tab, x))
+      dimNames <- attr(out$Data, "dimensions")[b]
+      out$Data <- aperm(out$Data, perm = b)    
+      attr(out$Data, "dimensions")  <- dimNames
+      # Source Dataset and other metadata 
+      attr(out, "dataset") <- dataset
+      attr(out, "source") <- "ECOMS User Data Gateway" 
+      attr(out, "URL") <- "<http://meteo.unican.es/ecoms-udg>"
       return(out)
 }      
 # End
