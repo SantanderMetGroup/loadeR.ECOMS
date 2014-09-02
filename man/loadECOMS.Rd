@@ -103,11 +103,13 @@ In the case of the CFSv2 reforecast there are four initializations (4 cycles) fr
 \strong{Definition of spatial domains}
 
 
-Regarding the selection of the spatial domain, it is possible to select the whole spatial domain of the datasets (currently global for all hindcasts available). In this case \code{lonLim=NULL} and \code{latLim=NULL}. More often, rectangular domains are defined by the minimum and maximum coordinates in longitude and latitude (for instance \code{lonLim=c(-10,10)} and \code{latLim=c(35,45)} indicates a rectangular window centered in the Iberian Peninsula), and single grid-cell values (for instance \code{lonLim=-3.21} and \code{latLim=41.087} for retrieving the data in the closest grid point to the point coordinate -3.21E, 41.087N. In the last two cases, the function operates by finding the nearest (euclidean distance) grid-points to the coordinates introduced.
+Regarding the selection of the spatial domain, it is possible to select the whole spatial domain of the datasets (currently global for all hindcasts available). In this case \code{lonLim=NULL} and \code{latLim=NULL}. More often, rectangular domains are defined by the minimum and maximum coordinates in longitude and latitude (for instance \code{lonLim=c(-10,10)} and \code{latLim=c(35,45)} indicates a rectangular window centered in the Iberian Peninsula), and single grid-cell values (for instance \code{lonLim=-3.21} and \code{latLim=41.087} for retrieving the data in the closest grid point to the point coordinate -3.21E, 41.087N. In the last two cases, the function operates by finding the nearest (euclidean distance) grid-points to the coordinates introduced. (NOTE: Currently the single-point option is disabled for the NCEP dataset, that only accepts rectangular domain selections.)
 
 The returned value by \code{xyCoords} varies accordingly, and it fits the common data structure of many R plotting functions (see \link[grDevices]{xy.coords} for obtaining a more detailed info).
 
 The spatial definition of the data is associated to a specific coordinate reference system via the \sQuote{proj4string} slot of \code{xyCoords}, thus enabling the direct application of geospatial operations such as projection transformations, spatial overlay methods etc with the appropriate R methods.
+
+
 
 
 \strong{Definition of temporal slices}
@@ -130,7 +132,7 @@ By default, 16 members are returned for the CFSv2 hindcast for better comparabil
 The argument \code{time} controls the temporal filtering/aggregation options that may apply for a variable. In case of daily mean data, this can be obtained in two different ways:
 \enumerate{
 \item For variables that are already stored as daily means in the dataset, both \code{"DD"} and \code{"none"} return the required daily output
-\item In case of 6-hourly data, if \code{"DD"} is chosen, the function will compute the daily mean as the averaged 6-hourly outputs for each day, printing an information message on screen. If the variable is precipitation or a radiation (\code{var} = \code{"tp"}, \code{"rsds"} or \code{"rlds"}), the result of the aggregation will be the sum rather than the mean (i.e., it will return the daily accumulated value).
+\item In case of 6-hourly data, if \code{"DD"} is chosen, the function will compute the daily mean as the averaged 6-hourly outputs for each day, printing an information message on screen. If the variable is precipitation or a radiation (\code{var} = \code{"tp"}, \code{"rsds"} or \code{"rlds"}), the result of the aggregation will be the sum rather than the mean (i.e., it will return the daily accumulated value). In the same way, if the variable is a daily maximum/minimum (i.e., \code{var = "tasmax"}/\code{var = "tasmin"}), the corresponding function will be applied to the 6-h outputs on a daily basis.
 \item In case of 12-hourly data, daily mean data (\code{"DD"}) won't be computed, and the function will raise an error. In this particular case, the only accepted \code{time} argument values will be \code{"none"}, \code{"00"} and \code{"12"}.
 }
 
@@ -152,4 +154,7 @@ The argument \code{time} controls the temporal filtering/aggregation options tha
 }
 
 
+\examples{\dontrun{
+# Go to <http://www.meteo.unican.es/ecoms-udg/RPackage/Examples>
+}}
 
