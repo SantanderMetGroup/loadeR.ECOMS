@@ -36,6 +36,12 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   stop("Invalid season definition")
             }
       }
+      # Exception in NCEP due to different grids within the same dataset
+      if (dataset == "NCEP") {
+            if (length(lonLim) == 1 || length(latLim) == 1) {
+                  stop("Single-point selections are invalid for the NCEP dataset\nConsider using a small rectangular domain")
+            }
+      }
       # Note when loading gridded datasets
       if ((dataset == "WFDEI" | dataset == "NCEP") & !is.null(members)) {
             message("NOTE: The dataset is not a forecast. Argument 'members' will be ignored")      
