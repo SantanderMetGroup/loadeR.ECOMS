@@ -16,14 +16,14 @@ loadECOMS(dataset, var, dictionary = TRUE, members = NULL, lonLim = NULL,
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{dataset}{A character string indicating the database to be accessed. Currently accepted values are \code{"System4_seasonal_15"}, \code{"System4_seasonal_51"}, \code{"System4_annual_15"} and \code{"CFSv2_seasonal_16"} for hindcasts (where the notation indicates the GCM name, the temporal range and the default number of ensemble members returned respectively, separated by the lower bars), \code{"WFDEI"} for the WATCH Forcing Dataset based on ERA-Interim (gridded observations) and \code{"NCEP"} for the NCEP/NCAR reanalysis. See Details}
+  \item{dataset}{A character string indicating the database to be accessed. Currently accepted values are \code{"System4_seasonal_15"}, \code{"System4_seasonal_51"}, \code{"System4_annual_15"} and \code{"CFSv2_seasonal_16"} for hindcasts (where the notation indicates the GCM name, the temporal range and the default number of ensemble members returned respectively, separated by the lower bars), \code{"WFDEI"} for the WATCH Forcing Dataset based on ERA-Interim (gridded observations) and \code{"NCEP"} for the NCEP/NCAR reanalysis. See details on available datasets.}
   
   \item{var}{
-Variable code (character string). This is the name of the variable according to the R standard naming (see the next argument). For variables with vertical levels, the vertical level is specified next to the variable name followed by the \dQuote{@} symbol (e.g. \code{var = "z@700"} for geopotential heigth at 700 mb isobaric surface pressure level). It is also possible to enter the variable name as originally coded in the dataset to skip data homogenization, although this is not recommended. See the next argument. 
+Variable code (character string). This is the name of the variable according to the R standard naming (see the next argument). For variables with vertical levels, the vertical level is specified next to the variable name followed by the \dQuote{@} symbol (e.g. \code{var = "z@700"} for geopotential heigth at 700 mb isobaric surface pressure level). It is also possible to enter the variable name as originally coded in the dataset to skip data homogenization, although this is not recommended (see the next argument). See details on available variables. 
 }
 
   \item{dictionary}{
-A logical flag indicating if a dictionary is used for variable homogenization. Default (strongly recommended) is set to \code{TRUE}, meaning that the function will internally perform the necessary homogenization steps to return the standard variables defined in the vocabulary (e.g. variable transformation, deaccumulation...). See details. 
+A logical flag indicating if a dictionary is used for variable homogenization. Default (strongly recommended) is set to \code{TRUE}, meaning that the function will internally perform the necessary homogenization steps to return the standard variables defined in the vocabulary (e.g. variable transformation, deaccumulation...). See details on data homogenization. 
 }
 
   \item{members}{
@@ -31,22 +31,22 @@ A vector of integers indicating the members to be loaded. Default to \code{NULL}
 }
 
   \item{lonLim}{
-Vector of length = 2, with minimum and maximum longitude coordinates, in decimal degrees, of the bounding box selected. For single-point queries, a numeric value with the longitude coordinate. If \code{NULL} (default), the whole longitudinal range is selected (Note that this may lead to a large output object size). See details. 
+Vector of length = 2, with minimum and maximum longitude coordinates, in decimal degrees, of the bounding box selected. For single-point queries, a numeric value with the longitude coordinate. If \code{NULL} (default), the whole longitudinal range is selected (Note that this may lead to a large output object size). See details on the definition of spatial domains. 
 }
   \item{latLim}{
 Same as \code{lonLim}, but for the selection of the latitudinal range.
 }
 
   \item{season}{
-An integer vector specifying the desired season (in months, January = 1 ..., December = 12). Options include one to several (contiguous) months. For full year selections (not possible for all datasets, e.g. seasonal forecasts), the argument value must be set to \code{season = 1:12}. If the requested variable is static (e.g. orography) it will be ignored. See \dQuote{Definition of temporal slices} in details. 
+An integer vector specifying the desired season (in months, January = 1 ..., December = 12). Options include one to several (contiguous) months. For full year selections (not possible for all datasets, e.g. seasonal forecasts), the argument value must be set to \code{season = 1:12}. If the requested variable is static (e.g. orography) it will be ignored. See details on the definition of temporal slices. 
 }
 
   \item{years}{
-Optional vector of years to select. Default to all available years. If the requested variable is static (e.g. orography) it will be ignored. See \dQuote{Definition of temporal slices} in details. 
+Optional vector of years to select. Default to all available years. If the requested variable is static (e.g. orography) it will be ignored. See details on the definition of temporal slices. 
 }
 
   \item{leadMonth}{
-Integer value indicating the lead forecast time, relative to the first month of \code{season}. Note that \code{leadMonth=1} for \code{season=1} (January) corresponds to the December initialization. Default to 1 (i.e., 1 lead month forecast). If the dataset is not a forecast or the requested variable is static (e.g. orography) it will be ignored. A message will be printed on screen in the first case if its value is different from \code{NULL}.
+Integer value indicating the lead forecast time, relative to the first month of \code{season}. Note that \code{leadMonth=1} for \code{season=1} (January) corresponds to the December initialization. Default to 1 (i.e., 1 lead month forecast). If the dataset is not a forecast or the requested variable is static (e.g. orography) it will be ignored. A message will be printed on screen in the first case if its value is different from \code{NULL}. See details on initialization times.
 }
 
   \item{time}{A character vector indicating the temporal filtering/aggregation of the output data. Default to \code{"none"}, which returns the original time series as stored in the dataset. For sub-daily variables, instantantaneous data at selected verification times can be filtered using one of the character strings \code{"00"}, \code{"06"}, \code{"12"} and \code{"18"}. If daily aggregated data are required use \code{"DD"}. If the requested variable is static (e.g. orography) it will be ignored. See details for time aggregation options.
