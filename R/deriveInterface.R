@@ -41,7 +41,7 @@ deriveInterface <- function(dataset, var, dictionary, time) {
       var <- findVerticalLevel(var)$var
       dicRow <- grep(paste("^", var, "$", sep = ""), dictionary$identifier) 
       if (length(dicRow) == 0) {
-            stop("Variable requested not found\nCheck variable naming and availability in http://www.meteo.unican.es/ecoms-udg/DataServer/ListOfVariables")
+            stop("Variable requested not found\nCheck variable naming and availability in http://www.meteo.unican.es/ecoms-udg/DataServer/DataServer/ListOfVariables")
       }
       if (length(dicRow) > 1) {
             if (time == "DD") {
