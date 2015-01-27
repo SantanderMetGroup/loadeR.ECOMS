@@ -85,8 +85,6 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time) {
                         timeIndList <- NULL
                   }
             }
-            foreDates <- do.call("c", foreDatesList)
-            foreDatesList <- NULL
             # Sub-routine for adjusting times in case of deaccumulation
             deaccumFromFirst <- NULL
             if (!is.null(dic)) {
@@ -98,9 +96,18 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time) {
                               })
                         } else {
                               deaccumFromFirst <- TRUE
+                              foreTimesList <- lapply(1:length(foreTimesList), function(x) {
+                                    append(foreTimesList[[x]], tail(foreTimesList[[x]], 1) + 1)
+                              })
+                              dft <- as.numeric(difftime(foreDatesList[[1]][2], foreDatesList[[1]][1], units = "secs"))
+                              foreDatesList <- lapply(1:length(foreDatesList), function(x) {
+                                    append(as.POSIXlt(foreDatesList[[x]][1] - dft), foreDatesList[[x]])
+                              })
                         }
                   }
             }
+            foreDates <- do.call("c", foreDatesList)
+            foreDatesList <- NULL
             # Sub-routine for calculation of time bounds
             foreDates <- timeBounds(dic, foreDates)
             # Java forecast time ranges list along rt axes
