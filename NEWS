@@ -1,6 +1,7 @@
 ecomsUDG.Raccess
 ================
 
+* Bug fix in the retrieval of forecast dates beyond the last year of the runtime axis (Reported by Wietse Franssen)
+* Enhancement in System4 deaccumulation of precipitation for lead month 0 queries. First day preserved for consistency with non-deaccumulated variables. Suggested by Kathryn Nicklin.
 * Documentation update
-
-* Minor bug fixes and enhancements
+* Other minor bug fixes and enhancements
