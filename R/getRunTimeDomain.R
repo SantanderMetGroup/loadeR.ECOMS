@@ -49,8 +49,8 @@ getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
             years <- startYear:years[length(years)]
       }
       if (years[length(years)] > endYear) {
-            warning("Last year in dataset: ", endYear,". Only available years will be returned")
-            years <- years[1]:endYear
+            warning("Last initialization in the dataset in year: ", endYear,". Only available years will be returned")
+            years <- years[which(years <= endYear + 1)]
       }
       # Month to take the initialization 
       validMonth <- season[1] - leadMonth 
