@@ -10,7 +10,7 @@ Authors@R: as.person(c(
     "Santander MetGroup <http://meteo.unican.es> [aut]",      
     "Joaquin Bedia <bediaj@unican.es> [cre]",
     "Max Tuni <max@predictia.es> [ctb]",
-    "Antonio Cofi\~no <antonio.cofino@unican.es> [ctb]",
+    "Antonio Cofino <antonio.cofino@unican.es> [ctb]",
     "Sixto Herrera <sixto@predictia.es> [ctb]"))
 BugReports: https://github.com/SantanderMetGroup/ecomsUDG.Raccess/issues
 URL: http://meteo.unican.es/ecoms-udg
