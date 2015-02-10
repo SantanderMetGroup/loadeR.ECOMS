@@ -8,7 +8,7 @@ Version: 2.2-6
 Date: 27 Jan 2015
 Authors@R: as.person(c(
     "Santander MetGroup <http://meteo.unican.es> [aut]",      
-    "Joaquin Bedia <bediaj@unican.es> [cre]",
+    "Joaquin Bedia <bediaj@unican.es> [ctb,cre]",
     "Max Tuni <max@predictia.es> [ctb]",
     "Antonio Cofino <antonio.cofino@unican.es> [ctb]",
     "Sixto Herrera <sixto@predictia.es> [ctb]"))
