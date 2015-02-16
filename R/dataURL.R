@@ -16,7 +16,7 @@ dataURL <- function(dataset) {
             "System4_seasonal_15" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Seasonal_15Members.ncml", "excludeVars" = NULL),
             "System4_seasonal_51" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Seasonal_51Members.ncml", "excludeVars" = NULL),
             "System4_annual_15" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/system4/System4_Annual_15Members.ncml", "excludeVars" = NULL),
-            "CFSv2_seasonal_16" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/cfs/agg/cfsAgg_fmrc.ncd", "excludeVars" = c("Pressure_reduced_to_MSL_msl", "Temperature_height_above_ground")),
+            "CFSv2_seasonal_16" = list("URL" = "http://meteo.unican.es/tds5/dodsC/cfsrr/CFSv2_Seasonal.ncml", "excludeVars" = NULL),
             "WFDEI" = list("URL" = "http://www.meteo.unican.es/tds5/dodsC/wfdei/wfdei_daily.ncml", "excludeVars" = NULL),
             "NCEP" = list("URL" = "http://meteo.unican.es/tds5/dodsC/ncepReanalysis1/ncepReanalysis1_4xDaily.ncml", "excludeVars" = NULL))
       return(x)
