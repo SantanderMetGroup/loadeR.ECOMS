@@ -13,7 +13,11 @@
 #' in the ECOMS-UDG by the moment. Because of the lagged-runtime configuration of CFSv2 for member definition,
 #' the dimension \sQuote{ensemble} doen not exist. In turn, this is created and included as a dimension in the returned array
 #' from the run time parameters passed by runTimePars and foreTimePars.
-#' @references \url{https://www.unidata.ucar.edu/software/thredds/current/netcdf-java/v4.0/javadocAll/ucar/nc2/dt/grid/GeoGrid.html}
+#' 
+#' A call to Sys.sleep is performed in order to limit the number of active sessions. See details in 
+#' \code{\link{makeSubset.S4}} for more information.
+#' 
+#' @references \url{http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.3/javadocAll/ucar/nc2/dt/grid/GeoGrid.html}
 #' @author J Bedia \email{joaquin.bedia@@gmail.com} and A. Cofi\~no
 #' 
 makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
@@ -23,13 +27,17 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
       z <- .jnew("ucar/ma2/Range", 0L, 0L)
       ens <- .jnull()
       aux.list <- rep(list(bquote()), length(runTimePars$runTimeRanges))
+      counter <- 0
       for (i in 1:length(runTimePars$runTimeRanges)) {
             aux.list1 <- rep(list(bquote()), length(runTimePars$runTimeRanges[[i]]))
+            counter <- counter + 1
             for (j in 1:length(runTimePars$runTimeRanges[[i]])) {
+                  counter <- counter + 1
                   rt <- runTimePars$runTimeRanges[[i]][[j]]
                   ft <- foreTimePars$ForeTimeRangesList[[i]][[j]]
                   aux.list2 <- rep(list(bquote()), length(latLon$llRanges))
                   for (k in 1:length(latLon$llRanges)) {
+                        counter <- counter + 1
                         subSet <- grid$makeSubset(rt, ens, ft, z, latLon$llRanges[[k]]$get(0L), latLon$llRanges[[k]]$get(1L))
                         shapeArray <- rev(subSet$getShape())
                         dimNamesRef <- dimNames              
@@ -42,6 +50,10 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
                               rm.dim <- grep(gcs$getYHorizAxis()$getDimensionsString(), dimNamesRef, fixed = TRUE)
                               shapeArray <- shapeArray[-rm.dim]
                               dimNamesRef <- dimNamesRef[-rm.dim]
+                        }
+                        if (counter > 50) {
+                              counter <- 0
+                              Sys.sleep(60)
                         }
                         aux.list2[[k]] <- array(subSet$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray(), dim = shapeArray)
                   }
