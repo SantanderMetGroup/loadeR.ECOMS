@@ -50,7 +50,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       gds <- J("ucar.nc2.dt.grid.GridDataset")$open(url$URL)
       grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
-            stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables")
+            stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/dataserver/listofvariables")
       }
       # Grid datasets
       if (dataset == "WFDEI" | dataset == "NCEP") {
@@ -116,7 +116,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       # Source Dataset and other metadata 
       attr(out, "dataset") <- dataset
       attr(out, "source") <- "ECOMS User Data Gateway" 
-      attr(out, "URL") <- "<http://meteo.unican.es/ecoms-udg>"
+      attr(out, "URL") <- "<http://meteo.unican.es/trac/wiki/udg/ecoms>"
       return(out)
 }      
 # End
