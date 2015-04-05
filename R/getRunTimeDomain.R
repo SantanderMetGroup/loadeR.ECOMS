@@ -72,7 +72,8 @@ getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
       }
       # runtime parameters depending on model
       if (grepl("CFSv2", dataset)) {
-            rtPars <- getRunTimeDomain.CFS(runDatesAll, validMonth, members, years)  
+            rtPars <- getRunTimeDomain.CFS(runDatesAll, validMonth, members, years)
+            years <- rtPars$years
       }
       if (grepl("^System4", dataset)) {
             rtPars <- getRunTimeDomain.S4(runDatesAll, validMonth, years)  

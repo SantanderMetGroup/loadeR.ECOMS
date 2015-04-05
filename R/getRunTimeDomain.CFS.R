@@ -10,11 +10,17 @@
 #' \item runDatesEnsList a list of the same length as the number of members selected, with the initialization dates
 #' \item runTimesEnsList a list of the same length as the number of members selected, with a list of initialization
 #' times, in the form of java ranges, as required by makeSubset.
+#' \item years The years vector, updated if necessary. See details.
 #' \end{itemize}
 #' @details The lagged runtime configuration of CFSv2 means that ensemble members are defined by different
 #'  initializations, so that the dimension ensemble does not exist \emph{per se}, but is defined by
 #'  different initializations.
-#' @references \url{http://meteo.unican.es/ecoms-udg/DataServer/Datasets/CFSv2}      
+#'  
+#'  It may happen that there are not enough initializations for the last year to retrieve
+#'  the data for all the initializations requested. In this case, the last year in selection
+#'  is suppressed with a warning. If the selection corresponds to one single year, the query
+#'  is automatically updated to the maximum number of available members, with a warning.
+#' @references \url{http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2}      
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com}
 
 getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years) {
@@ -39,38 +45,48 @@ getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years) {
       init.list <- lapply(ls(pattern = "\\.inits$")[pmatch(tolower(month.abb), ls(pattern = "\\.inits$"))], function(x) get(x))
       rm(list = c("d", "m", "y", ls(pattern = "\\.inits$")))
       runTimesAll <- init.list[[validMonth]]
-      rm(init.list)
+      init.list <- NULL
       runDatesValidMonth <- runDatesAll[runTimesAll]
       runTimes <- runTimesAll[which((runDatesValidMonth$year + 1900) %in% years)]
       runDates <- runDatesAll[runTimes]
-      rm(runDatesValidMonth, runTimesAll, runDatesAll)
+      runDatesValidMonth <- runTimesAll <- runDatesAll <- NULL
       if (validMonth == 11 & (length(members) > 28 | any(members > 28))) {
             stop("Maximum number of members in this initialization is 28")
       }
       if (validMonth != 11 & (length(members) > 24 | any(members > 24))) {
             stop("Maximum number of members in this initialization is 24")
       }
-      runTimes <- unlist(lapply(unique(runDates$year + 1900), function(x) {
-            runTimes[which(runDates$year + 1900 == x)[members]]
-      }))
-      runDates.aux <- unlist(lapply(unique(runDates$year + 1900), function(x) {
+      rt.mem <- sapply(unique(runDates$year + 1900), function(x) {
+            length(runTimes[which((runDates$year + 1900) == x)])
+      })
+      if (any(members > min(rt.mem))) {
+            if (length(rt.mem) == 1) {
+                  members <- 1:min(rt.mem)
+                  warning("Unavailable initializations for the requested members\nSelection modified to members ", members[1], " to ", length(members))
+            } else {
+                  year.out <- unique(runDates$year + 1900)[which.min(rt.mem)]
+                  years <- years[-match(year.out, years)]
+                  warning("Last year in selection removed (not enough initializations available in hindcast)\nMaximum possible choice to include last year is members 1 to ", min(rt.mem))
+            }
+      }
+      runDates.aux <- unlist(lapply(years, function(x) {
             format(as.POSIXct(runDates[which(runDates$year + 1900 == x)[members]], tz = "GMT"), format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
       }))
       runDatesEnsList <- rep(list(bquote()), length(members))
       names(runDatesEnsList) <- paste("Member", members, sep = "_")
       runTimesEnsList <- runDatesEnsList
       for (i in 1:length(members)) {
-            ind <- seq.int(i, by = length(members), length.out = length(unique(runDates$year)))
+            ind <- seq.int(i, by = length(members), length.out = length(years))
             runTimesEnsList[[i]] <- runTimes[ind]
             runDatesEnsList[[i]] <- runDates.aux[ind]
-            rm(ind)
       }
+      ind <- NULL
       for (i in 1:length(runTimesEnsList)) {
             runTimesEnsList[[i]] <- lapply(1:length(runTimesEnsList[[i]]), function (j) {
-                  rt <- as.integer(runTimesEnsList[[i]][j])
+                  rt <- as.integer(runTimesEnsList[[i]][j] - 1)
                   .jnew("ucar/ma2/Range", rt, rt)
             })
       }
-      return(list("runDates" = runDatesEnsList, "runTimeRanges" = runTimesEnsList))
+      return(list("runDates" = runDatesEnsList, "runTimeRanges" = runTimesEnsList, "years" = years))
 }
 # End 
