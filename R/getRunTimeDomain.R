@@ -40,6 +40,14 @@ getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
       if (is.null(years)) {
             years <- allYears
       } 
+      if (grepl("CFSv2", dataset)) {
+            aux <- intersect(years, 1983:2009)      
+            if (!identical(aux, years)) {
+                  warning("Available years in dataset: 1983-2009\nSome years were removed")
+            }
+            years <- aux
+            aux <- NULL
+      }
       if (years[1] < startYear & years[length(years)] > endYear) {
             warning("Year selection out of dataset range. Only available years will be returned")
             years <- allYears
