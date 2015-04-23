@@ -26,18 +26,14 @@ makeSubset.S4 <- function(grid, latLon, runTimePars, memberRangeList, foreTimePa
       dimNames <- rev(names(scanVarDimensions(grid))) # reversed!
       z <- .jnew("ucar/ma2/Range", 0L, 0L)
       aux.list <- rep(list(bquote()), length(memberRangeList))
-      counter <- 0
       for (i in 1:length(memberRangeList)) {
-            counter <- counter + 1
             ens <- memberRangeList[[i]]
             aux.list1 <- rep(list(bquote()), length(runTimePars$runTimeRanges))
             for (j in 1:length(runTimePars$runTimeRanges)) {
-                  counter <- counter + 1
                   rt <- runTimePars$runTimeRanges[[j]]
                   ft <- foreTimePars$ForeTimeRangesList[[j]]
                   aux.list2 <- rep(list(bquote()), length(latLon$llRanges))
                   for (k in 1:length(latLon$llRanges)) {
-                        counter <- counter + 1
                         subSet <- grid$makeSubset(rt, ens, ft, z, latLon$llRanges[[k]]$get(0L), latLon$llRanges[[k]]$get(1L))
                         shapeArray <- rev(subSet$getShape())
                         dimNamesRef <- dimNames              
@@ -50,10 +46,6 @@ makeSubset.S4 <- function(grid, latLon, runTimePars, memberRangeList, foreTimePa
                               rm.dim <- grep(gcs$getYHorizAxis()$getDimensionsString(), dimNamesRef, fixed = TRUE)
                               shapeArray <- shapeArray[-rm.dim]
                               dimNamesRef <- dimNamesRef[-rm.dim]
-                        }
-                        if (counter > 50) {
-                              counter <- 0
-                              Sys.sleep(60)
                         }
                         aux.list2[[k]] <- array(subSet$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray(), dim = shapeArray)
                   }
