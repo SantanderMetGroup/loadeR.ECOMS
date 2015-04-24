@@ -31,9 +31,9 @@
 
 deriveInterface <- function(dataset, var, dictionary, time) {
       if (!dictionary) {
-            stop("The requested variable is non-standard. The dictionary must be used for homogenization and conversion of input variables\nGo to http://meteo.unican.es/ecoms-udg/ListOfVariables for details")
+            stop("The requested variable is non-standard. The dictionary must be used for homogenization and conversion of input variables\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables> for details")
       }
-      dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
+      dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset, ".dic", sep = ""))
       # devel (comment before package building)
       # dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
       dictionary <- tryCatch({read.csv(dicPath, stringsAsFactors = FALSE)}, error = function(e) stop("Dictionary not found"))
@@ -41,7 +41,7 @@ deriveInterface <- function(dataset, var, dictionary, time) {
       var <- findVerticalLevel(var)$var
       dicRow <- grep(paste("^", var, "$", sep = ""), dictionary$identifier) 
       if (length(dicRow) == 0) {
-            stop("Variable requested not found\nCheck variable naming and availability in http://www.meteo.unican.es/ecoms-udg/DataServer/DataServer/ListOfVariables")
+            stop("Variable requested not found\nCheck variable naming and availability in <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables>")
       }
       if (length(dicRow) > 1) {
             if (time == "DD") {
@@ -51,7 +51,7 @@ deriveInterface <- function(dataset, var, dictionary, time) {
             }
       }
       if (dictionary$derived[dicRow] == 1) {
-            message("NOTE: The requested variable is not originally stored in model's database\nIt will be derived on-the-fly using an approximation\nGo to http://meteo.unican.es/ecoms-udg/ListOfVariables for details")
+            message("NOTE: The requested variable is not originally stored in model's database\nIt will be derived on-the-fly using an approximation\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables> for details")
             deriveInterface <- dictionary$interface[dicRow]
             leadVar <- switch(deriveInterface, 
                                     deriveSurfacePressure = "tas",
