@@ -30,7 +30,6 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
       for (i in 1:length(runTimePars$runTimeRanges)) {
             aux.list1 <- rep(list(bquote()), length(runTimePars$runTimeRanges[[i]]))
             for (j in 1:length(runTimePars$runTimeRanges[[i]])) {
-                  counter <- counter + 1
                   rt <- runTimePars$runTimeRanges[[i]][[j]]
                   ft <- foreTimePars$ForeTimeRangesList[[i]][[j]]
                   aux.list2 <- rep(list(bquote()), length(latLon$llRanges))
