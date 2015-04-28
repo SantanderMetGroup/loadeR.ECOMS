@@ -10,12 +10,12 @@
 #' representative verification time. If start and end are identical, the variable is instantaneous
 #' and therefore the representative time interval is 0}
 #' \item{foreTimeRangesList}{A list of length \emph{i} containing the java ranges defining the
-#' forecast times selected along the \emph{i-th} run time axis.
+#' forecast times selected along the \emph{i-th} run time axis.}
 #' \item{deaccumFromFirst}{NULL if no deaccumulation is performed. TRUE or FALSE if deaccumulation is performed from
 #' the first time of the runtime axis or not respectively. If FALSE, an additional runtime is added at the beginning
 #' of each element of the runTimeList to avoid losing the first day when performing deaccumulation.}
-#' \item{doDailyMean}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
-#' to \code{\link{makeSubset.CFS}} to undertake the pertinent aggregation if TRUE.
+#' \item{dailyAggr}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
+#' to \code{\link{makeSubset.CFS}} to undertake the pertinent aggregation if TRUE.}
 #' \end{itemize}
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com} 
 #' 
@@ -36,6 +36,27 @@ getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, time) {
             foreTimesList[[x]] <- aux.foreTimesList
             foreDatesList[[x]] <- aux.foreDatesList
       }
+      aux <- rep(NA, length(foreTimesList))
+      for (i in 1:length(foreTimesList)) {
+            aux[i] <- length(foreTimesList[[i]][[1]])
+      }
+      if (length(unique(aux)) > 1) {
+            aux.dates <- rep(list(bquote()), length(foreTimesList))
+            for (i in 1:length(foreTimesList)) {
+                  aux.dates[[i]] <- head(foreDatesList[[i]][[1]], 1)
+            }
+            init <- do.call("max", aux.dates)
+            for (i in 1:length(foreTimesList)) {
+                  if(head(foreDatesList[[i]][[1]], 1) < init) {
+                        for (j in 1:length(foreTimesList[[i]])) {
+                              retain <- which(foreDatesList[[i]][[1]] >= init)
+                              foreTimesList[[i]][[j]] <- foreTimesList[[i]][[j]][retain] 
+                              foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][retain] 
+                        }
+                  }
+            }
+      }
+      aux.dates <- aux <- NULL
       # Sub-routine for setting stride and shift along time dimension    
       if (is.null(dic) & time != "none") {
             stop("Time resolution especification incompatible with non-standard variable requests\nUse the dictionary or set the 'time' argument to NULL")
@@ -63,10 +84,8 @@ getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, time) {
                   timeInd <- NULL
             }
       }
-      
-      ####
       # Ensure matching for daily aggregation (full days only)
-      if(isTRUE(dic$doDailyMean)) {
+      if(!is.na(dic$dailyAggr)) {
             for (i in 1:length(foreDatesList)) {
                   for (j in 1:length(foreDatesList[[i]])) {
                         # Ensure foredates start at 00:00
@@ -82,7 +101,7 @@ getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, time) {
                         }
                   }
             }
-      }                  
+      }                 
       foreDates <- do.call("c", foreDatesList[[1]])
       foreDatesList <- NULL
       # Sub-routine for adjusting times in case of deaccumulation (unused so far in CFS)
