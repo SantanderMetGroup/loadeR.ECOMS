@@ -1,5 +1,4 @@
 loadSeasonalForecast.CFS = function(var, grid, dic, latLon, runTimePars, time, level) {
-      gcs <- grid$getCoordinateSystem()
       foreTimePars <- getForecastTimeDomain.CFS(grid, dic, runTimePars, time)
       mdArray <- makeSubset.CFS(grid, latLon, runTimePars, foreTimePars)
       if (!is.null(dic)) {

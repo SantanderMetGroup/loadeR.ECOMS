@@ -13,14 +13,14 @@
 #' representative verification time. If start and end are identical, the variable is instantaneous
 #' and therefore the representative time interval is 0}
 #' \item{foreTimeRangesList}{A list of length \emph{i} containing the java ranges defining the
-#' forecast times selected along the \emph{i-th} run time axis.
+#' forecast times selected along the \emph{i-th} run time axis.}
 #' \item{foreTimeShift}{Integer value (java format) giving the shift to start reading in the time axis}
 #' \item{foreTimeStride}{Integer value (java format) giving the stride for reading in the time axis}
 #' \item{deaccumFromFirst}{NULL if no deaccumulation is performed. TRUE or FALSE if deaccumulation is performed from
 #' the first time of the runtime axis or not respectively. If FALSE, an additional runtime is added at the beginning
 #' of each element of the runTimeList to avoid losing the first day when performing deaccumulation.}
 #' \item{doDailyMean}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
-#' to \code{\link{makeSubset.S4}} to undertake the pertinent aggregation if TRUE.
+#' to \code{\link{makeSubset.S4}} to undertake the pertinent aggregation if TRUE.}
 #' \end{itemize}
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com} 
 

@@ -4,7 +4,7 @@
 #' @param lonLim longitudinal range definition (see \code{\link{loadSeasonalForecast}})
 #' @param latLim latitudinal range definition (see \code{\link{loadSeasonalForecast}})
 #' @return A list of parameters passed to the loading function:
-#' \begin{itemize}{}
+#' \begin{itemize}
 #' \item{llRanges}{A list of length 2 or 1 (selection crosses or not dateline) of 
 #' java \sQuote{LatLonRect} class elements}
 #' \item{pointXYindex}{A vector of length 2 with the index positions for the xy
@@ -18,12 +18,12 @@
 #' place for consistent spatial mapping.
 #' The index position of lon and lat in the corresponding axes is returned 
 #' by \code{pointXYindex}, and is passed to the \sQuote{readDataSlice} method in
-#'  \code{\link{makeSubset.S4} and \code{\link{makeSubset.CFS}. For single point locations, 
+#'  \code{\link{makeSubset.S4}} and \code{\link{makeSubset.CFS}}. For single point locations, 
 #'  this is a integer vector of length two defining these positions, while in the case of rectangular
 #'   domains its value is c(-1L,-1L).
 #' @note The function assumes that datasets have degrees-east and degress-north as units
 #' of the corresponding X and Y axes.
-#' @references \url{https://www.unidata.ucar.edu/software/thredds/current/netcdf-java/v4.0/javadocAll/ucar/nc2/dt/GridCoordSystem.html#getRangesFromLatLonRect%28ucar.unidata.geoloc.LatLonRect%29}
+#' @references \url{https://www.unidata.ucar.edu/software/thredds/current/netcdf-java/v4.0/javadocAll/ucar/nc2/dt/GridCoordSystem.html}
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com} and A. Cofin\~no
 
 getLatLonDomainForecast <- function(grid, lonLim, latLim) {
