@@ -6,7 +6,6 @@ loginECOMS_UDG <- function(username, password, proxy.host = NULL, proxy.port = N
       if (!is.null(proxy.host)) {
             J("ucar.nc2.util.net.HTTPSession")$setGlobalProxy(proxy.host, proxy.port)
       }
-      aux <- .jnew("ucar/nc2/util/net/HTTPBasicProvider", username, password)
-      J("ucar.nc2.util.net.HTTPSession")$setGlobalCredentialsProvider(aux)
+      J("ucar.httpservices.MyHTTPFactory")$setCredentials(username, password)
 }
 # End
