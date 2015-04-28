@@ -38,11 +38,15 @@ getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
       endYear <- endDay$year + 1900
       allYears <- startYear : endYear
       if (is.null(years)) {
-            years <- allYears
+            if (grepl("CFSv2", dataset)) {
+                  years <- 1983:2009
+            } else {
+                  years <- allYears
+            }
       } 
       if (grepl("CFSv2", dataset)) {
             aux <- intersect(years, 1983:2009)      
-            if (!identical(aux, years)) {
+            if (!identical(as.integer(aux), as.integer(years))) {
                   warning("Available years in dataset: 1983-2009\nSome years were removed")
             }
             years <- aux
