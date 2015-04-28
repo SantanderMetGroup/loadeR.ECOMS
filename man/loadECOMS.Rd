@@ -31,7 +31,7 @@ A vector of integers indicating the members to be loaded. Default to \code{NULL}
 }
 
   \item{lonLim}{
-Vector of length = 2, with minimum and maximum longitude coordinates, in decimal degrees, of the bounding box selected. For single-point queries, a numeric value with the longitude coordinate. If \code{NULL} (default), the whole longitudinal range is selected (Note that this may lead to a large output object size). See details on the definition of spatial domains. 
+Vector of length = 2, with the minimum and maximum longitude coordinates, in decimal degrees, of the bounding box selected. For single-point queries, a numeric value with the longitude coordinate. If \code{NULL} (default), the whole longitudinal range is selected (Note that this may lead to a large output object size). See details on the definition of spatial domains. 
 }
   \item{latLim}{
 Same as \code{lonLim}, but for the selection of the latitudinal range.
@@ -97,7 +97,7 @@ The different nature of the various databases, models and variables, and the idi
 
 \strong{Ensemble member definition}
 
-In the case of the CFSv2 reforecast there are four initializations (4 cycles) from every 5th day running for 9 months (see \href{http://meteo.unican.es/ecoms-udg/DataServer/Datasets/CFSv2}{CFSv2 members} for more detailed information of members' construction). Thus, the lagged-time configuration of members results in a different number of possible members depending on the initialization chosen (more precisely, 24 members excepting the November initializations, which have 28). For better comparability with its ECMWF's counterpart (the System4 seasonal forecast of 15 members), \code{loadECOMS} defines by default an ensemble of 16 members for each lead month and forecast season in the case of CFS, although it is possible to request up to 24/28. 
+In the case of the CFSv2 reforecast there are four initializations (4 cycles) from every 5th day running for 9 months (see \href{http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2}{CFSv2 members} for more detailed information of members' construction). Thus, the lagged-time configuration of members results in a different number of possible members depending on the initialization chosen (more precisely, 24 members excepting the November initializations, which have 28). This theoretical configuration has been slightly modified to avoid some missing initializations in the original dataset (see details in the previous link). For better comparability with its ECMWF's counterpart (the System4 seasonal forecast of 15 members), \code{loadECOMS} defines by default an ensemble of 16 members for each lead month and forecast season in the case of CFS, although it is possible to request all available members for that particular lead month. In addition, due to the lagged runtime configuration of the ensemble members in CFSv2, in case of lead month 0 requests, some of the first days of the requested period may be missing, as only common days for all members requested are returned.
 
 
 \strong{Definition of spatial domains}
