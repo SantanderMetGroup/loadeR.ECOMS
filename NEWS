@@ -1,6 +1,9 @@
 ecomsUDG.Raccess
 ================
 
-* Bug fix in dictionary scaling factor for conversion of radiation variables of System4_seasonal_15
-* Documentation update
-* Other minor bug fixes and enhancements
+* CFSv2 dataset redefinition
+  * Improved performance of data download
+  * New member definition to avoid errors due to missing runtimes in the original dataset
+    (http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2)
+* Improved authentication scheme providing greater stability for long queries
+* Several minor bug fixes and enhancements
