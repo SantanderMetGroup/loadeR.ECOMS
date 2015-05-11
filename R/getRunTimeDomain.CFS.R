@@ -25,7 +25,7 @@
 
 getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years) {
       if (is.null(members)) {
-            members <- 1:16      
+            members <- 1:15      
       }
       d <- runDatesAll$mday
       m <- runDatesAll$mon + 1
