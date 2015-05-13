@@ -7,15 +7,15 @@
 #' @param latLon A list of geolocation parameters, as returned by getLatLonDomainForecast
 #' @param runTimePars A list of run time definition parameters, as returned by \code{getRunTimeDomain}
 #' @param foreTimePars A list of forecast time definition parameters, as returned by \code{getForecastTimeDomain.CFS}
-#' @return A n-dimensional array. Dimensions are labelled by the \dQuote{dimnames} attribute
+#' @return A list with the n-dimensional array of data and the modified foreTimePars with adjusted dates depending on the
+#' temporal aggregation performed.
 #' @details Dimensions of length one are dropped and the \dQuote{dimnames} attribute is consequently modified.
 #' In the current version the Z dimension is ignored (and dropped), as it is not planned to include multi-level variables
 #' in the ECOMS-UDG by the moment. Because of the lagged-runtime configuration of CFSv2 for member definition,
 #' the dimension \sQuote{ensemble} doen not exist. In turn, this is created and included as a dimension in the returned array
 #' from the run time parameters passed by runTimePars and foreTimePars.
 #' 
-#' A call to Sys.sleep is performed in order to limit the number of active sessions. See details in 
-#' \code{\link{makeSubset.S4}} for more information.
+#' This function performs the temporal aggregations.
 #' 
 #' @references \url{http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.3/javadocAll/ucar/nc2/dt/grid/GeoGrid.html}
 #' @author J Bedia \email{joaquin.bedia@@gmail.com} and A. Cofi\~no
@@ -49,12 +49,31 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
                         }
                         aux.list2[[k]] <- array(subSet$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray(), dim = shapeArray)
                   }
-                  # Sub-routine for daily aggregation from 6h data
-                  if (!is.na(foreTimePars$dailyAggr)) {
-                        aux.list1[[j]] <- toDD(do.call("abind", c(aux.list2, along = 1)), dimNamesRef, foreTimePars$dailyAggr)
-                        dimNamesRef <- attr(aux.list1[[j]], "dimensions")
-                  } else {
-                        aux.list1[[j]] <- do.call("abind", c(aux.list2, along = 1))
+                  aux.list1[[j]] <- do.call("abind", c(aux.list2, along = 1))
+                  aux.list2 <- NULL
+                  # Daily aggregator
+                  if (foreTimePars$aggr.d != "none") {
+                        aux.string <- paste((foreTimePars$forecastDates[[i]][[j]])$mon, (foreTimePars$forecastDates[[i]][[j]])$mday, sep = "-")
+                        aux.factor <- factor(aux.string, levels = unique(aux.string))
+                        mar <- grep("^time", dimNamesRef, invert = TRUE)
+                        aux.list1[[j]] <- apply(aux.list1[[j]], mar, function(x) {
+                              tapply(x, INDEX = aux.factor, FUN = foreTimePars$aggr.d, na.rm = TRUE)
+                        })
+                        dimNamesRef <- c("time", dimNamesRef[mar])
+                        # Convert dates to daily:
+                        nhours <- length(aux.factor) / nlevels(aux.factor)
+                        foreTimePars$forecastDates[[i]][[j]] <- foreTimePars$forecastDates[[i]][[j]][seq(1, by = nhours, length.out = nlevels(aux.factor))]
+                  }
+                  # Monthly aggregator
+                  if (foreTimePars$aggr.m != "none") {
+                        mes <- (foreTimePars$forecastDates[[i]][[j]])$mon
+                        day <- (foreTimePars$forecastDates[[i]][[j]])$mday
+                        mar <- grep("^time", dimNamesRef, invert = TRUE)
+                        aux.list1[[j]] <- apply(aux.list1[[j]], MARGIN = mar, FUN = function(x) {
+                              tapply(x, INDEX = mes, FUN = foreTimePars$aggr.m)
+                        })
+                        dimNamesRef <- c("time", dimNamesRef[mar])
+                        foreTimePars$forecastDates[[i]][[j]] <- foreTimePars$forecastDates[[i]][[j]][which(day == 1)]
                   }
             }
             aux.list[[i]] <- do.call("abind", c(aux.list1, along = grep("^time", dimNamesRef)))
@@ -74,6 +93,9 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
       dimNames <- gsub("^time.*", "time", dimNames)
       mdArray <- unname(mdArray)
       attr(mdArray, "dimensions") <- dimNames
-      return(mdArray)
+      # Date adjustment
+      foreTimePars$forecastDates <- adjustDates.forecast(foreTimePars)
+      return(list("mdArray" = mdArray, "foreTimePars" = foreTimePars))
 }
 # End
+

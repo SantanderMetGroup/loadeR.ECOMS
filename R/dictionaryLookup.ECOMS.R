@@ -21,58 +21,53 @@ dictionaryLookup.ECOMS <- function(dicPath, derInterface, time) {
       dictionary <- tryCatch({read.csv(dicPath, stringsAsFactors = FALSE)}, error = function(e) stop("Dictionary not found"))
       dicRow <- grep(paste("^", findVerticalLevel(derInterface$leadVar)$var, "$", sep = ""), dictionary$identifier) 
       if (length(dicRow) == 0) {
-            stop("Variable requested does not match any identifier in the dictionary")
+            stop("Variable requested not found\nCheck available variables at https://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables")
       }
-      dailyAggr <- NA
       if (length(dicRow) > 1) {
-            morethanone <- TRUE
             if (time == "DD" & derInterface$deriveInterface == "none") {
                   dicRow <- dicRow[dictionary$time_step[dicRow] == "24h"]
-                  time <- "none"
                   if (length(dicRow) == 0) {
                         dicRow <- grep(paste("^", derInterface$origVar, "$", sep = ""), dictionary$identifier)                  
-                        dicRow <- dicRow[dictionary$time_step[dicRow] == "6h"]
-                        time <- "DD"
+                        dicRow <- dicRow[dictionary$time_step[dicRow] == "6h" | dictionary$time_step[dicRow] == "3h"]
                   }
             } else {
-                  dicRow <- dicRow[dictionary$time_step[dicRow] == "6h"]
-                  morethanone <- FALSE
+                  dicRow <- dicRow[dictionary$time_step[dicRow] == "6h" | dictionary$time_step[dicRow] == "3h"]
             }
       } else {
-            morethanone <- FALSE
             if (dictionary$time_step[dicRow] == "12h" & time == "DD") {
                   stop("Cannot compute daily mean from 12-h data")
             }
-            if ((time == "06" | time == "18") & dictionary$time_step[dicRow] == "12h") {
+            if ((time %in% c("03","06","09","15","18","21")) & dictionary$time_step[dicRow] == "12h") {
                   stop("Requested 'time' value (\"", time, "\") not available for 12-h data")
             }
             if ((time != "none" & time != "DD") & (dictionary$time_step[dicRow] == "24h")) {
-                  stop("Subdaily data not available for variable \"", derInterface$origVar, "\". Check value of argument 'time'")
+                  stop("Subdaily data not available for variable \"", var, "\". Check value of argument 'time'")
             }
             if (time == "DD" & dictionary$time_step[dicRow] == "24h") {
                   time <- "none"
             }
       }
-      if (time == "DD" & !isTRUE(morethanone)) {
-            dailyAggr <- "mean"
-            if (derInterface$origVar == "tp" | derInterface$origVar == "rlds" | derInterface$origVar == "rsds") {
-                  dailyAggr <- "sum"
-                  message("NOTE: daily accumulated will be calculated from the 6-h model output")
-            } else if (grepl(".*max$", derInterface$origVar)) {
-                  dailyAggr <- "max"
-                  message("NOTE: daily maximum will be calculated from the 6-h model output")
-            } else if (grepl(".*min$", derInterface$origVar)) {
-                  dailyAggr <- "min"
-                  message("NOTE: daily minimum will be calculated from the 6-h model output")
-            } else {
-                  message("NOTE: daily mean will be calculated from the 6-h model output")
-            }
-      }
+      
+#       if (time == "DD") {
+#             dailyAggr <- "mean"
+#             if (derInterface$origVar == "tp" | derInterface$origVar == "rlds" | derInterface$origVar == "rsds") {
+#                   dailyAggr <- "sum"
+#                   message("NOTE: daily accumulated will be calculated from the 6-h model output")
+#             } else if (grepl(".*max$", derInterface$origVar)) {
+#                   dailyAggr <- "max"
+#                   message("NOTE: daily maximum will be calculated from the 6-h model output")
+#             } else if (grepl(".*min$", derInterface$origVar)) {
+#                   dailyAggr <- "min"
+#                   message("NOTE: daily minimum will be calculated from the 6-h model output")
+#             } else {
+#                   message("NOTE: daily mean will be calculated from the 6-h model output")
+#             }
+#       }
       if (derInterface$deriveInterface == "none") {
-            dic <- cbind.data.frame(dictionary[dicRow, ], "dailyAggr" = I(dailyAggr))
+            dic <- dictionary[dicRow, ]
       } else {
             dicRow2 <- grep(paste("^", derInterface$origVar, "$", sep = ""), dictionary$identifier)
-            dic <- cbind.data.frame(dictionary[dicRow2, ], "dailyAggr" = I(dailyAggr))
+            dic <- dictionary[dicRow2, ]
             dic$short_name <- dictionary$short_name[dicRow]
       }
       return(dic)
