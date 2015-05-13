@@ -6,3 +6,4 @@ tp,pr,6h,0,6,sum,0,21600,0,0,
 psl,mslp,6h,0,0,none,0,1,0,0,
 uas,u10m,6h,0,0,none,0,1,0,0,
 vas,v10m,6h,0,0,none,0,1,0,0,
+wss,wss,6h,0,0,none,0,1,0,1,deriveSurfaceWindSpeed
