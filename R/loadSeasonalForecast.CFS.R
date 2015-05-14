@@ -30,6 +30,7 @@ loadSeasonalForecast.CFS = function(var, gds, grid, dic, latLon, runTimePars, ti
             attr(Variable, "longname") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 2])
       } else {
             attr(Variable, "units") <- "undefined"
+            attr(Variable, "longname") <- "undefined"
       }
       attr(Variable, "daily_agg_cellfun") <- cube$foreTimePars$aggr.d
       attr(Variable, "monthly_agg_cellfun") <- cube$foreTimePars$aggr.m
