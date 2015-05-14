@@ -1,23 +1,43 @@
-loadSeasonalForecast.CFS = function(var, grid, dic, latLon, runTimePars, time, level) {
-      foreTimePars <- getForecastTimeDomain.CFS(grid, dic, runTimePars, time)
-      mdArray <- makeSubset.CFS(grid, latLon, runTimePars, foreTimePars)
+loadSeasonalForecast.CFS = function(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface) {
+      foreTimePars <- getForecastTimeDomain.CFS(grid, dic, runTimePars, time, aggr.d, aggr.m)
+#       mdArray <- makeSubset.CFS(grid, latLon, runTimePars, foreTimePars)
+      cube <- switch(derInterface$deriveInterface,
+            none = makeSubset.CFS(grid, latLon, runTimePars, memberRangeList, foreTimePars),
+            deriveSurfaceWindSpeed = deriveSurfaceWindSpeed.CFS(gds, grid, latLon, runTimePars, foreTimePars))
+#       cube <- makeSubset.CFS(grid, latLon, runTimePars, foreTimePars)
+      foreTimePars <- NULL      
+      if (!is.null(derInterface$deriveInterface)) {
+            var <- derInterface$origVar
+      }
       if (!is.null(dic)) {
             isStandard <- TRUE
-            mdArray <- dictionaryTransformForecast(dic, foreTimePars, mdArray)
+            cube$mdArray <- dictionaryTransformForecast(dic, cube$foreTimePars, cube$mdArray)
       } else {
             isStandard <- FALSE
       }
       if (isTRUE(latLon$revLat)) {
-            mdArray <- revArrayLatDim(mdArray, grid)
+            cube$mdArray <- revArrayLatDim(cube$mdArray, grid)
       }
       # formatting initialization dates
       for (x in 1:length(runTimePars$runDates)){
             runTimePars$runDates[[x]] <- format(as.POSIXct(runTimePars$runDates[[x]], tz = "GMT"), format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
       }
-      return(list("Variable" = list("varName" = var, "isStandard" = isStandard, "level" = level),
-                  "Data" = mdArray,
+      Variable <- list("varName" = var, "level" = level)
+      attr(Variable, "is_standard") <- isStandard
+      if (isStandard) {
+            data(vocabulary, envir = environment())
+            attr(Variable, "units") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 3])
+            attr(Variable, "longname") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 2])
+      } else {
+            attr(Variable, "units") <- "undefined"
+      }
+      attr(Variable, "daily_agg_cellfun") <- cube$foreTimePars$aggr.d
+      attr(Variable, "monthly_agg_cellfun") <- cube$foreTimePars$aggr.m
+      attr(Variable, "verification_time") <- time
+      return(list("Variable" = Variable,
+                  "Data" = cube$mdArray,
                   "xyCoords" = latLon$xyCoords, 
-                  "Dates" = foreTimePars$forecastDates,
+                  "Dates" = cube$foreTimePars$forecastDates,
                   "InitializationDates" = runTimePars$runDates,
                   "Members" = names(runTimePars$runTimeRanges)))
 }
