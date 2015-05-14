@@ -25,6 +25,8 @@ deriveSurfaceWindSpeed.S4 <- function(gds, grid, latLon, runTimePars, memberRang
       gcs <- grid$getCoordinateSystem()
       dimNames <- rev(names(scanVarDimensions(grid))) # reversed!
       z <- .jnew("ucar/ma2/Range", 0L, 0L)
+      aux.foreDatesList <- rep(list(foreTimePars$forecastDates), length(memberRangeList))      
+      foreTimePars$forecastDates <- NULL
       aux.list <- rep(list(bquote()), length(memberRangeList))
       for (i in 1:length(memberRangeList)) {
             ens <- memberRangeList[[i]]
@@ -57,14 +59,32 @@ deriveSurfaceWindSpeed.S4 <- function(gds, grid, latLon, runTimePars, memberRang
                         aux.list2[[k]] <- array(wss, dim = shapeArray)
                         wss <- NULL
                   }
-                  # Sub-routine for daily aggregation from 6h data
-                  if (!is.na(foreTimePars$dailyAggr)) {
-                        aux.list1[[j]] <- toDD(do.call("abind", c(aux.list2, along = 1)), dimNamesRef, foreTimePars$dailyAggr)
-                        dimNamesRef <- attr(aux.list1[[j]], "dimensions")
-                  } else {
-                        aux.list1[[j]] <- do.call("abind", c(aux.list2, along = 1))
-                  }
+                  aux.list1[[j]] <- do.call("abind", c(aux.list2, along = 1))
                   aux.list2 <- NULL
+                  # Daily aggregator
+                  if (foreTimePars$aggr.d != "none") {
+                        aux.string <- paste((aux.foreDatesList[[i]][[j]])$mon, (aux.foreDatesList[[i]][[j]])$mday, sep = "-")
+                        aux.factor <- factor(aux.string, levels = unique(aux.string))
+                        mar <- grep("^time", dimNamesRef, invert = TRUE)
+                        aux.list1[[j]] <- apply(aux.list1[[j]], mar, function(x) {
+                              tapply(x, INDEX = aux.factor, FUN = foreTimePars$aggr.d, na.rm = TRUE)
+                        })
+                        dimNamesRef <- c("time", dimNamesRef[mar])
+                        # Convert dates to daily:
+                        nhours <- length(aux.factor) / nlevels(aux.factor)
+                        aux.foreDatesList[[i]][[j]] <- aux.foreDatesList[[i]][[j]][seq(1, by = nhours, length.out = nlevels(aux.factor))]
+                  }
+                  # Monthly aggregator
+                  if (foreTimePars$aggr.m != "none") {
+                        mes <- (aux.foreDatesList[[i]][[j]])$mon
+                        day <- (aux.foreDatesList[[i]][[j]])$mday
+                        mar <- grep("^time", dimNamesRef, invert = TRUE)
+                        aux.list1[[j]] <- apply(aux.list1[[j]], MARGIN = mar, FUN = function(x) {
+                              tapply(x, INDEX = mes, FUN = foreTimePars$aggr.m)
+                        })
+                        dimNamesRef <- c("time", dimNamesRef[mar])
+                        aux.foreDatesList[[i]][[j]] <- aux.foreDatesList[[i]][[j]][which(day == 1)]
+                  }
             }
             aux.list[[i]] <- do.call("abind", c(aux.list1, along = grep("^time", dimNamesRef)))
             aux.list1 <- NULL
@@ -80,6 +100,9 @@ deriveSurfaceWindSpeed.S4 <- function(gds, grid, latLon, runTimePars, memberRang
       dimNames <- gsub("^time.*", "time", dimNames)
       mdArray <- unname(mdArray)
       attr(mdArray, "dimensions") <- dimNames
-      return(mdArray)
+      # Date adjustment
+      foreTimePars$forecastDates <- aux.foreDatesList
+      foreTimePars$forecastDates <- adjustDates.forecast(foreTimePars)
+      return(list("mdArray" = mdArray, "foreTimePars" = foreTimePars))
 }
 # End
