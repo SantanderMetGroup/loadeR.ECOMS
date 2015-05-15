@@ -10,20 +10,21 @@ A simple interface for accesing and retrieving dimensional slices of the various
 
 \usage{
 loadECOMS(dataset, var, dictionary = TRUE, members = NULL, lonLim = NULL, 
-      latLim = NULL, season = NULL, years = NULL, leadMonth = 1, time = "none") 
+      latLim = NULL, season = NULL, years = NULL, leadMonth = 1,
+      time = "none", aggr.d = "none", aggr.m = "none") 
 }
 
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{dataset}{A character string indicating the database to be accessed. Currently accepted values are \code{"System4_seasonal_15"}, \code{"System4_seasonal_51"}, \code{"System4_annual_15"} and \code{"CFSv2_seasonal_16"} for hindcasts (where the notation indicates the GCM name, the temporal range and the default number of ensemble members returned respectively, separated by the lower bars), \code{"WFDEI"} for the WATCH Forcing Dataset based on ERA-Interim (gridded observations) and \code{"NCEP"} for the NCEP/NCAR reanalysis. See details on available datasets.}
+  \item{dataset}{A character string indicating the database to be accessed. Currently accepted values are \code{"System4_seasonal_15"}, \code{"System4_seasonal_51"}, \code{"System4_annual_15"} and \code{"CFSv2_seasonal"} for hindcasts (where the notation indicates the GCM name, the temporal range and the default number of ensemble members returned respectively, separated by the lower bars), \code{"WFDEI"} for the WATCH Forcing Dataset based on ERA-Interim (gridded observations) and \code{"NCEP"} for the NCEP/NCAR reanalysis. See details on available datasets.}
   
   \item{var}{
 Variable code (character string). This is the name of the variable according to the R standard naming (see the next argument). For variables with vertical levels, the vertical level is specified next to the variable name followed by the \dQuote{@} symbol (e.g. \code{var = "z@700"} for geopotential heigth at 700 mb isobaric surface pressure level). It is also possible to enter the variable name as originally coded in the dataset to skip data homogenization, although this is not recommended (see the next argument). See details on available variables. 
 }
 
   \item{dictionary}{
-A logical flag indicating if a dictionary is used for variable homogenization. Default (strongly recommended) is set to \code{TRUE}, meaning that the function will internally perform the necessary homogenization steps to return the standard variables defined in the vocabulary (e.g. variable transformation, deaccumulation...). See details on data homogenization. 
+A logical flag indicating if a dictionary is used for variable homogenization. Default (\emph{strongly recommended}) is set to \code{TRUE}, meaning that the function will internally perform the necessary homogenization steps to return the standard variables defined in the vocabulary (e.g. variable transformation, deaccumulation...). See details on data homogenization. 
 }
 
   \item{members}{
@@ -51,15 +52,21 @@ Integer value indicating the lead forecast time, relative to the first month of 
 
   \item{time}{A character vector indicating the temporal filtering/aggregation of the output data. Default to \code{"none"}, which returns the original time series as stored in the dataset. For sub-daily variables, instantantaneous data at selected verification times can be filtered using one of the character strings \code{"00"}, \code{"06"}, \code{"12"} and \code{"18"}. If daily aggregated data are required use \code{"DD"}. If the requested variable is static (e.g. orography) it will be ignored. See details for time aggregation options.
 }
+
+  \item{aggr.d}{A character string indicating the temporal aggregation function to be applied in case of daily aggregation of sub-daily data (when \code{time = "DD"} and the original data is sub-daily, otherwise ignored). Currently accepted values are \code{"none"} (default), \code{"mean"}, \code{"min"}, \code{"max"} and \code{"sum"}. See details for time aggregation options.
+}
+
+  \item{aggr.m}{Same as argument \code{aggr.d} but for monthly aggregation of data. It requires the specification of the daily aggregation in case of subdaily data. See details for time aggregation options.
+}
+
 }
 
 
 \value{
 A list with the following elements providing the necessary information for data representation and analysis:
-\item{Variable}{A list with three elements:}
+\item{Variable}{A list with two elements, and some other attributes including units and temporal aggregation details:}
 \itemize{ 
       \item \code{varName} A character string indicating which is the variable returned. Same as value provided for argument \code{var}
-      \item \code{isStandard} Logical value indicating whether the variable returned is standard or not (i.e., wether the dictionary has been used -the default- or not.)
       \item \code{level} A numeric value indicating the vertical level of the variable (\code{NULL} for 2D variables)}
 \item{Data}{A N-dimensional array. The number of dimensions (N) depends on the type of request given that dimensions of length one are dropped. Thus, N can take values from 4 (several members for a rectangular domain with different values for longitude, latitude, ensemble and time dimensions) to 1 (atomic vector), for single-point and single-member selections, for which only the time dimension is required. The dimensions are labelled by the \dQuote{dimnames} attribute, and are always arranged in canonical order (i.e.: [member, time, level, lat, lon]).}
 \item{xyCoords}{A list with \code{x} and \code{y} components, as required by many standard mapping functions in R (see e.g. \code{\link[graphics]{image}}. In addition, the attribute \code{projection} provides geo-referencing information for more advanced spatial operations/conversions, in the form of a character string following the \href{http://trac.osgeo.org/proj/}{PROJ.4 specifications}.}
@@ -97,7 +104,7 @@ The different nature of the various databases, models and variables, and the idi
 
 \strong{Ensemble member definition}
 
-In the case of the CFSv2 reforecast there are four initializations (4 cycles) from every 5th day running for 9 months (see \href{http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2}{CFSv2 members} for more detailed information of members' construction). Thus, the lagged-time configuration of members results in a different number of possible members depending on the initialization chosen (more precisely, 24 members excepting the November initializations, which have 28). This theoretical configuration has been slightly modified to avoid some missing initializations in the original dataset (see details in the previous link). For better comparability with its ECMWF's counterpart (the System4 seasonal forecast of 15 members), \code{loadECOMS} defines by default an ensemble of 16 members for each lead month and forecast season in the case of CFS, although it is possible to request all available members for that particular lead month. In addition, due to the lagged runtime configuration of the ensemble members in CFSv2, in case of lead month 0 requests, some of the first days of the requested period may be missing, as only common days for all members requested are returned.
+In the case of the CFSv2 reforecast there are four initializations (4 cycles) from every 5th day running for 9 months (see \href{http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2}{CFSv2 members} for more detailed information of members' construction). Thus, the lagged-time configuration of members results in a different number of possible members depending on the initialization chosen (more precisely, 24 members excepting the November initializations, which have 28). This theoretical configuration has been slightly modified to avoid some missing initializations in the original dataset (see details in the previous link). For better comparability with its ECMWF's counterpart (the System4 seasonal forecast of 15 members), \code{loadECOMS} defines by default an ensemble of 15 members for each lead month and forecast season in the case of CFS, although it is possible to request all available members for that particular lead month. This way, all default members are ensured to belong to the antecedent month's initializations or first days of the current month. In addition, due to the lagged runtime configuration of the ensemble members in CFSv2, in case of lead month 0 requests, some of the first days of the period may be missing, as only common days for all members requested are returned.
 
 
 \strong{Definition of spatial domains}
@@ -108,8 +115,6 @@ Regarding the selection of the spatial domain, it is possible to select the whol
 The returned value by \code{xyCoords} varies accordingly, and it fits the common data structure of many R plotting functions (see \link[grDevices]{xy.coords} for obtaining a more detailed info).
 
 The spatial definition of the data is associated to a specific coordinate reference system via the \sQuote{proj4string} slot of \code{xyCoords}, thus enabling the direct application of geospatial operations such as projection transformations, spatial overlay methods etc with the appropriate R methods.
-
-
 
 
 \strong{Definition of temporal slices}
@@ -124,7 +129,7 @@ In case the whole year is needed (instead of a particular season), the argument 
 
 The characteristics of the \code{InitializationDates} output vary depending on the dataset. In the case of models that have simultaneous initializations for different members (e.g. System4), the output is just a vector of initialization times (one per year selected). Unlike the simultaneous initializations scheme, the lagged runtime configuration of members used by some other models (e.g. CFSv2) results in different initialization times for the same forecast times of different members. In this case, the \code{InitializationDates} are included in a list whose elements are named as the corresponding member.
 
-By default, 16 members are returned for the CFSv2 hindcast for better comparability with the 15 members returned by the ECMWF's System4 seasonal hindcast. However, note that up to 24 members can be obtained from the CFSv2 hindcast (i.e., \code{members=1:24}), and 28 in the case of the November initializations. See the \href{http://meteo.unican.es/ecoms-udg/DataServer/Datasets/CFSv2}{technical documentation} at the ECOMS-UDG wiki for more details on the lagged runtimes configuration of the CFSv2 hindcast.  
+By default, 16 members are returned for the CFSv2 hindcast for better comparability with the 15 members returned by the ECMWF's System4 seasonal hindcast. However, note that up to 24 members can be obtained from the CFSv2 hindcast (i.e., \code{members=1:24}), and 28 in the case of the November initializations, although some modifications to this initial configuration have been introduced to avois errors stemming from missing initializations for some years in the original database. See the \href{https://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2}{CFSv2 member definition} at the ECOMS-UDG wiki for more details on the lagged runtimes configuration of the CFSv2 hindcast and the \pkg{ecomsUDG.Rpackage} approach.  
 
 
 \strong{Temporal filtering / aggregation}
@@ -132,8 +137,9 @@ By default, 16 members are returned for the CFSv2 hindcast for better comparabil
 The argument \code{time} controls the temporal filtering/aggregation options that may apply for a variable. In case of daily mean data, this can be obtained in two different ways:
 \enumerate{
 \item For variables that are already stored as daily means in the dataset, both \code{"DD"} and \code{"none"} return the required daily output
-\item In case of 6-hourly data, if \code{"DD"} is chosen, the function will compute the daily mean as the averaged 6-hourly outputs for each day, printing an information message on screen. If the variable is precipitation or a radiation (\code{var} = \code{"tp"}, \code{"rsds"} or \code{"rlds"}), the result of the aggregation will be the sum rather than the mean (i.e., it will return the daily accumulated value). In the same way, if the variable is a daily maximum/minimum (i.e., \code{var = "tasmax"}/\code{var = "tasmin"}), the corresponding function will be applied to the 6-h outputs on a daily basis.
-\item In case of 12-hourly data, daily mean data (\code{"DD"}) won't be computed, and the function will raise an error. In this particular case, the only accepted \code{time} argument values will be \code{"none"}, \code{"00"} and \code{"12"}.
+\item In case of 6-hourly data, if \code{"DD"} is chosen, the function will compute the daily value using the aggregation function indicated in the argument \code{aggr.d}, printing an information message on screen. This function is normally the \code{"mean"} providing daily averages, although if the variable is a 6-h flux (e.g. precipitation or radiation, (\code{var} = \code{"tp"}, \code{"rsds"} or \code{"rlds"}), the aggregation function should be probably \code{"sum"} (i.e., it will return the daily accumulated value). In the same way, if the variable is a daily maximum/minimum (i.e., \code{var = "tasmax"}/\code{var = "tasmin"}), the corresponding function (\code{aggr.d = "max"} or \code{aggr.d = "min"}) could be applied to the 6-h outputs on a daily basis to obtain absolute maximum/minimum daily values.
+\item In case of 12-hourly data, daily mean data (\code{"DD"}) is possible, but the function will give a warning, as in general it is not a recommended practice to compute daily means using just two values. However, it is possible to do this as it is a necessary step prior to monthly aggregation. Obviously, in case of 12-h data \code{time} argument values different from \code{"none"}, \code{"DD"}, \code{"00"} or \code{"12"} won't be accepted.
+\item For monthly aggregations, the process is similar to daily data. It must be beared in mind that in this case, the daily aggregation must be previously indicated for sub-daily variables, prior to apply the monthly aggregation function.
 }
 
 }
@@ -142,7 +148,7 @@ The argument \code{time} controls the temporal filtering/aggregation options tha
 
 \references{
 
-\url{http://meteo.unican.es/ecoms-udg}
+\url{http://meteo.unican.es/trac/wiki/udg/ecoms}
 
 %Saha, S. et al., 2013. The NCEP Climate Forecast System Version 2. J Clim. DOI: 10.1175/JCLI-D-12-00823.1.
 
