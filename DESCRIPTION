@@ -4,7 +4,7 @@ Imports: downscaleR.java (>= 1.0.0), utils, abind, RCurl
 Suggests: sp
 Type: Package
 Title: R interface to the ECOMS User Data Gateway
-Version: 3.0-0
+Version: 4.0-0
 Date: 15 May 2015
 Authors@R: as.person(c(
     "Santander MetGroup <http://meteo.unican.es> [aut]",      
