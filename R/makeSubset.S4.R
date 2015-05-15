@@ -5,17 +5,14 @@
 #' 
 #' @param grid An input java GeoGrid
 #' @param latLon A list of geolocation parameters, as returned by getLatLonDomainForecast
-#' @param memberRangeList A list of ensemble java ranges as returned by getMemberDomain.S4
 #' @param runTimePars A list of run time definition parameters, as returned by getRunTimeDomain
+#' @param memberRangeList A list of ensemble java ranges as returned by getMemberDomain.S4
 #' @param foreTimePars A list of forecast time definition parameters, as returned by getForecastTimeDomain.S4
-#' @return A n-dimensional array. Dimensions are labelled by the \dQuote{dimnames} attribute
+#' @return A list containing a n-dimensional array and the (possibly) modified foreTimePars object with the 
+#' corrected dates in case of time aggregations. Dimensions are labelled by the \dQuote{dimnames} attribute.
 #' @details Dimensions of length one are dropped and the \dQuote{dimnames} attribute is consequently modified.
 #' In the current version the Z dimension is ignored (and dropped), as it is not planned to include multi-level variables
 #' in the ECOMS-UDG by the moment.
-#' 
-#' In order to control the number of active sessions in the server, the \code{\link{Sys.sleep}} function
-#'  is applied once a fixed number of iterations within the loop is reached (object 'counter'),
-#'  so the inactive sessions have time to expire, avoiding read errors due to an excess of active sessions.
 #' 
 #' @references \url{http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.3/javadocAll/ucar/nc2/dt/grid/GeoGrid.html}
 #' @author J Bedia \email{joaquin.bedia@@gmail.com} and A. Cofi\~no
@@ -35,6 +32,7 @@ makeSubset.S4 <- function(grid, latLon, runTimePars, memberRangeList, foreTimePa
                   rt <- runTimePars$runTimeRanges[[j]]
                   ft <- foreTimePars$ForeTimeRangesList[[j]]
                   aux.list2 <- rep(list(bquote()), length(latLon$llRanges))
+                  # dateline crossing
                   for (k in 1:length(latLon$llRanges)) {
                         subSet <- grid$makeSubset(rt, ens, ft, z, latLon$llRanges[[k]]$get(0L), latLon$llRanges[[k]]$get(1L))
                         shapeArray <- rev(subSet$getShape())
@@ -53,6 +51,12 @@ makeSubset.S4 <- function(grid, latLon, runTimePars, memberRangeList, foreTimePa
                   }
                   aux.list1[[j]] <- do.call("abind", c(aux.list2, along = 1))
                   aux.list2 <- NULL
+                  # Deaccumulator
+                  if (!is.null(foreTimePars$deaccumFromFirst)) {
+                        mar <- c(1:length(dim(aux.list1[[j]])))[-grep("^time", dimNamesRef)] 
+                        aux.list1[[j]] <- apply(aux.list1[[j]], mar, deaccumulate, foreTimePars$deaccumFromFirst)
+                        dimNamesRef <- c("time", dimNamesRef[grep("^time$", dimNamesRef, invert = TRUE)])
+                  }      
                   # Daily aggregator
                   if (foreTimePars$aggr.d != "none") {
                         aux.string <- paste((aux.foreDatesList[[i]][[j]])$mon, (aux.foreDatesList[[i]][[j]])$mday, sep = "-")
