@@ -5,5 +5,8 @@ ecomsUDG.Raccess
   * Improved performance of data download
   * New member definition to avoid errors due to missing runtimes in the original dataset
     (http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2)
+  * New surface variables available, including wind speed (derived from north and eastward components)
+* New time aggregation options, including greater flexibility for daily and new monthly aggregations
 * Improved authentication scheme providing greater stability for long queries
+* Added new attributes containing relevant metadata (longname, units, time aggregation details...)
 * Several minor bug fixes and enhancements

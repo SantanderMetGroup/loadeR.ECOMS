@@ -1,11 +1,11 @@
 Package: ecomsUDG.Raccess
-Depends: downscaleR, R(>= 3.0.0)
+Depends: downscaleR (>= 0.7.0), R(>= 3.0.0), rJava
 Imports: downscaleR.java (>= 1.0.0), utils, abind, RCurl
 Suggests: sp
 Type: Package
 Title: R interface to the ECOMS User Data Gateway
 Version: 3.0-0
-Date: 29 Apr 2015
+Date: 15 May 2015
 Authors@R: as.person(c(
     "Santander MetGroup <http://meteo.unican.es> [aut]",      
     "Joaquin Bedia <bediaj@unican.es> [ctb,cre]",
@@ -15,7 +15,7 @@ Authors@R: as.person(c(
     "Manuel Vega <manuel.vega@unican.es> [ctb]"))
 BugReports: https://github.com/SantanderMetGroup/ecomsUDG.Raccess/issues
 URL: https://meteo.unican.es/trac/wiki/udg/ecoms
-Description: This package enables homogenized, user-friendly access to hindcast
+Description: Enables homogenized, user-friendly access to hindcast
  and other climate databases remotely stored at the ECOMS User Data Gateway, 
  allowing the retrieval of manageable dimensional slices from large climate datasets.
  The use of this package requires prior registration in the ECOMS-UDG via
