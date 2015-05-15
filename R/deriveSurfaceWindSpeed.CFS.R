@@ -19,12 +19,14 @@ deriveSurfaceWindSpeed.CFS <- function(gds, grid, latLon, runTimePars, foreTimeP
                         shapeArray <- rev(subSet$getShape())
                         dimNamesRef <- dimNames              
                         if (latLon$pointXYindex[1] >= 0) {
-                              rm.dim <- grep(gcs$getXHorizAxis()$getDimensionsString(), dimNamesRef, fixed = TRUE)
+#                               rm.dim <- grep(gcs$getXHorizAxis()$getDimensionsString(), dimNamesRef, fixed = TRUE)
+                              rm.dim <- grep("^lon", dimNamesRef)
                               shapeArray <- shapeArray[-rm.dim]
                               dimNamesRef <- dimNamesRef[-rm.dim]
                         }
                         if (latLon$pointXYindex[2] >= 0) {
-                              rm.dim <- grep(gcs$getYHorizAxis()$getDimensionsString(), dimNamesRef, fixed = TRUE)
+#                               rm.dim <- grep(gcs$getYHorizAxis()$getDimensionsString(), dimNamesRef, fixed = TRUE)
+                              rm.dim <- grep("^lat", dimNamesRef)
                               shapeArray <- shapeArray[-rm.dim]
                               dimNamesRef <- dimNamesRef[-rm.dim]
                         }
