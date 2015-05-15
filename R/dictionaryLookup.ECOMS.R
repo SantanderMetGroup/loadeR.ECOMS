@@ -35,7 +35,7 @@ dictionaryLookup.ECOMS <- function(dicPath, derInterface, time) {
             }
       } else {
             if (dictionary$time_step[dicRow] == "12h" & time == "DD") {
-                  stop("Cannot compute daily mean from 12-h data")
+                  warning("Daily mean was calculated from 12-h data")
             }
             if ((time %in% c("03","06","09","15","18","21")) & dictionary$time_step[dicRow] == "12h") {
                   stop("Requested 'time' value (\"", time, "\") not available for 12-h data")
@@ -47,22 +47,6 @@ dictionaryLookup.ECOMS <- function(dicPath, derInterface, time) {
                   time <- "none"
             }
       }
-      
-#       if (time == "DD") {
-#             dailyAggr <- "mean"
-#             if (derInterface$origVar == "tp" | derInterface$origVar == "rlds" | derInterface$origVar == "rsds") {
-#                   dailyAggr <- "sum"
-#                   message("NOTE: daily accumulated will be calculated from the 6-h model output")
-#             } else if (grepl(".*max$", derInterface$origVar)) {
-#                   dailyAggr <- "max"
-#                   message("NOTE: daily maximum will be calculated from the 6-h model output")
-#             } else if (grepl(".*min$", derInterface$origVar)) {
-#                   dailyAggr <- "min"
-#                   message("NOTE: daily minimum will be calculated from the 6-h model output")
-#             } else {
-#                   message("NOTE: daily mean will be calculated from the 6-h model output")
-#             }
-#       }
       if (derInterface$deriveInterface == "none") {
             dic <- dictionary[dicRow, ]
       } else {
