@@ -24,13 +24,30 @@
 #' \end{itemize}
 #' @author J. Bedia \email{joaquin.bedia@@gmail.com} 
 
-getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time) {
+getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, aggr.d, aggr.m) {
       gcs <- grid$getCoordinateSystem()
+      deaccumFromFirst <- NULL
       if (dic$time_step == "static") {
             foreDates <- "static field"
             foreTimeRangesList <- list(.jnew("ucar/ma2/Range", 0L, 0L))
-            deaccumFromFirst <- NULL
       } else {
+            timeResInSeconds <- gcs$getTimeAxisForRun(runTimePars$runTimeRanges[[1]]$element(0L))$getTimeResolution()$getValueInSeconds()
+            if ((aggr.d == "none") & (time == "DD") & ((timeResInSeconds / 3600) < 24)) {
+                  stop("Data is sub-daily:\nA daily aggregation function must be indicated to perform daily aggregation")
+            }
+            # Si es MM hay que asegurarse de que se calcula sobre dato diario
+            if ((aggr.m != "none") & ((timeResInSeconds / 3600) < 24) & (time == "none")) {
+                  stop("Data is sub-daily:\nA daily aggregation function must be indicated first to perform monthly aggregation")
+            }
+            if ((timeResInSeconds / 3600) == 24) {
+                  time <- "DD"
+                  if (aggr.d != "none") {
+                        aggr.d <- "none"
+                        message("NOTE: The original data is daily: argument 'aggr.d' ignored")
+                  }
+            }
+            if (aggr.d != "none") message("NOTE: Daily aggregation will be computed from ", timeResInSeconds / 3600, "-hourly data")
+            if (aggr.m != "none") message("NOTE: Daily data will be monthly aggregated")
             foreTimesList <- rep(list(bquote()), length(runTimePars$runTimeRanges))
             foreDatesList <- foreTimesList
             for (i in 1:length(runTimePars$runTimeRanges)) {
@@ -55,38 +72,28 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time) {
                         foreTimesList[[i]] <- ind
                   }
                   foreDatesList[[i]] <- auxDates[foreTimesList[[i]]]
-                  deaccumFromFirst <- FALSE
+#                   deaccumFromFirst <- FALSE
                   auxDates <- NULL
             }
-            # Sub-routine for setting stride and shift along time dimension    
-            if (is.null(dic) & time != "none") {
-                  stop("Time resolution especification incompatible with non-standard variable requests\nUse the dictionary or set the 'time' argument to NULL")
-            }
-            if (is.null(dic) | isTRUE(dic$doDailyMean)) {
+            if (time == "DD" | time == "none") {
                   foreTimeStride <- 1L
                   foreTimeShift <- 0L
             } else {
-                  if (time == "DD" | time == "none") {
-                        foreTimeStride <- 1L
-                        foreTimeShift <- 0L
-                  } else {
-                        time <- as.integer(time)
-                        timeIndList <- lapply(1:length(foreDatesList), function(x) {
-                              which(foreDatesList[[x]]$hour == time)
-                        })
-                        if (length(timeIndList[[1]]) == 0) {
-                              stop("Non-existing verification time selected.\nCheck value of argument 'time'")
-                        }
-                        foreDatesList <- lapply(1:length(foreDatesList), function(x) {
-                              foreDatesList[[x]][timeIndList[[x]]]
-                        })
-                        foreTimeStride <- as.integer(diff(timeIndList[[1]])[1])
-                        foreTimeShift <- as.integer(-(timeIndList[[1]][1] - 1))
-                        timeIndList <- NULL
+                  time <- as.integer(time)
+                  timeIndList <- lapply(1:length(foreDatesList), function(x) {
+                        which(foreDatesList[[x]]$hour == time)
+                  })
+                  if (length(timeIndList[[1]]) == 0) {
+                        stop("Non-existing verification time selected.\nCheck value of argument 'time'")
                   }
+                  foreDatesList <- lapply(1:length(foreDatesList), function(x) {
+                        foreDatesList[[x]][timeIndList[[x]]]
+                  })
+                  foreTimeStride <- as.integer(diff(timeIndList[[1]])[1])
+                  foreTimeShift <- as.integer(-(timeIndList[[1]][1] - 1))
+                  timeIndList <- NULL
             }
             # Sub-routine for adjusting times in case of deaccumulation
-            deaccumFromFirst <- NULL
             if (!is.null(dic)) {
                   if (dic$deaccum == 1) {
                         if (foreTimesList[[1]][1] > 1) {
@@ -106,16 +113,12 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time) {
                         }
                   }
             }
-            foreDates <- do.call("c", foreDatesList)
-            foreDatesList <- NULL
-            # Sub-routine for calculation of time bounds
-            foreDates <- timeBounds(dic, foreDates)
-            # Java forecast time ranges list along rt axes
             foreTimeRangesList <- lapply(1:length(foreTimesList), function(x) {
                   .jnew("ucar/ma2/Range", as.integer(foreTimesList[[x]][1] - 1), as.integer(tail(foreTimesList[[x]], 1L) - 1), foreTimeStride)$shiftOrigin(foreTimeShift)
                   
             })
       }
-      return(list("forecastDates" = foreDates, "ForeTimeRangesList" = foreTimeRangesList, "deaccumFromFirst" = deaccumFromFirst, "dailyAggr" = dic$dailyAggr))
+      return(list("forecastDates" = foreDatesList, "ForeTimeRangesList" = foreTimeRangesList, "deaccumFromFirst" = deaccumFromFirst,
+                  "aggr.d" = aggr.d, "aggr.m" = aggr.m))
 }
 # End

@@ -76,52 +76,24 @@ getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, time, aggr.d, agg
       }
       aux <- aux.dates <- NULL
       # Sub-routine for setting stride and shift along time dimension    
-#       if (is.null(dic) & time != "none") {
-#             stop("Time resolution especification incompatible with non-standard variable requests\nUse the dictionary or set the 'time' argument to NULL")
-#       }
-#       if (is.null(dic) | isTRUE(dic$doDailyMean)) {
-#             foreTimeStride <- 1L
-#             foreTimeShift <- 0L
-#       } else {
-            if (time == "DD" | time == "none") {
-                  foreTimeStride <- 1L
-                  foreTimeShift <- 0L
-            } else {
-                  time <- as.integer(time)
-                  timeInd <- which(foreDatesList[[1]][[1]]$hour == time)
-                  if (length(timeInd) == 0) {
-                        stop("Non-existing verification time selected.\nCheck value of argument 'time'")
-                  }
-                  for (i in 1:length(foreDatesList)) {
-                        for (j in 1:length(foreDatesList[[i]])) {
-                              foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][timeInd]      
-                        }
-                  }
-                  foreTimeStride <- as.integer(diff(timeInd)[1])
-                  foreTimeShift <- as.integer(-(timeInd[1]-1))
-                  timeInd <- NULL
+      if (time == "DD" | time == "none") {
+            foreTimeStride <- 1L
+            foreTimeShift <- 0L
+      } else {
+            time <- as.integer(time)
+            timeInd <- which(foreDatesList[[1]][[1]]$hour == time)
+            if (length(timeInd) == 0) {
+                  stop("Non-existing verification time selected.\nCheck value of argument 'time'")
             }
-#       }
-      # Ensure matching for daily aggregation (full days only)
-#       if(!is.na(dic$dailyAggr)) {
-#             for (i in 1:length(foreDatesList)) {
-#                   for (j in 1:length(foreDatesList[[i]])) {
-#                         # Ensure foredates start at 00:00
-#                         if (foreDatesList[[i]][[j]][1]$hour != 0) {
-#                               start.ind <- which(foreDatesList[[i]][[j]]$hour == 0)[1]
-#                               foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][start:length(foreDatesList[[i]][[j]])]
-#                         }
-#                         # Ensure full days and remove uncomplete days if any at the end
-#                         len <- length(foreDatesList[[i]][[j]]) 
-#                         if (len %% 4 != 0) {
-#                               ntail <- len %% 4
-#                               foreDatesList[[i]][[j]] <- head(foreDatesList[[i]][[j]], n = len - ntail)
-#                         }
-#                   }
-#             }
-#       }                 
-#       foreDates <- do.call("c", foreDatesList[[1]])
-#       foreDatesList <- NULL
+            for (i in 1:length(foreDatesList)) {
+                  for (j in 1:length(foreDatesList[[i]])) {
+                        foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][timeInd]      
+                  }
+            }
+            foreTimeStride <- as.integer(diff(timeInd)[1])
+            foreTimeShift <- as.integer(-(timeInd[1]-1))
+            timeInd <- NULL
+      }
       # Sub-routine for adjusting times in case of deaccumulation (unused so far in CFS)
       deaccumFromFirst <- NULL
       if (!is.null(dic)) {
@@ -138,9 +110,6 @@ getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, time, aggr.d, agg
                   }
             }
       }
-      # Sub-routine for calculation of time bounds
-#      foreDates <- timeBounds(dic, foreDates)
-      # Java forecast time ranges list along rt axes
       for (i in 1:length(foreTimesList)) {
             for (j in 1:length(foreTimesList[[i]])) {
                   start <- as.integer(foreTimesList[[i]][[j]][1] - 1)

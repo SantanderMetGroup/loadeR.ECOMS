@@ -1,8 +1,15 @@
 loadECOMS <- function(dataset, var, dictionary = TRUE, 
                      members = NULL, lonLim = NULL, latLim = NULL, season = NULL,
-                     years = NULL, leadMonth = 1, time = "none") {
+                     years = NULL, leadMonth = 1, time = "none",
+                     aggr.d = "none", aggr.m = "none") {
       dataset <- match.arg(dataset, c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15", "CFSv2_seasonal", "WFDEI", "NCEP"))
-      time <- match.arg(time, choices = c("none", "00", "06", "12", "18", "DD"))
+      time <- match.arg(time, choices = c("none","00","03","06","09","12","15","18","21","DD"))
+      aggr.d <- match.arg(aggr.d, choices = c("none", "mean", "min", "max", "sum"))
+      if (time != "DD" & aggr.d != "none") {
+            aggr.d <- "none"
+            message("NOTE: Argument 'aggr.d' ignored as 'time' was set to ", time)
+      }
+      aggr.m <- match.arg(aggr.m, choices = c("none", "mean", "min", "max", "sum"))
       derInterface <- deriveInterface(dataset, var, dictionary, time)
       var <- derInterface$leadVar
       aux.level <- findVerticalLevel(derInterface$leadVar)
@@ -11,7 +18,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       url <- dataURL(dataset)
       # Dictionary/shortName search
       if (isTRUE(dictionary)) {
-            dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste(dataset,".dic", sep = ""))
+            dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste0(dataset, ".dic"))
             # for devel only 
             # dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
             dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)
@@ -56,7 +63,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       # Grid datasets
       if (dataset == "WFDEI" | dataset == "NCEP") {
             latLon <- getLatLonDomain(grid, lonLim, latLim)
-            out <- loadGridDataset.ECOMS(var, grid, dic, level, season, years, time, latLon)
+            out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m)
       # Forecasts
       } else {
             if (dic$time_step == "static") {
@@ -90,13 +97,13 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             latLon <- getLatLonDomainForecast(grid, lonLim, latLim)      
             runTimePars <- getRunTimeDomain(dataset, grid, members, season, years, leadMonth)
             if (grepl("^System4", dataset)) {
-                  out <- loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, derInterface)
+                  out <- loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
             }
             if (grepl("CFSv2", dataset)) {
                   if (is.null(members)) {
-                        members <- 1:16
+                        members <- 1:15
                   }
-                  out <- loadSeasonalForecast.CFS(var, grid, dic, latLon, runTimePars, time, level)
+                  out <- loadSeasonalForecast.CFS(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
             }
             if (derInterface$deriveInterface != "none") {
                   out$Variable$varName <- derInterface$origVar

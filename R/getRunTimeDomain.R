@@ -10,7 +10,7 @@
 #' @param years Years selected (see \code{\link{loadECOMS}})
 #' @param leadMonth Lead month (see \code{\link{loadECOMS}})
 #' @return A list of parameters:
-#' \begin{itemize}
+#' \itemize{
 #' \item validMonth An integer in the range [1,12] indicating the month to take the initialization
 #' \item years A vector of years selected
 #' \item season Season
@@ -18,7 +18,7 @@
 #'  within the season vector. NULL if no year-crossing season has been chosen.
 #' \item runDates a POSIXlt vector of initialization dates
 #' \item runTimeRanges a list of of initialization times of the java class \dQuote{ucar.ma2.ranges}.
-#' \end{itemize}
+#' }
 #' @details The function calls to specific subroutines for CFS or System4 requests, given their different
 #' runtime configurations. The function also takes care of selecting the appropriate initialization
 #' in the case of year-crossing seasons 

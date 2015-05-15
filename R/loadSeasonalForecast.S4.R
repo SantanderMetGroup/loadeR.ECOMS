@@ -28,23 +28,25 @@
 #'  @references \url{http://meteo.unican.es/ecoms-udg/ListOfVariables}
 #'  @author J. Bedia \email{joaquin.bedia@@gmail.com}
 
-loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, derInterface) {    
+loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface) {    
       memberRangeList <- getMemberDomain.S4(grid, dataset, members)
-      foreTimePars <- getForecastTimeDomain.S4(grid, dataset, dic, runTimePars, time)
-      mdArray <- switch(derInterface$deriveInterface,
+      foreTimePars <- getForecastTimeDomain.S4(grid, dataset, dic, runTimePars, time, aggr.d, aggr.m)
+      cube <- switch(derInterface$deriveInterface,
                         none = makeSubset.S4(grid, latLon, runTimePars, memberRangeList, foreTimePars),
                         deriveSurfacePressure = deriveSurfacePressure.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars),
                         deriveSurfaceRelativeHumidity = deriveSurfaceRelativeHumidity.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars),
                         deriveSurfaceSpecificHumidity = deriveSurfaceSpecificHumidity.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars),
                         deriveSurfaceWindSpeed = deriveSurfaceWindSpeed.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars))
+      foreTimePars <- NULL
       if (!is.null(dic)) {
             isStandard <- TRUE
-            mdArray <- dictionaryTransformForecast(dic, foreTimePars, mdArray)
+            cube$mdArray <- dictionaryTransformForecast(dic, cube$foreTimePars, cube$mdArray)
+            var <- derInterface$origVar
       } else {
             isStandard <- FALSE
       }
       if (isTRUE(latLon$revLat)) {
-            mdArray <- revArrayLatDim(mdArray, grid)
+            cube$mdArray <- revArrayLatDim(cube$mdArray, grid)
       }
       # formatting initialization dates
       runTimePars$runDates <- format(as.POSIXct(runTimePars$runDates, tz = "GMT"), format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
@@ -53,10 +55,23 @@ loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLo
             runTimePars$runDates <- NA
             names(memberRangeList) <- NA
       }
-      return(list("Variable" = list("varName" = var, "isStandard" = isStandard, "level" = level),
-                  "Data" = mdArray,
+      Variable <- list("varName" = var, "level" = level)
+      attr(Variable, "is_standard") <- isStandard
+      if (isStandard) {
+            data(vocabulary, envir = environment())
+            attr(Variable, "units") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 3])
+            attr(Variable, "longname") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 2])
+      } else {
+            attr(Variable, "units") <- "undefined"
+            attr(Variable, "longname") <- "undefined"
+      }
+      attr(Variable, "daily_agg_cellfun") <- cube$foreTimePars$aggr.d
+      attr(Variable, "monthly_agg_cellfun") <- cube$foreTimePars$aggr.m
+      attr(Variable, "verification_time") <- time
+      return(list("Variable" = Variable,
+                  "Data" = cube$mdArray,
                   "xyCoords" = latLon$xyCoords,
-                  "Dates" = foreTimePars$forecastDates,
+                  "Dates" = cube$foreTimePars$forecastDates,
                   "InitializationDates" = runTimePars$runDates,
                   "Members" = names(memberRangeList)))
 }
