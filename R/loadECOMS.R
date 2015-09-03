@@ -2,7 +2,8 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                      members = NULL, lonLim = NULL, latLim = NULL, season = NULL,
                      years = NULL, leadMonth = 1, time = "none",
                      aggr.d = "none", aggr.m = "none") {
-      dataset <- match.arg(dataset, c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15", "CFSv2_seasonal", "WFDEI", "NCEP"))
+      dataset <- match.arg(dataset, c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15",
+                                      "CFSv2_seasonal", "WFDEI", "NCEP_reanalysis1"))
       time <- match.arg(time, choices = c("none","00","03","06","09","12","15","18","21","DD"))
       aggr.d <- match.arg(aggr.d, choices = c("none", "mean", "min", "max", "sum"))
       if (time != "DD" & aggr.d != "none") {
