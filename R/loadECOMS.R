@@ -3,7 +3,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                      years = NULL, leadMonth = 1, time = "none",
                      aggr.d = "none", aggr.m = "none") {
       dataset <- match.arg(dataset, c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15",
-                                      "CFSv2_seasonal", "WFDEI", "NCEP_reanalysis1"))
+                                      "CFSv2_seasonal", "WFDEI", "NCEP_reanalysis1", "ERA_interim"))
       time <- match.arg(time, choices = c("none","00","03","06","09","12","15","18","21","DD"))
       aggr.d <- match.arg(aggr.d, choices = c("none", "mean", "min", "max", "sum"))
       if (time != "DD" & aggr.d != "none") {
@@ -24,7 +24,8 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             # dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
             dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)
             shortName <- dic$short_name
-            if (dataset == "System4_seasonal_15" & (shortName == "u" | shortName == "v" | shortName == "z")) {
+            if (grepl("System4_seasonal_15|ERA_interim", dataset) &
+                      (grepl("^u$|^v$|^z$|^t$|^q$", shortName, ignore.case = TRUE))) {
                   shortName <- paste(dic$short_name, level, "mb", sep = "")
             }
       } else {
@@ -46,13 +47,13 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             }
       }
       # Exception in NCEP due to different grids within the same dataset
-      if (dataset == "NCEP") {
+      if (dataset == "NCEP_reanalysis1") {
             if (length(lonLim) == 1 || length(latLim) == 1) {
-                  stop("Single-point selections are invalid for the NCEP dataset\nConsider using a small rectangular domain")
+                  stop("Single-point selections are invalid for the NCEP_reanalysis1 dataset\nConsider using a small rectangular domain")
             }
       }
       # Note when loading gridded datasets
-      if ((dataset == "WFDEI" | dataset == "NCEP") & !is.null(members)) {
+      if ((dataset == "WFDEI" | dataset == "NCEP_reanalysis1") & !is.null(members)) {
             message("NOTE: The dataset is not a forecast. Argument 'members' will be ignored")      
       }
       # Discover dataset and open grid
@@ -62,7 +63,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/dataserver/listofvariables")
       }
       # Grid datasets
-      if (dataset == "WFDEI" | dataset == "NCEP") {
+      if (dataset == "WFDEI" | dataset == "NCEP_reanalysis1") {
             latLon <- getLatLonDomain(grid, lonLim, latLim)
             out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m)
       # Forecasts
