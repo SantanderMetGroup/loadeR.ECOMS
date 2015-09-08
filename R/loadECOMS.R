@@ -24,9 +24,10 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             # dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
             dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)
             shortName <- dic$short_name
-            if (grepl("System4_seasonal_15|ERA_interim", dataset) &
-                      (grepl("^u$|^v$|^z$|^t$|^q$", shortName, ignore.case = TRUE))) {
-                  shortName <- paste(dic$short_name, level, "mb", sep = "")
+            if (grepl("System4\\_seasonal\\_15", dataset) & grepl("^u$|^v$|^z$|^t$|^q$", shortName)) {
+                  shortName <- paste0(dic$short_name, level, "mb")
+            } else if (grepl("ERA\\_interim", dataset) & grepl("^U$|^V$|^Z$|^T$|^Q$", shortName)) {
+                  shortName <- paste0(dic$short_name, level)
             }
       } else {
             dic <- NULL
@@ -53,7 +54,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             }
       }
       # Note when loading gridded datasets
-      if ((dataset == "WFDEI" | dataset == "NCEP_reanalysis1") & !is.null(members)) {
+      if (grepl("WFDEI|NCEP_reanalysis1|ERA_interim", dataset) & !is.null(members)) {
             message("NOTE: The dataset is not a forecast. Argument 'members' will be ignored")      
       }
       # Discover dataset and open grid
@@ -63,7 +64,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/dataserver/listofvariables")
       }
       # Grid datasets
-      if (dataset == "WFDEI" | dataset == "NCEP_reanalysis1") {
+      if (grepl("WFDEI|NCEP_reanalysis1|ERA_interim", dataset)) {
             latLon <- getLatLonDomain(grid, lonLim, latLim)
             out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m)
       # Forecasts
