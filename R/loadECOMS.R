@@ -68,6 +68,9 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   stop("UNAUTHORIZED TO OPEN DATASET\nPlease check your login details in loginECOMS_UDG function.\nIf you don\'t have a valid username/password or OpenID please visit the UDG Administration Panel (http://www.meteo.unican.es/udg-tap/login)")
             }
       })
+      if (is.null(gds)) {
+            stop("Requested URL not found\nPlease drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)")      
+      }
       grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
             stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/dataserver/listofvariables")
