@@ -58,7 +58,16 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             message("NOTE: The dataset is not a forecast. Argument 'members' will be ignored")      
       }
       # Discover dataset and open grid
-      gds <- J("ucar.nc2.dt.grid.GridDataset")$open(url$URL)
+      gds <- tryCatch(expr = {
+            J("ucar.nc2.dt.grid.GridDataset")$open(url$URL)
+      }, error = function(e) {
+            if (grepl("return status=503", e)) {
+                  stop("UDG SERVICE TEMPORARILY UNAVAILABLE\nThe UDG server is temporarily unable to service your request due to maintenance downtime or capacity problems, please try again later.\n
+                        If the problem persists after 24 h please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)")
+            } else if (grepl("Unauthorized to open dataset", e)) {
+                  stop("UNAUTHORIZED TO OPEN DATASET\nPlease check your login details in loginECOMS_UDG function.\nIf you don\'t have a valid username/password or OpenID please visit the UDG Administration Panel (http://www.meteo.unican.es/udg-tap/login)")
+            }
+      })
       grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
             stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/dataserver/listofvariables")
