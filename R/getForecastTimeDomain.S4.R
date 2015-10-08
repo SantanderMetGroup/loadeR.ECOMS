@@ -107,15 +107,16 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, agg
                                     append(foreTimesList[[x]], tail(foreTimesList[[x]], 1) + 1)
                               })
                               dft <- as.numeric(difftime(foreDatesList[[1]][2], foreDatesList[[1]][1], units = "secs"))
-                              foreDatesList <- lapply(1:length(foreDatesList), function(x) {
-                                    append(as.POSIXlt(foreDatesList[[x]][1] - dft), foreDatesList[[x]])
-                              })
+#                               foreDatesList <- lapply(1:length(foreDatesList), function(x) {
+#                                     append(as.POSIXlt(foreDatesList[[x]][1] - dft), foreDatesList[[x]])
+#                               })
                         }
                   }
             }
             foreTimeRangesList <- lapply(1:length(foreTimesList), function(x) {
-                  .jnew("ucar/ma2/Range", as.integer(foreTimesList[[x]][1] - 1), as.integer(tail(foreTimesList[[x]], 1L) - 1), foreTimeStride)$shiftOrigin(foreTimeShift)
-                  
+                  .jnew("ucar/ma2/Range", as.integer(foreTimesList[[x]][1] - 1), 
+                        as.integer(tail(foreTimesList[[x]], 1L) - 1),
+                        foreTimeStride)$shiftOrigin(foreTimeShift)
             })
       }
       return(list("forecastDates" = foreDatesList, "ForeTimeRangesList" = foreTimeRangesList, "deaccumFromFirst" = deaccumFromFirst,
