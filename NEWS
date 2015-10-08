@@ -4,5 +4,7 @@ ecomsUDG.Raccess
 * ERA Interim dataset included 
 * NCEP dataset renamed to NCEP_reanalysis1
 * New vertical level variables included in S4_seasonal_15 dataset 
+* Improved connection error handling
+* Minor bug fix in the variable deaccumulation of lead month 0 S4 predictions (affects radiation and precip)
 * Other minor bug fixes and enhancements
 * To see all new available variables and datasets go to: http://meteo.unican.es/ecoms-udg/dataserver/listofvariables

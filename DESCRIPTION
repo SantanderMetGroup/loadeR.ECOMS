@@ -5,7 +5,7 @@ Suggests: sp
 Type: Package
 Title: R interface to the ECOMS User Data Gateway
 Version: 4.1-0
-Date: 08 Sep 2015
+Date: 08 Oct 2015
 Authors@R: as.person(c(
     "Santander MetGroup <http://meteo.unican.es> [aut]",      
     "Joaquin Bedia <bediaj@unican.es> [ctb,cre]",
@@ -20,5 +20,5 @@ Description: Enables homogenized, user-friendly access to hindcast
  allowing the retrieval of manageable dimensional slices from large climate datasets.
  The use of this package requires prior registration in the ECOMS-UDG via
  the Santander MetGroup's THREDDS Administration Panel (TAP,
- go to <https://meteo.unican.es/trac/wiki/udg/registration> for more details).
+ go to <http://meteo.unican.es/trac/wiki/udg/registration> for more details).
 License: GPL (>= 3)
