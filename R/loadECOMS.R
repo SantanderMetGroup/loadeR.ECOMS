@@ -69,7 +69,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             }
       })
       if (is.null(gds)) {
-            stop("Requested URL not found\nPlease drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)")      
+            stop("Requested URL not found\nIf the problem persists please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)")      
       }
       grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
