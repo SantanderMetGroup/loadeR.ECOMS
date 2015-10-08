@@ -58,6 +58,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             message("NOTE: The dataset is not a forecast. Argument 'members' will be ignored")      
       }
       # Discover dataset and open grid
+      message("[", Sys.time(), "] ", "Opening connection with the UDG...")
       gds <- tryCatch(expr = {
             J("ucar.nc2.dt.grid.GridDataset")$open(url$URL)
       }, error = function(e) {
@@ -71,6 +72,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       if (is.null(gds)) {
             stop("Requested URL not found\nIf the problem persists please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)")      
       }
+      message("[", Sys.time(), "] ", "Connected successfuly")
       grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
             stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/dataserver/listofvariables")
