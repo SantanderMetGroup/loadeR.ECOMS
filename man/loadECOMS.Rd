@@ -161,6 +161,6 @@ The argument \code{time} controls the temporal filtering/aggregation options tha
 
 
 \examples{\dontrun{
-# Go to <http://www.meteo.unican.es/ecoms-udg/RPackage/Examples>
+# Go to <http://meteo.unican.es/trac/wiki/udg/ecoms/RPackage/examples>
 }}
 
