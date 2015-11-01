@@ -21,7 +21,7 @@ getRunTimeDomain.S4 <- function(runDatesAll, validMonth, years) {
       }
       runDatesValidMonth <- runDatesAll[runTimesAll]
       runTimes <- runTimesAll[which((runDatesValidMonth$year + 1900) %in% years)]
-      rm(runDatesValidMonth, runTimesAll)
+      runDatesValidMonth <- runTimesAll <- NULL
       runDates <- runDatesAll[runTimes]
       # java ranges
       runTimeRanges <- lapply(1:length(runTimes), function(x) {
