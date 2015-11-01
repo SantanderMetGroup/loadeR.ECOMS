@@ -1,0 +1,7 @@
+identifier,short_name,time_step,lower_time_bound,upper_time_bound,cell_method,offset,scale,deaccum,derived,interface
+zg,gh,6h,0,0,none,0,0.102040816,0,0,
+z,gh,6h,0,0,none,0,1,0,0,
+ta,ta,6h,0,0,none,-273.15,1,0,0,
+ua,ua,6h,0,0,none,0,1,0,0,
+va,va,6h,0,0,none,0,1,0,0,
+hus,hus,6h,0,0,none,0,1,0,0,

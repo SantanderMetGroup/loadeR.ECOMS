@@ -2,8 +2,14 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                      members = NULL, lonLim = NULL, latLim = NULL, season = NULL,
                      years = NULL, leadMonth = 1, time = "none",
                      aggr.d = "none", aggr.m = "none") {
-      dataset <- match.arg(dataset, c("System4_seasonal_15", "System4_seasonal_51", "System4_annual_15",
-                                      "CFSv2_seasonal", "WFDEI", "NCEP_reanalysis1", "ERA_interim"))
+      dataset <- match.arg(dataset, c("System4_seasonal_15",
+                                      "System4_seasonal_51",
+                                      "System4_annual_15",
+                                      "CFSv2_seasonal",
+                                      "SMHI_EC_EARTH_EUPORIAS",
+                                      "WFDEI",
+                                      "NCEP_reanalysis1",
+                                      "ERA_interim"))
       time <- match.arg(time, choices = c("none","00","03","06","09","12","15","18","21","DD"))
       aggr.d <- match.arg(aggr.d, choices = c("none", "mean", "min", "max", "sum"))
       if (time != "DD" & aggr.d != "none") {
@@ -66,11 +72,11 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   stop("UDG SERVICE TEMPORARILY UNAVAILABLE\nThe UDG server is temporarily unable to service your request due to maintenance downtime or capacity problems, please try again later.\n
                         If the problem persists after 24 h please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)")
             } else if (grepl("Unauthorized to open dataset", e)) {
-                  stop("UNAUTHORIZED TO OPEN DATASET\nPlease check your login details in loginECOMS_UDG function.\nIf you don\'t have a valid username/password or OpenID please visit the UDG Administration Panel (http://www.meteo.unican.es/udg-tap/login)")
+                  stop("UNAUTHORIZED TO OPEN DATASET\nPlease check your login details in loginECOMS_UDG function.\nIf you don\'t have a valid username/password or OpenID please the UDG Administration Panel (http://www.meteo.unican.es/udg-tap/login)")
             }
       })
       if (is.null(gds)) {
-            stop("Requested URL not found\nThe problem may be momentary. Please try again and if the error persists please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)")      
+            stop("Requested URL not found\nThe problem may be momentary. Try again and if the error persists please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)")      
       }
       message("[", Sys.time(), "] ", "Connected successfuly")
       grid <- gds$findGridByShortName(shortName)
@@ -103,7 +109,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   if (grepl("CFSv2", dataset) & (length(season) + leadMonth) > 9) {
                         stop("Max. forecast extent is 9 months. Reduce season length or lead month value accordingly")            
                   }
-                  if (grepl("System4_seasonal", dataset) & (length(season) + leadMonth) > 7) {
+                  if (grepl("System4_seasonal|SMHI_EC_EARTH", dataset) & (length(season) + leadMonth) > 7) {
                         stop("Max. forecast extent is 7 months. Reduce season length or lead month value accordingly")            
                   }
                   if (grepl("System4_annual", dataset) & (length(season) + leadMonth) > 13) {
@@ -113,7 +119,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             leadMonth <- as.integer(leadMonth)
             latLon <- getLatLonDomainForecast(grid, lonLim, latLim)      
             runTimePars <- getRunTimeDomain(dataset, grid, members, season, years, leadMonth)
-            if (grepl("^System4", dataset)) {
+            if (grepl("^System4|^SMHI_EC_EARTH", dataset)) {
                   out <- loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
             }
             if (grepl("CFSv2", dataset)) {
