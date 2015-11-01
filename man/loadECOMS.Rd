@@ -17,10 +17,10 @@ loadECOMS(dataset, var, dictionary = TRUE, members = NULL, lonLim = NULL,
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{dataset}{A character string indicating the database to be accessed. Currently accepted values are \code{"System4_seasonal_15"}, \code{"System4_seasonal_51"}, \code{"System4_annual_15"} and \code{"CFSv2_seasonal"} for hindcasts (where the notation indicates the GCM name, the temporal range and the default number of ensemble members returned respectively, separated by the lower bars), \code{"WFDEI"} for the WATCH Forcing Dataset based on ERA-Interim (gridded observations) and \code{"NCEP_reanalysis1"} for the NCEP/NCAR reanalysis. See details on available datasets.}
+  \item{dataset}{A character string indicating the database to be accessed. Currently accepted values are \code{"System4_seasonal_15"}, \code{"System4_seasonal_51"}, \code{"System4_annual_15"}, \code{"CFSv2_seasonal"} and \code{"SMHI_EC_EARTH_EUPORIAS"} for hindcasts, \code{"WFDEI"} for the WATCH Forcing Dataset based on ERA-Interim (gridded observations) and ERA_interim and \code{"NCEP_reanalysis1"} for the ECMWF Interim and NCEP/NCAR reanalyses respectively. See details on available datasets.}
   
   \item{var}{
-Variable code (character string). This is the name of the variable according to the R standard naming (see the next argument). For variables with vertical levels, the vertical level is specified next to the variable name followed by the \dQuote{@} symbol (e.g. \code{var = "z@700"} for geopotential heigth at 700 mb isobaric surface pressure level). It is also possible to enter the variable name as originally coded in the dataset to skip data homogenization, although this is not recommended (see the next argument). See details on available variables. 
+Variable code (character string). This is the name of the variable according to the R standard naming (see the next argument). For variables with vertical levels, the vertical level is specified next to the variable name followed by the \dQuote{@} symbol (e.g. \code{var = "z@700"} for geopotential at 700 mb isobaric surface pressure level). It is also possible to enter the variable name as originally coded in the dataset to skip data homogenization, although this is not recommended (see the next argument). See details on available variables. 
 }
 
   \item{dictionary}{
@@ -88,13 +88,13 @@ Additionally, there are three global attributes with metadata, (\code{"dataset"}
 \strong{Available datasets}
 
 
-For details on the different hindcast datasets available go to \url{http://meteo.unican.es/ecoms-udg/DataServer/Datasets}. Currently, there are four different seasonal to annual hindcasts and one observational gridded dataset available at ECOMS-UDG. All of them are available through the common interface \code{loadECOMS}, and therefore the argument values may vary slightly. For instance, arguments \code{members} and \code{leadMonth} do not apply in the case of the observational gridded dataset (WFDEI), and are therefore ignored if their value is not NULL. Similarly, the output structure may vary consequently, and forecast data types include the initialization dates and the names of the chosen members, while this information is not included for other types of gridded data.
+For details on the different hindcast datasets available go to \url{http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog}. Currently, there are four different seasonal to annual hindcasts and one observational gridded dataset available at ECOMS-UDG. All of them are available through the common interface \code{loadECOMS}, and therefore the argument values may vary slightly. For instance, arguments \code{members} and \code{leadMonth} do not apply in the case of the observational gridded dataset (WFDEI), and are therefore ignored if their value is not NULL. Similarly, the output structure may vary consequently, and forecast data types include the initialization dates and the names of the chosen members, while this information is not included for other types of gridded data.
 
 
 \strong{Available variables}
 
 
-For the possible values that the argument \code{var} can take for each dataset at ECOMS-UDG, check the first column of the \href{http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables}{variables table}, that is continuously updated as new variables are made available. The table also contains further details regarding the temporal aggregation/resolution of each variable and the available vertical levels.
+For the possible values that the argument \code{var} can take for each dataset at ECOMS-UDG, check the first column of the \href{http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog}{variables table}, that is continuously updated as new variables are made available. The table also contains further details regarding the temporal aggregation/resolution of each variable and the available vertical levels.
 
 
 \strong{Variable homogeneization}
@@ -129,7 +129,7 @@ In case the whole year is needed (instead of a particular season), the argument 
 
 The characteristics of the \code{InitializationDates} output vary depending on the dataset. In the case of models that have simultaneous initializations for different members (e.g. System4), the output is just a vector of initialization times (one per year selected). Unlike the simultaneous initializations scheme, the lagged runtime configuration of members used by some other models (e.g. CFSv2) results in different initialization times for the same forecast times of different members. In this case, the \code{InitializationDates} are included in a list whose elements are named as the corresponding member.
 
-By default, 16 members are returned for the CFSv2 hindcast for better comparability with the 15 members returned by the ECMWF's System4 seasonal hindcast. However, note that up to 24 members can be obtained from the CFSv2 hindcast (i.e., \code{members=1:24}), and 28 in the case of the November initializations, although some modifications to this initial configuration have been introduced to avois errors stemming from missing initializations for some years in the original database. See the \href{https://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2}{CFSv2 member definition} at the ECOMS-UDG wiki for more details on the lagged runtimes configuration of the CFSv2 hindcast and the \pkg{ecomsUDG.Rpackage} approach.  
+By default, 15 members are returned for the CFSv2 hindcast for better comparability with the 15 members returned by the ECMWF's System4 seasonal hindcast. However, note that up to 24 members can be obtained from the CFSv2 hindcast (i.e., \code{members=1:24}), and 28 in the case of the November initializations, although some modifications to this initial configuration have been introduced to avois errors stemming from missing initializations for some years in the original database. See the \href{https://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2}{CFSv2 member definition} at the ECOMS-UDG wiki for more details on the lagged runtimes configuration of the CFSv2 hindcast and the \pkg{ecomsUDG.Rpackage} approach.  
 
 
 \strong{Temporal filtering / aggregation}
