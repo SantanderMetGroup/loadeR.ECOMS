@@ -8,6 +8,7 @@
 #' @param runTimePars A list of run time definition parameters, as returned by getRunTimeDomain
 #' @param memberRangeList A list of ensemble java ranges as returned by getMemberDomain.S4
 #' @param foreTimePars A list of forecast time definition parameters, as returned by getForecastTimeDomain.S4
+#' @param verticalPars A list with vertical level definition, as returned by \code{getVerticalLevelPars.ECOMS}. Only the last element (the kava index position) is used
 #' @return A list containing a n-dimensional array and the (possibly) modified foreTimePars object with the 
 #' corrected dates in case of time aggregations. Dimensions are labelled by the \dQuote{dimnames} attribute.
 #' @details Dimensions of length one are dropped and the \dQuote{dimnames} attribute is consequently modified.
@@ -17,11 +18,11 @@
 #' @references \url{http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.3/javadocAll/ucar/nc2/dt/grid/GeoGrid.html}
 #' @author J Bedia \email{joaquin.bedia@@gmail.com} and A. Cofi\~no
 
-makeSubset.S4 <- function(grid, latLon, runTimePars, memberRangeList, foreTimePars) {
+makeSubset.S4 <- function(grid, latLon, runTimePars, memberRangeList, foreTimePars, verticalPars) {
       message("[", Sys.time(), "] Retrieving data subset ..." )
       gcs <- grid$getCoordinateSystem()
       dimNames <- rev(names(scanVarDimensions(grid))) # reversed!
-      z <- .jnew("ucar/ma2/Range", 0L, 0L)
+      z <- verticalPars$zRange
       aux.foreDatesList <- rep(list(foreTimePars$forecastDates), length(memberRangeList))      
       foreTimePars$forecastDates <- NULL
       aux.list <- rep(list(bquote()), length(memberRangeList))

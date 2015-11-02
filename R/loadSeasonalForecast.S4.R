@@ -31,8 +31,9 @@
 loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface) {    
       memberRangeList <- getMemberDomain.S4(grid, dataset, members)
       foreTimePars <- getForecastTimeDomain.S4(grid, dataset, dic, runTimePars, time, aggr.d, aggr.m)
+      verticalPars <- getVerticalLevelPars.ECOMS(grid, dataset, level)
       cube <- switch(derInterface$deriveInterface,
-                        none = makeSubset.S4(grid, latLon, runTimePars, memberRangeList, foreTimePars),
+                        none = makeSubset.S4(grid, latLon, runTimePars, memberRangeList, foreTimePars, verticalPars),
                         deriveSurfacePressure = deriveSurfacePressure.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars),
                         deriveSurfaceRelativeHumidity = deriveSurfaceRelativeHumidity.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars),
                         deriveSurfaceSpecificHumidity = deriveSurfaceSpecificHumidity.S4(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars),

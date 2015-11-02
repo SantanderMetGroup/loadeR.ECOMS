@@ -119,7 +119,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             leadMonth <- as.integer(leadMonth)
             latLon <- getLatLonDomainForecast(grid, lonLim, latLim)      
             runTimePars <- getRunTimeDomain(dataset, grid, members, season, years, leadMonth)
-            if (grepl("^System4|^SMHI_EC_EARTH", dataset)) {
+            if (grepl("^System4|SMHI_EC_EARTH_EUPORIAS", dataset)) {
                   out <- loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
             }
             if (grepl("CFSv2", dataset)) {
