@@ -51,7 +51,7 @@ deriveInterface <- function(dataset, var, dictionary, time) {
             }
       }
       if (dictionary$derived[dicRow] == 1) {
-            message("NOTE: The requested variable is not originally stored in model's database\nIt will be derived on-the-fly using an approximation\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables> for details")
+            message("NOTE: The requested variable is not originally stored in model's database\nIt will be derived on-the-fly using an approximation\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog> for details")
             deriveInterface <- dictionary$interface[dicRow]
             leadVar <- switch(deriveInterface, 
                                     deriveSurfacePressure = "tas",
