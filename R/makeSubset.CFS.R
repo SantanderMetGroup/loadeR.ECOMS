@@ -72,11 +72,24 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
                         aux.list1[[j]] <- apply(aux.list1[[j]], MARGIN = mar, FUN = function(x) {
                               tapply(x, INDEX = mes, FUN = foreTimePars$aggr.m)
                         })
-                        dimNamesRef <- c("time", dimNamesRef[mar])
+                        dimNamesRef <- if (length(unique(mes)) > 1) {
+                              c("time", dimNamesRef[mar])
+                        } else {
+                              dimNamesRef[mar]
+                        }
                         foreTimePars$forecastDates[[i]][[j]] <- foreTimePars$forecastDates[[i]][[j]][which(day == 1)]
                   }
             }
-            aux.list[[i]] <- do.call("abind", c(aux.list1, along = grep("^time", dimNamesRef)))
+            if (foreTimePars$aggr.m != "none") {
+                  if (length(unique(mes)) > 1) {
+                        aux.list[[i]] <- do.call("abind", c(aux.list1, along = grep("^time", dimNamesRef)))
+                  } else {
+                        aux.list[[i]] <- do.call("abind", c(aux.list1, along = -1L))
+                        dimNamesRef <- c("time", dimNamesRef)
+                  }
+            } else {
+                  aux.list[[i]] <- do.call("abind", c(aux.list1, along = grep("^time", dimNamesRef)))
+            }
             aux.list1 <- NULL
       }
       mdArray <- do.call("abind", aux.list)
