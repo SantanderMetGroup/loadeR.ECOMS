@@ -26,7 +26,7 @@
 
 getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, aggr.d, aggr.m) {
       gcs <- grid$getCoordinateSystem()
-      deaccumFromFirst <- NULL
+      #deaccumFromFirst <- NULL
       if (dic$time_step == "static") {
             foreDates <- "static field"
             foreTimeRangesList <- list(.jnew("ucar/ma2/Range", 0L, 0L))
@@ -72,7 +72,6 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, agg
                         foreTimesList[[i]] <- ind
                   }
                   foreDatesList[[i]] <- auxDates[foreTimesList[[i]]]
-#                   deaccumFromFirst <- FALSE
                   auxDates <- NULL
             }
             if (time == "DD" | time == "none") {
@@ -94,23 +93,13 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, agg
                   timeIndList <- NULL
             }
             # Sub-routine for adjusting times in case of deaccumulation
+            deaccum <- FALSE
             if (!is.null(dic)) {
                   if (dic$deaccum == 1) {
-                        if (foreTimesList[[1]][1] > 1) {
-                              deaccumFromFirst <- FALSE
-                              foreTimesList <- lapply(1:length(foreTimesList), function(x) {
-                                    c(foreTimesList[[x]][1] - 1, foreTimesList[[x]])
-                              })
-                        } else {
-                              deaccumFromFirst <- TRUE
-                              foreTimesList <- lapply(1:length(foreTimesList), function(x) {
-                                    append(foreTimesList[[x]], tail(foreTimesList[[x]], 1) + 1)
-                              })
-                              dft <- as.numeric(difftime(foreDatesList[[1]][2], foreDatesList[[1]][1], units = "secs"))
-#                               foreDatesList <- lapply(1:length(foreDatesList), function(x) {
-#                                     append(as.POSIXlt(foreDatesList[[x]][1] - dft), foreDatesList[[x]])
-#                               })
-                        }
+                        deaccum <- TRUE
+                        foreTimesList <- lapply(1:length(foreTimesList), function(x) {
+                              append(foreTimesList[[x]], tail(foreTimesList[[x]], 1) + 1)
+                        })
                   }
             }
             foreTimeRangesList <- lapply(1:length(foreTimesList), function(x) {
@@ -119,7 +108,7 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, agg
                         foreTimeStride)$shiftOrigin(foreTimeShift)
             })
       }
-      return(list("forecastDates" = foreDatesList, "ForeTimeRangesList" = foreTimeRangesList, "deaccumFromFirst" = deaccumFromFirst,
+      return(list("forecastDates" = foreDatesList, "ForeTimeRangesList" = foreTimeRangesList, "deaccum" = deaccum,
                   "aggr.d" = aggr.d, "aggr.m" = aggr.m))
 }
 # End

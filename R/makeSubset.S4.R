@@ -53,7 +53,7 @@ makeSubset.S4 <- function(grid, latLon, runTimePars, memberRangeList, foreTimePa
                   aux.list1[[j]] <- do.call("abind", c(aux.list2, along = 1))
                   aux.list2 <- NULL
                   # Deaccumulator
-                  if (!is.null(foreTimePars$deaccumFromFirst)) {
+                  if (foreTimePars$deaccum) {
                         mar <- c(1:length(dim(aux.list1[[j]])))[-grep("^time", dimNamesRef)] 
                         aux.list1[[j]] <- apply(aux.list1[[j]], mar, diff)#deaccumulate, foreTimePars$deaccumFromFirst)
                         dimNamesRef <- c("time", dimNamesRef[grep("^time$", dimNamesRef, invert = TRUE)])
@@ -84,7 +84,11 @@ makeSubset.S4 <- function(grid, latLon, runTimePars, memberRangeList, foreTimePa
                         } else {
                               dimNamesRef[mar]
                         }
-                        aux.foreDatesList[[i]][[j]] <- aux.foreDatesList[[i]][[j]][which(day == 1)]
+                        aux.foreDatesList[[i]][[j]] <- if (aux.foreDatesList[[i]][[j]][1]$mday == 2) { # case of lm0 precip
+                              append(aux.foreDatesList[[i]][[j]][1], aux.foreDatesList[[i]][[j]][which(day == 1)])
+                        } else {
+                              aux.foreDatesList[[i]][[j]][which(day == 1)]      
+                        }
                   }
             }
             if (foreTimePars$aggr.m != "none") {
