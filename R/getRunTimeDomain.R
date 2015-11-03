@@ -87,7 +87,7 @@ getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
             rtPars <- getRunTimeDomain.CFS(runDatesAll, validMonth, members, years)
             years <- rtPars$years
       }
-      if (grepl("^System4|SMHI_EC_EARTH_EUPORIAS", dataset)) {
+      if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
             rtPars <- getRunTimeDomain.S4(runDatesAll, validMonth, years)  
       }
       return(list("validMonth" = validMonth, "years" = years, "season" = season, "year.cross" = year.cross.ind, "runDates" = rtPars$runDates, "runTimeRanges" = rtPars$runTimeRanges))

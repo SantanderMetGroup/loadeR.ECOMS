@@ -6,7 +6,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                                       "System4_seasonal_51",
                                       "System4_annual_15",
                                       "CFSv2_seasonal",
-                                      "SMHI_EC_EARTH_EUPORIAS",
+                                      "SMHI-EC-EARTH_EUPORIAS",
                                       "WFDEI",
                                       "NCEP_reanalysis1",
                                       "ERA_interim"))
@@ -81,7 +81,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       message("[", Sys.time(), "] ", "Connected successfuly")
       grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
-            stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/dataserver/listofvariables")
+            stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog")
       }
       # Grid datasets
       if (grepl("WFDEI|NCEP_reanalysis1|ERA_interim", dataset)) {
@@ -109,7 +109,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   if (grepl("CFSv2", dataset) & (length(season) + leadMonth) > 9) {
                         stop("Max. forecast extent is 9 months. Reduce season length or lead month value accordingly")            
                   }
-                  if (grepl("System4_seasonal|SMHI_EC_EARTH", dataset) & (length(season) + leadMonth) > 7) {
+                  if (grepl("System4_seasonal|SMHI-EC-EARTH", dataset) & (length(season) + leadMonth) > 7) {
                         stop("Max. forecast extent is 7 months. Reduce season length or lead month value accordingly")            
                   }
                   if (grepl("System4_annual", dataset) & (length(season) + leadMonth) > 13) {
@@ -119,7 +119,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             leadMonth <- as.integer(leadMonth)
             latLon <- getLatLonDomainForecast(grid, lonLim, latLim)      
             runTimePars <- getRunTimeDomain(dataset, grid, members, season, years, leadMonth)
-            if (grepl("^System4|SMHI_EC_EARTH_EUPORIAS", dataset)) {
+            if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
                   out <- loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
             }
             if (grepl("CFSv2", dataset)) {
