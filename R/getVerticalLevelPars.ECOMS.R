@@ -19,10 +19,8 @@ getVerticalLevelPars.ECOMS <- function(grid, dataset, level) {
         levelInd <- gcs$getVerticalAxis()$findCoordElement(level)
         if (grepl("System4", dataset)) {
             levelInd <- 0L      
-        } else {
-            if (levelInd < 0) {
-                  stop("Vertical level not found.\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog> for valid vertical level values")
-            }
+        } else if (levelInd < 0) {
+            stop("Vertical level not found.\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog> for valid vertical level values")
         }
         zRange <- .jnew("ucar/ma2/Range", levelInd, levelInd)
     } else {
