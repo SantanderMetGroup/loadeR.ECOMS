@@ -5,7 +5,7 @@ Suggests: sp
 Type: Package
 Title: R interface to the ECOMS User Data Gateway
 Version: 4.2-0
-Date: 02 Nov 2015
+Date: 03 Nov 2015
 Authors@R: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [aut]",
     "Joaquin Bedia <bediaj@unican.es> [ctb,cre]",
