@@ -109,11 +109,14 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   if (grepl("CFSv2", dataset) & (length(season) + leadMonth) > 9) {
                         stop("Max. forecast extent is 9 months. Reduce season length or lead month value accordingly")            
                   }
-                  if (grepl("System4_seasonal|SMHI-EC-EARTH", dataset) & (length(season) + leadMonth) > 7) {
+                  if (grepl("System4_seasonal", dataset) & (length(season) + leadMonth) > 7) {
                         stop("Max. forecast extent is 7 months. Reduce season length or lead month value accordingly")            
                   }
                   if (grepl("System4_annual", dataset) & (length(season) + leadMonth) > 13) {
                         stop("Max. forecast extent is 13 months. Reduce season length or lead month value accordingly")            
+                  }
+                  if (grepl("SMHI-EC-EARTH_EUPORIAS", dataset) & (length(season) + leadMonth) > 4) {
+                        stop("Max. forecast extent is 4 months. Reduce season length or lead month value accordingly")            
                   }
             }
             leadMonth <- as.integer(leadMonth)
