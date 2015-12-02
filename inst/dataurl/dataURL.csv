@@ -1,0 +1,9 @@
+dataset,URL,excludeVars
+System4_seasonal_15,http://www.meteo.unican.es/tds5/dodsC/system4/System4_Seasonal_15Members.ncml,
+System4_seasonal_51,http://www.meteo.unican.es/tds5/dodsC/system4/System4_Seasonal_51Members.ncml,
+System4_annual_15,http://www.meteo.unican.es/tds5/dodsC/system4/System4_Annual_15Members.ncml,
+CFSv2_seasonal,http://meteo.unican.es/tds5/dodsC/cfsrr/CFSv2_Seasonal.ncml,
+SMHI-EC-EARTH_EUPORIAS,http://meteo.unican.es/tds5/dodsC/ec_earth_v3/smhi_ec_earth_4xDaily.ncml,
+WFDEI,http://www.meteo.unican.es/tds5/dodsC/wfdei/wfdei_daily.ncml,
+NCEP_reanalysis1,http://www.meteo.unican.es/tds5/dodsC/ncepReanalysis1/ncepReanalysis1_4xDaily.ncml,
+ERA_interim,http://www.meteo.unican.es/tds5/dodsC/interim/daily/interim20_daily.ncml,
