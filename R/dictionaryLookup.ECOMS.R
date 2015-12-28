@@ -13,8 +13,8 @@
 #' (i.e., the variable to be derived) but at the end replaces the \code{shortName} by that of the
 #'  \sQuote{leading variable} (see \code{\link{deriveInterface}} for a description of this concept),
 #'  in order to open an existing \dQuote{GeoGrid}.
-#' @references \url{http://meteo.unican.es/ecoms-udg/RPackage/Homogeneization}
-#' @author J. Bedia \email{joaquin.bedia@@gmail.com}
+#' @references \url{http://meteo.unican.es/trac/wiki/udg/ecoms/RPackage/homogeneization}
+#' @author J. Bedia 
 
 dictionaryLookup.ECOMS <- function(dicPath, derInterface, time) {
       message("[", Sys.time(), "] Defining homogeneization parameters for variable \"", derInterface$origVar, "\"")

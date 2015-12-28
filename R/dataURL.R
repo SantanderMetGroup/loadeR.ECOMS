@@ -26,8 +26,8 @@
 # # End
 
 dataURL <- function(dataset) {
-      a <- read.csv(file.path(find.package("ecomsUDG.Raccess"), "dataurl","dataURL.csv"))
-      as.list(a[grep(dataset, a$dataset),2:3])
+      a <- read.csv(file.path(find.package("ecomsUDG.Raccess"), "dataurl", "dataURL.csv"), stringsAsFactors = FALSE)
+      as.list(a[grep(dataset, a$dataset), 2:3])
 }
-      
+
       
