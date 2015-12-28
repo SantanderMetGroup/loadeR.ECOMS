@@ -23,9 +23,10 @@ loadSeasonalForecast.CFS = function(var, gds, grid, dic, latLon, runTimePars, ti
       }
       # variable info
       Variable <- list("varName" = var, "level" = level)
-      attr(Variable, "is_standard") <- isStandard
+      attr(Variable, "use_dictionary") <- isStandard
+      attr(Variable, "description") <- grid$getDescription()
       if (isStandard) {
-            data(vocabulary, envir = environment())
+            vocabulary <- loadeR::showVocabulary()
             attr(Variable, "units") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 3])
             attr(Variable, "longname") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 2])
       } else {

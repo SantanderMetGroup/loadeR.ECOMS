@@ -26,7 +26,8 @@
 #'   freeing as much space as possible. The different functions for deriving variables are named with the
 #'   \sQuote{derive} prefix.
 #'  @references \url{http://meteo.unican.es/ecoms-udg/ListOfVariables}
-#'  @author J. Bedia \email{joaquin.bedia@@gmail.com}
+#'  @author J. Bedia 
+#'  @importFrom loadeR showVocabulary
 
 loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface) {    
       memberRangeList <- getMemberDomain.S4(grid, dataset, members)
@@ -57,9 +58,10 @@ loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLo
             names(memberRangeList) <- NA
       }
       Variable <- list("varName" = var, "level" = level)
-      attr(Variable, "is_standard") <- isStandard
+      attr(Variable, "use_dictionary") <- isStandard
+      attr(Variable, "description") <- grid$getDescription()
       if (isStandard) {
-            data(vocabulary, envir = environment())
+            vocabulary <- loadeR::showVocabulary()
             attr(Variable, "units") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 3])
             attr(Variable, "longname") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 2])
       } else {
