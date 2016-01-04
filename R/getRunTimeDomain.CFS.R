@@ -21,7 +21,7 @@
 #'  is suppressed with a warning. If the selection corresponds to one single year, the query
 #'  is automatically updated to the maximum number of available members, with a warning.
 #' @references \url{http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2}      
-#' @author J. Bedia \email{joaquin.bedia@@gmail.com}
+#' @author J. Bedia 
 
 getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years) {
       if (is.null(members)) {
@@ -78,7 +78,7 @@ getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years) {
                   .jnew("ucar.ma2.Range", rt, rt)
             })
       }
-      return(list("runDates" = runDatesEnsList, "runTimeRanges" = runTimesEnsList, "years" = years))
+      return(list("runDates" = runDatesEnsList, "runTimeRanges" = runTimesEnsList))
 }
 # End 
 

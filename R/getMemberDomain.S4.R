@@ -9,7 +9,7 @@
 #' @note The function assumes that the ensemble members are internally designated by character strings,
 #' rather than integers than in the former version. Otherwise, the getCoordValues()
 #' method should be used instead of getNames() on the ensemble axis.
-#' @author J. Bedia \email{joaquin.bedia@@gmail.com}
+#' @author J. Bedia 
 
 getMemberDomain.S4 <- function(grid, dataset, members) {
       gcs <- grid$getCoordinateSystem()
