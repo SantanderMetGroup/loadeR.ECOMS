@@ -7,6 +7,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                                       "System4_annual_15",
                                       "CFSv2_seasonal",
                                       "SMHI-EC-EARTH_EUPORIAS",
+                                      "Glosea5_seasonal_12",
                                       "WFDEI",
                                       "NCEP_reanalysis1",
                                       "ERA_interim"))
@@ -25,9 +26,9 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       url <- dataURL(dataset)
       # Dictionary/shortName search
       if (isTRUE(dictionary)) {
-            dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste0(dataset, ".dic"))
+            # dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste0(dataset, ".dic"))
             # for devel only 
-            # dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
+            dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
             dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)
             shortName <- dic$short_name
             if (grepl("System4\\_seasonal\\_15", dataset) & grepl("^u$|^v$|^z$|^t$|^q$", shortName)) {
@@ -112,6 +113,9 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   if (grepl("System4_seasonal", dataset) & (length(season) + leadMonth) > 7) {
                         stop("Max. forecast extent is 7 months. Reduce season length or lead month value accordingly")            
                   }
+                  if (grepl("Glosea5", dataset) & (length(season) + leadMonth) > 6) {
+                        stop("Max. forecast extent is less than 6 months. Reduce season length or lead month value accordingly")            
+                  }
                   if (grepl("System4_annual", dataset) & (length(season) + leadMonth) > 13) {
                         stop("Max. forecast extent is 13 months. Reduce season length or lead month value accordingly")            
                   }
@@ -120,16 +124,14 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   }
             }
             leadMonth <- as.integer(leadMonth)
-            latLon <- getLatLonDomainForecast(grid, lonLim, latLim)      
+            latLon <- getLatLonDomainForecast(grid, lonLim, latLim)
             runTimePars <- getRunTimeDomain(dataset, grid, members, season, years, leadMonth)
             if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
                   out <- loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
-            }
-            if (grepl("CFSv2", dataset)) {
-                  if (is.null(members)) {
-                        members <- 1:15
-                  }
+            } else if (grepl("CFSv2", dataset)) {
                   out <- loadSeasonalForecast.CFS(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
+            } else if (grepl("Glosea", dataset)) {
+                  out <- loadSeasonalForecast.GS5(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)                                    
             }
             if (derInterface$deriveInterface != "none") {
                   out$Variable$varName <- derInterface$origVar
