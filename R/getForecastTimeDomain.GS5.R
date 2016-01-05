@@ -52,28 +52,29 @@ getForecastTimeDomain.GS5 <- function (grid, dic, runTimePars, time, aggr.d, agg
             foreTimesList[[x]] <- aux.foreTimesList
             foreDatesList[[x]] <- aux.foreDatesList
       }
-#       aux <- rep(NA, length(foreTimesList))
-#       for (i in 1:length(foreTimesList)) {
-#             aux[i] <- length(foreTimesList[[i]][[1]])
-#       }
-#       if (length(unique(aux)) > 1) {
-#             aux.dates <- rep(list(bquote()), length(foreTimesList))
-#             for (i in 1:length(foreTimesList)) {
-#                   aux.dates[[i]] <- head(foreDatesList[[i]][[1]], 1)
-#             }
-#             init <- do.call("max", aux.dates)
-#             for (i in 1:length(foreTimesList)) {
-#                   if(head(foreDatesList[[i]][[1]], 1) < init) {
-#                         message("NOTE: some forecast times at the beginning of the initialization may be lost so all members have equal length")
-#                         for (j in 1:length(foreTimesList[[i]])) {
-#                               retain <- which(foreDatesList[[i]][[1]] >= init)
-#                               foreTimesList[[i]][[j]] <- foreTimesList[[i]][[j]][retain] 
-#                               foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][retain] 
-#                         }
-#                   }
-#             }
-#       }
-#       aux <- aux.dates <- NULL
+      # Subroutine to adjust forecast dates among all members for equal length (applies only for leadMonth=0 queries)
+      aux <- rep(NA, length(foreTimesList))
+      for (i in 1:length(foreTimesList)) {
+            aux[i] <- length(foreTimesList[[i]][[1]])
+      }
+      if (length(unique(aux)) > 1) {
+            message("NOTE: some forecast times at the beginning of the initialization may be lost so all members have equal length")
+            aux.dates <- rep(list(bquote()), length(foreTimesList))
+            for (i in 1:length(foreTimesList)) {
+                  aux.dates[[i]] <- head(foreDatesList[[i]][[1]], 1)
+            }
+            init <- do.call("max", aux.dates)
+            for (i in 1:length(foreTimesList)) {
+                  if (head(foreDatesList[[i]][[1]], 1) < init) {
+                        for (j in 1:length(foreTimesList[[i]])) {
+                              retain <- which(foreDatesList[[i]][[1]] >= init)
+                              foreTimesList[[i]][[j]] <- foreTimesList[[i]][[j]][retain] 
+                              foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][retain] 
+                        }
+                  }
+            }
+      }
+      aux <- aux.dates <- NULL
       # Sub-routine for setting stride and shift along time dimension    
       if (time == "DD" | time == "none") {
             foreTimeStride <- 1L
@@ -112,7 +113,7 @@ getForecastTimeDomain.GS5 <- function (grid, dic, runTimePars, time, aggr.d, agg
       for (i in 1:length(foreTimesList)) {
             for (j in 1:length(foreTimesList[[i]])) {
                   start <- as.integer(foreTimesList[[i]][[j]][1] - 1)
-                  end <- as.integer(foreTimesList[[i]][[j]][length(foreTimesList[[i]][[j]])] - 1)
+                  end <- as.integer(tail(foreTimesList[[i]][[j]], 1) - 1)
                   foreTimesList[[i]][[j]] <- .jnew("ucar/ma2/Range", start, end, foreTimeStride)$shiftOrigin(foreTimeShift)
             }
       }

@@ -113,8 +113,11 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   if (grepl("System4_seasonal", dataset) & (length(season) + leadMonth) > 7) {
                         stop("Max. forecast extent is 7 months. Reduce season length or lead month value accordingly")            
                   }
-                  if (grepl("Glosea5", dataset) & (length(season) + leadMonth) > 6) {
-                        stop("Max. forecast extent is less than 6 months. Reduce season length or lead month value accordingly")            
+                  if (grepl("Glosea5.*12", dataset) & (length(season) + leadMonth) > 4) {
+                        stop("Max. forecast extent is 130 days. Reduce season length or lead month value accordingly")            
+                  }
+                  if (grepl("Glosea5.*24", dataset) & (length(season) + leadMonth) > 4) {
+                        stop("Max. forecast extent is 120 days. Reduce season length or lead month value accordingly")            
                   }
                   if (grepl("System4_annual", dataset) & (length(season) + leadMonth) > 13) {
                         stop("Max. forecast extent is 13 months. Reduce season length or lead month value accordingly")            

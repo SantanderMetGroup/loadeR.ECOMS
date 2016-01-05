@@ -89,7 +89,7 @@ getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
       } else if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
             rtPars <- getRunTimeDomain.S4(runDatesAll, validMonth, years)  
       } else if (grepl("^Glosea5", dataset)) {
-            rtPars <- getRunTimeDomain.GS5(dataset, runDatesAll, validMonth, members, years) 
+            rtPars <- getRunTimeDomain.GS5(dataset, season, leadMonth, runDatesAll, validMonth, members, years) 
       }
       return(list("validMonth" = validMonth, "years" = years, "season" = season, "year.cross" = year.cross.ind, "memberRangeList" = rtPars$memberRangeList, "runDates" = rtPars$runDates, "runTimeRanges" = rtPars$runTimeRanges))
 }

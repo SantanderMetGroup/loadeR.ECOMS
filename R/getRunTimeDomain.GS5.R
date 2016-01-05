@@ -1,6 +1,10 @@
-getRunTimeDomain.GS5 <- function(dataset, runDatesAll, validMonth, members, years) {
+getRunTimeDomain.GS5 <- function(dataset, season, leadMonth, runDatesAll, validMonth, members, years) {
       if (grepl("Glosea5.*12$", dataset)) {
-            csv <- "GS5_12.csv"
+            aux <- seq(leadMonth + 2, by = 3, length.out = 4)
+            if (any(aux > 12)) aux[aux > 12] <- aux[aux > 12] - 12
+            if (!(season[1] %in% aux)) {
+                  stop("Invalid leadMonth: Initializations in February, May, August and November only")
+            }
             if (!is.null(members)) {
                   if (length(members) > 12 | any(members) > 12 | any(members) < 1) {
                         stop("Invalid member definition")
@@ -8,8 +12,13 @@ getRunTimeDomain.GS5 <- function(dataset, runDatesAll, validMonth, members, year
             } else {
                   members <- 1:12
             }
+            csv <- "GS5_12.csv"
       } else if (grepl("Glosea5.*24$", dataset)) {
-            csv <- "GS5_24.csv"
+            aux <- seq(leadMonth + 5, by = 6, length.out = 2)
+            if (any(aux > 12)) aux[aux > 12] <- aux[aux > 12] - 12
+            if (!(season[1] %in% aux)) {
+                  stop("Invalid leadMonth: Initializations in May and November only")
+            }
             if (!is.null(members)) {
                   if (length(members) > 24 | any(members) > 24 | any(members) < 1) {
                         stop("Invalid member definition")
@@ -17,6 +26,7 @@ getRunTimeDomain.GS5 <- function(dataset, runDatesAll, validMonth, members, year
             } else {
                   members <- 1:24
             }
+            csv <- "GS5_24.csv"
       }
       # Lookup reference table for member definition
       # mem.ref <- read.csv("inst/memdefs/GS5_12.csv")[members, ]
