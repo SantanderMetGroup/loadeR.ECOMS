@@ -29,7 +29,7 @@ getRunTimeDomain.GS5 <- function(dataset, runDatesAll, validMonth, members, year
       rt.ind <- which((runDatesAll$mon + 1) %in% c(validMonth-1, validMonth))
       # Valid month inits
       # runTimesValidMonth <- rt.axis$getCoordValues()[rt.ind]
-      runTimesValidMonth <- (1:length(rt.axis$getCoordValues()))[rt.ind]
+      runTimesValidMonth <- (1:length(runDatesAll))[rt.ind]
       runDatesValidMonth <- runDatesAll[rt.ind] 
       # Valid year inits
       rt.ind <- which((runDatesValidMonth$year + 1900) %in% years)
