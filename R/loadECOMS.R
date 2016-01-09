@@ -8,6 +8,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                                       "CFSv2_seasonal",
                                       "SMHI-EC-EARTH_EUPORIAS",
                                       "Glosea5_seasonal_12",
+                                      "Glosea5_seasonal_24",
                                       "WFDEI",
                                       "NCEP_reanalysis1",
                                       "ERA_interim"))
