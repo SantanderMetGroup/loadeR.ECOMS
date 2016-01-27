@@ -27,9 +27,9 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       url <- dataURL(dataset)
       # Dictionary/shortName search
       if (isTRUE(dictionary)) {
-            # dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste0(dataset, ".dic"))
+            dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste0(dataset, ".dic"))
             # for devel only 
-            dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
+            # dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
             dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)
             shortName <- dic$short_name
             if (grepl("System4\\_seasonal\\_15", dataset) & grepl("^u$|^v$|^z$|^t$|^q$", shortName)) {
