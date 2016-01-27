@@ -1,7 +1,8 @@
 ecomsUDG.Raccess
 ================
 
-* New SMHI-EC-EARTH_EUPORIAS hindcast available
-* Minor bug fix in monthly aggregations of single-month season queries 
+* GloSea5 hindcasts available
+* Updated attributes list 
+* Dataset URLs mapped from a new lookup table as a csv text file.
 * Other minor bug fixes and enhancements
 * To see all new available variables and datasets go to: http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog
