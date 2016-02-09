@@ -96,18 +96,16 @@ getForecastTimeDomain.GS5 <- function (grid, dic, runTimePars, time, aggr.d, agg
       }
       # Sub-routine for adjusting times in case of deaccumulation (unused so far in GS5)
       deaccumFromFirst <- NULL
-      if (!is.null(dic)) {
-            if (dic$deaccum == 1) {
-                  if (foreTimesList[[1]][[1]][1] > 1) {
-                        deaccumFromFirst <- FALSE
-                        for (i in 1:length(foreTimesList)) {
-                              for (j in 1:length(foreTimesList[[i]])) {
-                                    foreTimesList[[i]][[j]] <- c(foreTimesList[[i]][[j]][1] - 1, foreTimesList[[i]][[j]])
-                              }
+      if (!is.null(dic) & dic$deaccum == 1) {
+            if (foreTimesList[[1]][[1]][1] > 1) {
+                  deaccumFromFirst <- FALSE
+                  for (i in 1:length(foreTimesList)) {
+                        for (j in 1:length(foreTimesList[[i]])) {
+                              foreTimesList[[i]][[j]] <- c(foreTimesList[[i]][[j]][1] - 1, foreTimesList[[i]][[j]])
                         }
-                  } else {
-                        deaccumFromFirst <- TRUE
                   }
+            } else {
+                  deaccumFromFirst <- TRUE
             }
       }
       for (i in 1:length(foreTimesList)) {
