@@ -23,10 +23,9 @@ Authors@R: as.person(c(
     "Manuel Vega <manuel.vega@unican.es> [ctb]"))
 BugReports: https://github.com/SantanderMetGroup/ecomsUDG.Raccess/issues
 URL: http://meteo.unican.es/trac/wiki/udg/ecoms
-Description: Enables homogenized, user-friendly access to hindcast and other
-    climate databases used/produced in the ECOMS initiative,
-    from the Santander MetGroup's User Data Gateway (UDG) via OPeNDAP. Previous registration
-    via the Santander MetGroup's THREDDS Administration Panel (TAP) is required.
+Description: Enables homogenized access via OPeNDAP to hindcast and other
+    climate databases of the FP-7 ECOMS consortium, stored at the Santander MetGroup's User Data Gateway (UDG).
+    Previous registration via the Santander MetGroup's THREDDS Administration Panel (TAP) is required.
     Data access is regulated through a fine-grained authorization scheme depending on data access policies,
     although permission for the PUBLIC role is automatically granted.
     Go to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/registration> for more details.
