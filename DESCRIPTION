@@ -1,7 +1,7 @@
 Package: loadeR.ECOMS
 Depends:
-    loadeR,
     R(>= 3.0.0),
+    loadeR,
     rJava
 Imports:
     loadeR.java (>= 1.0.0),
@@ -12,14 +12,14 @@ Suggests:
     downscaleR,
 Type: Package
 Title: R interface to the ECOMS User Data Gateway
-Version: 1.0-0
+Version: 0.0-0
 Date: 2016-02-11
 Authors@R: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [aut]",
     "Joaquin Bedia <bediaj@unican.es> [ctb,cre]",
-    "Max Tuni <max@predictia.es> [ctb]",
     "Antonio Cofino <antonio.cofino@unican.es> [ctb]",
-    "Sixto Herrera <sixto@predictia.es> [ctb]",
+    "Sixto Herrera <herreras@unican.es> [ctb]",
+    "Max Tuni <max@predictia.es> [ctb]",
     "Manuel Vega <manuel.vega@unican.es> [ctb]"))
 BugReports: https://github.com/SantanderMetGroup/ecomsUDG.Raccess/issues
 URL: http://meteo.unican.es/trac/wiki/udg/ecoms

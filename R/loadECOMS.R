@@ -74,7 +74,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   stop("UDG SERVICE TEMPORARILY UNAVAILABLE\nThe UDG server is temporarily unable to service your request due to maintenance downtime or capacity problems, please try again later.\n
                         If the problem persists after 24 h please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)")
             } else if (grepl("Unauthorized to open dataset", e)) {
-                  stop("UNAUTHORIZED TO OPEN DATASET\nPlease check your login details in loginECOMS_UDG function.\nIf you don\'t have a valid username/password or OpenID please the UDG Administration Panel (http://www.meteo.unican.es/udg-tap/login)")
+                  stop("UNAUTHORIZED TO OPEN DATASET\nPlease check your login details in loginUDG function.\nIf you don\'t have a valid username/password or OpenID please the UDG Administration Panel (http://www.meteo.unican.es/udg-tap/login)")
             }
       })
       if (is.null(gds)) {
