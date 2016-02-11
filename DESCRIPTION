@@ -1,4 +1,4 @@
-Package: ecomsUDG.Raccess
+Package: loadeR.ECOMS
 Depends:
     loadeR,
     R(>= 3.0.0),
@@ -10,11 +10,10 @@ Imports:
     RCurl
 Suggests:
     downscaleR,
-    sp
 Type: Package
 Title: R interface to the ECOMS User Data Gateway
-Version: 5.0-0
-Date: 2016-02-09
+Version: 1.0-0
+Date: 2016-02-11
 Authors@R: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [aut]",
     "Joaquin Bedia <bediaj@unican.es> [ctb,cre]",
@@ -25,12 +24,11 @@ Authors@R: as.person(c(
 BugReports: https://github.com/SantanderMetGroup/ecomsUDG.Raccess/issues
 URL: http://meteo.unican.es/trac/wiki/udg/ecoms
 Description: Enables homogenized, user-friendly access to hindcast and other
-    climate databases remotely stored at the ECOMS User Data Gateway, allowing the
-    retrieval of manageable dimensional slices from large climate datasets. The
-    use of this package requires prior registration in the UDG via the Santander
-    MetGroup's THREDDS Administration Panel (TAP). Data access is regulated through
-    a fine-grained authorization scheme depending on data access policies, although
-    permission for the PUBLIC role is automatically granted. Go to <http://
-    meteo.unican.es/trac/wiki/udg/ecoms/dataserver/registration> for more details.
+    climate databases used/produced in the ECOMS initiative,
+    from the Santander MetGroup's User Data Gateway (UDG) via OPeNDAP. Previous registration
+    via the Santander MetGroup's THREDDS Administration Panel (TAP) is required.
+    Data access is regulated through a fine-grained authorization scheme depending on data access policies,
+    although permission for the PUBLIC role is automatically granted.
+    Go to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/registration> for more details.
 License: GPL (>= 3)
 RoxygenNote: 5.0.1

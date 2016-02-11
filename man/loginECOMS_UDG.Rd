@@ -1,5 +1,5 @@
 \name{loginECOMS_UDG - deprecated}
-%\alias{loginECOMS_UDG - deprecated}
+\alias{loginECOMS_UDG}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
       Log in to the ECOMS User Data Gateway (deprecated)
