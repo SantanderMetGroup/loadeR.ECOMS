@@ -27,7 +27,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       url <- dataURL(dataset)
       # Dictionary/shortName search
       if (isTRUE(dictionary)) {
-            dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste0(dataset, ".dic"))
+            dicPath <- file.path(find.package("loadeR.ECOMS"), "dictionaries", paste0(dataset, ".dic"))
             # for devel only 
             # dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
             dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)

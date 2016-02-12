@@ -30,7 +30,7 @@ getRunTimeDomain.GS5 <- function(dataset, season, leadMonth, runDatesAll, validM
       }
       # Lookup reference table for member definition
       # mem.ref <- read.csv("inst/memdefs/GS5_12.csv")[members, ]
-      mem.ref <- read.csv(file.path(find.package("ecomsUDG.Raccess"), "memdefs", csv))[members, ]
+      mem.ref <- read.csv(file.path(find.package("loadeR.ECOMS"), "memdefs", csv))[members, ]
       # mem.ref <- mem.ref[order(mem.ref[ ,1]),]
       # Define Members
       memberRangeList <- lapply(as.integer(mem.ref$mem - 1), function(x) .jnew("ucar/ma2/Range", x, x))

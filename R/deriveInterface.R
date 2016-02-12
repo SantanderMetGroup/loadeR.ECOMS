@@ -33,7 +33,7 @@ deriveInterface <- function(dataset, var, dictionary, time) {
       if (dictionary == FALSE) {
             stop("The requested variable is non-standard. The dictionary must be used for homogenization and conversion of input variables\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables> for details")
       }
-      dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste0(dataset, ".dic"))
+      dicPath <- file.path(find.package("loadeR.ECOMS"), "dictionaries", paste0(dataset, ".dic"))
       # devel (comment before package building)
       # dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
       dictionary <- tryCatch({read.csv(dicPath, stringsAsFactors = FALSE)}, error = function(e) stop("Dictionary not found"))
