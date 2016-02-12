@@ -14,10 +14,11 @@
             latest.ver <- package_version(gsub("Version: ", "", b[grep("Version", b)]))
             if (ver < latest.ver) {
                   ver.mess1 <- "WARNING: Your current version of loadeR.ECOMS is not up-to-date"
-                  ver.mess <- paste("Get the latest stable version", latest.ver, "at http://meteo.unican.es/trac/wiki/udg/ecoms/RPackage/versions#Versions")      
+                  ver.mess <- paste("Get the latest stable version", latest.ver, "typing on your R console:\ndevtools::install_github(\"SantanderMetGroup/loadeR.ECOMS\")")      
                   packageStartupMessage(ver.mess1)
                   packageStartupMessage(ver.mess)
             }
       }
 } 
 # End
+
