@@ -12,8 +12,8 @@ Suggests:
     downscaleR,
 Type: Package
 Title: R interface to the ECOMS User Data Gateway
-Version: 0.0-0
-Date: 2016-02-11
+Version: 0.0-1
+Date: 2016-02-12
 Authors@R: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [aut]",
     "Joaquin Bedia <bediaj@unican.es> [ctb,cre]",
