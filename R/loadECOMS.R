@@ -47,6 +47,10 @@ loadECOMS <- function (dataset, var, dictionary = TRUE, members = NULL, lonLim =
     dic <- NULL
     shortName <- var
   }
+  if (dic$time_step == "MM") {
+    aggr.m <- "none"
+    message("NOTE: The dataset is already monthly. Argument 'aggr.m' ignored")
+  }
   if (dic$time_step == "static") {
     message("NOTE: The requested variable is static. All time-related arguments will be ignored")
     season <- 1
