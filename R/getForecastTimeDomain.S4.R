@@ -22,7 +22,7 @@
 #' \item{doDailyMean}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
 #' to \code{\link{makeSubset.S4}} to undertake the pertinent aggregation if TRUE.}
 #' \end{itemize}
-#' @author J. Bedia \email{joaquin.bedia@@gmail.com} 
+#' @author J. Bedia 
 
 getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, aggr.d, aggr.m) {
       gcs <- grid$getCoordinateSystem()
