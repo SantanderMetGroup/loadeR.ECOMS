@@ -29,42 +29,45 @@
 #'   needed to compute the velocity module.
 #' @author J Bedia \email{joaquin.bedia@@gmail.com}
 
-deriveInterface <- function(dataset, var, dictionary, time) {
-      if (dictionary == FALSE) {
-            stop("The requested variable is non-standard. The dictionary must be used for homogenization and conversion of input variables\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables> for details")
-      }
-      dicPath <- file.path(find.package("loadeR.ECOMS"), "dictionaries", paste0(dataset, ".dic"))
-      # devel (comment before package building)
-      # dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
-      dictionary <- tryCatch({read.csv(dicPath, stringsAsFactors = FALSE)}, error = function(e) stop("Dictionary not found"))
-      lev <- findVerticalLevel(var)$level
-      var <- findVerticalLevel(var)$var
-      dicRow <- grep(paste("^", var, "$", sep = ""), dictionary$identifier) 
-      if (length(dicRow) == 0) {
-            stop("Variable requested not found\nCheck variable naming and availability in <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables>")
-      }
-      if (length(dicRow) > 1) {
-            if (time == "DD") {
-                  dicRow <- dicRow[grep("24h", dictionary$time_step[dicRow])]
-            } else {
-                  dicRow <- dicRow[grep("6h", dictionary$time_step[dicRow])]
-            }
-      }
-      if (dictionary$derived[dicRow] == 1) {
-            message("NOTE: The requested variable is not originally stored in model's database\nIt will be derived on-the-fly using an approximation\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog> for details")
-            deriveInterface <- dictionary$interface[dicRow]
-            leadVar <- switch(deriveInterface, 
-                                    deriveSurfacePressure = "tas",
-                                    deriveSurfaceRelativeHumidity = "tas",
-                                    deriveSurfaceSpecificHumidity = "tas",
-                                    deriveSurfaceWindSpeed = "uas")
-      } else {
-            deriveInterface <- "none"
-            leadVar <- var
-      }
-      if (!is.null(lev)) {
-            leadVar <- paste(leadVar, lev, sep = "@")
-      }
-      return(list("deriveInterface" = deriveInterface, "leadVar" = leadVar, "origVar" = var))
+deriveInterface <- function(dataset, var, dictionary, time, dic="none") {
+  if (dictionary == FALSE) {
+    stop("The requested variable is non-standard. The dictionary must be used for homogenization and conversion of input variables\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables> for details")
+  }
+  dicPath <- dic
+  #dicPath <- file.path(find.package("ecomsUDG.Raccess"), "dictionaries", paste0(dataset, ".dic"))
+  #dicPath <- "/oceano/gmeteo/WORK/ASNA/projects/euporias/00_common/data/RCM/work/SMHI.dic" # For SMHI
+  #dicPath <- "/oceano/gmeteo/WORK/ASNA/projects/euporias/00_common/data/RCM/work/CCLM.dic" # For CCLM
+  #dicPath <- "/oceano/gmeteo/WORK/ASNA/projects/euporias/00_common/data/RCM/work/WRF.dic"  # For WRF
+  # devel (comment before package building)
+  # dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
+  dictionary <- tryCatch({read.csv(dicPath, stringsAsFactors = FALSE)}, error = function(e) stop("Dictionary not found"))
+  lev <- findVerticalLevel(var)$level
+  var <- findVerticalLevel(var)$var
+  dicRow <- grep(paste("^", var, "$", sep = ""), dictionary$identifier) 
+  if (length(dicRow) == 0) {
+    stop("Variable requested not found\nCheck variable naming and availability in <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables>")
+  }
+  if (length(dicRow) > 1) {
+    if (time == "DD") {
+      dicRow <- dicRow[grep("24h", dictionary$time_step[dicRow])]
+    } else {
+      dicRow <- dicRow[grep("6h", dictionary$time_step[dicRow])]
+    }
+  }
+  if (dictionary$derived[dicRow] == 1) {
+    message("NOTE: The requested variable is not originally stored in model's database\nIt will be derived on-the-fly using an approximation\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables> for details")
+    deriveInterface <- dictionary$interface[dicRow]
+    leadVar <- switch(deriveInterface, 
+                      deriveSurfacePressure = "tas",
+                      deriveSurfaceRelativeHumidity = "tas",
+                      deriveSurfaceSpecificHumidity = "tas",
+                      deriveSurfaceWindSpeed = "uas")
+  } else {
+    deriveInterface <- "none"
+    leadVar <- var
+  }
+  if (!is.null(lev)) {
+    leadVar <- paste(leadVar, lev, sep = "@")
+  }
+  return(list("deriveInterface" = deriveInterface, "leadVar" = leadVar, "origVar" = var))
 }
-# End

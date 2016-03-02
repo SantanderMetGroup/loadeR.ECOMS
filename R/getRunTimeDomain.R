@@ -22,7 +22,7 @@
 #' @details The function calls to specific subroutines for CFS or System4 requests, given their different
 #' runtime configurations. The function also takes care of selecting the appropriate initialization
 #' in the case of year-crossing seasons 
-#' @author J Bedia 
+#' @author J Bedia \email{joaquin.bedia@@gmail.com}
 
 getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
       message("[", Sys.time(), "] Defining initialization time parameters")
@@ -83,14 +83,13 @@ getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
             year.cross.ind <- NULL
       }
       # runtime parameters depending on model
-      if (grepl("CFSv2", dataset)) {
-            rtPars <- getRunTimeDomain.CFS(runDatesAll, validMonth, members, years)
-            # years <- rtPars$years
-      } else if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
+      #if (grepl("CFSv2", dataset)) {
+      #      rtPars <- getRunTimeDomain.CFS(runDatesAll, validMonth, members, years)
+      #      years <- rtPars$years
+      #}
+      #if (grepl("^System4", dataset)) {
             rtPars <- getRunTimeDomain.S4(runDatesAll, validMonth, years)  
-      } else if (grepl("^Glosea5", dataset)) {
-            rtPars <- getRunTimeDomain.GS5(dataset, season, leadMonth, runDatesAll, validMonth, members, years) 
-      }
-      return(list("validMonth" = validMonth, "years" = years, "season" = season, "year.cross" = year.cross.ind, "memberRangeList" = rtPars$memberRangeList, "runDates" = rtPars$runDates, "runTimeRanges" = rtPars$runTimeRanges))
+      #}
+      return(list("validMonth" = validMonth, "years" = years, "season" = season, "year.cross" = year.cross.ind, "runDates" = rtPars$runDates, "runTimeRanges" = rtPars$runTimeRanges))
 }
 # End
