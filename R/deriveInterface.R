@@ -27,7 +27,7 @@
 #'  wind component (\code{"uas"}), and then all parameters are passed to the subsequent
 #'  functions for subsetting and are recicled for loading also the northward component \code{"vas"}
 #'   needed to compute the velocity module.
-#' @author J Bedia \email{joaquin.bedia@@gmail.com}
+#' @author J Bedia 
 
 deriveInterface <- function(dataset, var, dictionary, time) {
       if (dictionary == FALSE) {
@@ -41,7 +41,7 @@ deriveInterface <- function(dataset, var, dictionary, time) {
       var <- findVerticalLevel(var)$var
       dicRow <- grep(paste("^", var, "$", sep = ""), dictionary$identifier) 
       if (length(dicRow) == 0) {
-            stop("Variable requested not found\nCheck variable naming and availability in <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables>")
+            stop("Variable requested not found\nCheck variable naming and availability in <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog>")
       }
       if (length(dicRow) > 1) {
             if (time == "DD") {
