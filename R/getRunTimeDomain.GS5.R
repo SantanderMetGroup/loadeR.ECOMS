@@ -3,11 +3,11 @@ getRunTimeDomain.GS5 <- function(dataset, season, leadMonth, runDatesAll, validM
             aux <- seq(leadMonth + 2, by = 3, length.out = 4)
             if (any(aux > 12)) aux[aux > 12] <- aux[aux > 12] - 12
             if (!(season[1] %in% aux)) {
-                  stop("Invalid leadMonth: Initializations in February, May, August and November only")
+                  stop("Invalid leadMonth: Initializations in February, May, August and November only", call. = FALSE)
             }
             if (!is.null(members)) {
-                  if (length(members) > 12 | any(members) > 12 | any(members) < 1) {
-                        stop("Invalid member definition")
+                  if (length(members) > 12 | any(members > 12) | any(members < 1)) {
+                        stop("Invalid member definition", call. = FALSE)
                   }
             } else {
                   members <- 1:12
@@ -17,11 +17,11 @@ getRunTimeDomain.GS5 <- function(dataset, season, leadMonth, runDatesAll, validM
             aux <- seq(leadMonth + 5, by = 6, length.out = 2)
             if (any(aux > 12)) aux[aux > 12] <- aux[aux > 12] - 12
             if (!(season[1] %in% aux)) {
-                  stop("Invalid leadMonth: Initializations in May and November only")
+                  stop("Invalid leadMonth: Initializations in May and November only", call. = FALSE)
             }
             if (!is.null(members)) {
-                  if (length(members) > 24 | any(members) > 24 | any(members) < 1) {
-                        stop("Invalid member definition")
+                  if (length(members) > 24 | any(members > 24) | any(members < 1)) {
+                        stop("Invalid member definition", call. = FALSE)
                   }
             } else {
                   members <- 1:24
@@ -36,7 +36,7 @@ getRunTimeDomain.GS5 <- function(dataset, season, leadMonth, runDatesAll, validM
       memberRangeList <- lapply(as.integer(mem.ref$mem - 1), function(x) .jnew("ucar/ma2/Range", x, x))
       # Define runtimes
       rt.ref <- mem.ref$rt
-      rt.ind <- which((runDatesAll$mon + 1) %in% c(validMonth-1, validMonth))
+      rt.ind <- which((runDatesAll$mon + 1) %in% c(validMonth - 1, validMonth))
       # Valid month inits
       # runTimesValidMonth <- rt.axis$getCoordValues()[rt.ind]
       runTimesValidMonth <- (1:length(runDatesAll))[rt.ind]
@@ -46,12 +46,12 @@ getRunTimeDomain.GS5 <- function(dataset, season, leadMonth, runDatesAll, validM
       runDatesValid <- runDatesValidMonth[rt.ind]
       runTimesValid <- runTimesValidMonth[rt.ind]
       aux.ind <- c(seq(1, length(runTimesValid), by = 3), length(runTimesValid) + 1)
-      rt.list <- lapply(1:(length(aux.ind)-1), function(x) runTimesValid[aux.ind[x]:(aux.ind[x+1]-1)])
-      runDatesList <- lapply(1:(length(aux.ind)-1), function(x) runDatesValid[aux.ind[x]:(aux.ind[x+1]-1)])
+      rt.list <- lapply(1:(length(aux.ind) - 1), function(x) runTimesValid[aux.ind[x]:(aux.ind[x + 1] - 1)])
+      runDatesList <- lapply(1:(length(aux.ind) - 1), function(x) runDatesValid[aux.ind[x]:(aux.ind[x + 1] - 1)])
       runDatesValidMonth <- runTimesValid <- runDatesValid <- runDatesAll <- NULL
       runTimesEnsList <- lapply(1:length(rt.ref), function(x) lapply(rt.list, "[", rt.ref[x]))
       for (i in 1:length(runTimesEnsList)) {
-            runTimesEnsList[[i]] <- lapply(1:length(runTimesEnsList[[i]]), function (j) {
+            runTimesEnsList[[i]] <- lapply(1:length(runTimesEnsList[[i]]), function(j) {
                   rt <- as.integer(runTimesEnsList[[i]][[j]] - 1)
                   .jnew("ucar.ma2.Range", rt, rt)
             })

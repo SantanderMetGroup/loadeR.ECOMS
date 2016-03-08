@@ -18,8 +18,9 @@ loadSeasonalForecast.GS5 = function(var, gds, grid, dic, latLon, runTimePars, ti
             cube$mdArray <- revArrayLatDim(cube$mdArray, grid)
       }
       # formatting initialization dates
-      for (x in 1:length(runTimePars$runDates)){
-            runTimePars$runDates[[x]] <- format(as.POSIXct(runTimePars$runDates[[x]], tz = "GMT"), format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
+      for (x in 1:length(runTimePars$runDates)) {
+            runTimePars$runDates[[x]] <- format(as.POSIXct(runTimePars$runDates[[x]], tz = "GMT"),
+                                                format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
       }
       # variable info
       Variable <- list("varName" = var, "level" = level)
@@ -27,8 +28,8 @@ loadSeasonalForecast.GS5 = function(var, gds, grid, dic, latLon, runTimePars, ti
       attr(Variable, "description") <- grid$getDescription()
       if (isStandard) {
             vocabulary <- loadeR::showVocabulary()
-            attr(Variable, "units") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 3])
-            attr(Variable, "longname") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 2])
+            attr(Variable, "units") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier), 3])
+            attr(Variable, "longname") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier), 2])
       } else {
             attr(Variable, "units") <- "undefined"
             attr(Variable, "longname") <- "undefined"

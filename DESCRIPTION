@@ -11,7 +11,7 @@ Imports:
 Suggests:
     downscaleR,
 Type: Package
-Title: R interface to the ECOMS User Data Gateway
+Title: A loadeR extension for accessing the ECOMS User Data Gateway datasets
 Version: 0.0-1
 Date: 2016-02-12
 Authors@R: as.person(c(

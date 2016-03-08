@@ -7,7 +7,8 @@
 #' @param foreTimePars A list of time selection parameters, as returned by \code{getTimeDomain}
 #' @param mdArray A n-dimensional array, as returned by \code{makeSubset}
 #' @return The transformed n dimensional array of data. See details.
-#' @author J. Bedia \email{joaquin.bedia@@gmail.com}
+#' @author J. Bedia 
+#' @keywords internal
 
 dictionaryTransformForecast <- function(dic, foreTimePars, mdArray) {
 #       dimNames <- attr(mdArray, "dimensions")

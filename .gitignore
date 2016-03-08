@@ -6,3 +6,4 @@ loadeR.ECOMS.Rproj
 ignore
 .Rprofile
 .Rbuildignore
+hs_err_pid*

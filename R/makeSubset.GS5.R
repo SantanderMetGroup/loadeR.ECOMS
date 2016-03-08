@@ -118,6 +118,9 @@ makeSubset.GS5 <- function(grid, latLon, runTimePars, foreTimePars) {
       # Date adjustment
       foreTimePars$forecastDates <- aux.foreDatesList
       foreTimePars$forecastDates <- adjustDates.forecast(foreTimePars)
+      ########################
+      print("make Subset OK")
+      ########################
       return(list("mdArray" = mdArray, "foreTimePars" = foreTimePars))
 }
 # End

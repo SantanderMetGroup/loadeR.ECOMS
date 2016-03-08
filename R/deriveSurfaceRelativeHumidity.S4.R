@@ -14,7 +14,8 @@
 #' @details The function essentially follows the same approach as \code{\link{makeSubset.S4}}, excepting that at each time step
 #' it loads more than one \dQuote{GeoGrid} (both tas and tdps) in order to compute relative humidity. 
 #' @references \url{http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables}
-#' @author J Bedia \email{joaquin.bedia@@gmail.com}, borrowing MatLab code from S. Herrera
+#' @keywords internal
+#' @author J Bedia, borrowing MatLab code from S. Herrera
 
 deriveSurfaceRelativeHumidity.S4 <- function(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars) {
       message("[", Sys.time(), "] Retrieving data subset ..." )

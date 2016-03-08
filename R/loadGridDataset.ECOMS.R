@@ -3,7 +3,7 @@
 #' Loads a user-defined subset from a gridded dataset compliant with the Common
 #'  Data Model interface
 #' 
-#' @author J. Bedia \email{joaquin.bedia@@gmail.com}
+#' @author J. Bedia 
 #' @references \url{http://www.unidata.ucar.edu/software/thredds/current/netcdf-java/tutorial/GridDatatype.html}
 
 loadGridDataset.ECOMS <- function(var, grid, dic, level, season, years, time, latLon) {

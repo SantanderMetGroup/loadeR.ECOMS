@@ -16,7 +16,7 @@
 #' @details The function essentially follows the same approach as \code{\link{makeSubset.S4}}, excepting that
 #'  at each time step it loads more than one \dQuote{GeoGrid} in order to apply the equations. 
 #' @references \url{http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables}
-#' @author J Bedia \email{joaquin.bedia@@gmail.com}, borrowing MatLab code from S. Herrera. 
+#' @author J Bedia, borrowing MatLab code from S. Herrera. 
 
 deriveSurfaceSpecificHumidity.S4 <- function(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars) {
       message("[", Sys.time(), "] Retrieving data subset ..." )

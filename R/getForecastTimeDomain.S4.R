@@ -22,7 +22,7 @@
 #' \item{doDailyMean}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
 #' to \code{\link{makeSubset.S4}} to undertake the pertinent aggregation if TRUE.}
 #' \end{itemize}
-#' @author J. Bedia \email{joaquin.bedia@@gmail.com} 
+#' @author J. Bedia 
 
 getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, aggr.d, aggr.m) {
       gcs <- grid$getCoordinateSystem()
@@ -33,11 +33,11 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, agg
       } else {
             timeResInSeconds <- gcs$getTimeAxisForRun(runTimePars$runTimeRanges[[1]]$element(0L))$getTimeResolution()$getValueInSeconds()
             if ((aggr.d == "none") & (time == "DD") & ((timeResInSeconds / 3600) < 24)) {
-                  stop("Data is sub-daily:\nA daily aggregation function must be indicated to perform daily aggregation")
+                  stop("Data is sub-daily:\nA daily aggregation function must be indicated to perform daily aggregation", call. = FALSE)
             }
             # Si es MM hay que asegurarse de que se calcula sobre dato diario
             if ((aggr.m != "none") & ((timeResInSeconds / 3600) < 24) & (time == "none")) {
-                  stop("Data is sub-daily:\nA daily aggregation function must be indicated first to perform monthly aggregation")
+                  stop("Data is sub-daily:\nA daily aggregation function must be indicated first to perform monthly aggregation", call. = FALSE)
             }
             if ((timeResInSeconds / 3600) == 24) {
                   time <- "DD"
@@ -83,7 +83,7 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, agg
                         which(foreDatesList[[x]]$hour == time)
                   })
                   if (length(timeIndList[[1]]) == 0) {
-                        stop("Non-existing verification time selected.\nCheck value of argument 'time'")
+                        stop("Non-existing verification time selected.\nCheck value of argument 'time'", call. = FALSE)
                   }
                   foreDatesList <- lapply(1:length(foreDatesList), function(x) {
                         foreDatesList[[x]][timeIndList[[x]]]

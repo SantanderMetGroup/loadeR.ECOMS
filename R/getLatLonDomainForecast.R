@@ -24,11 +24,12 @@
 #' @note The function assumes that datasets have degrees-east and degress-north as units
 #' of the corresponding X and Y axes.
 #' @references \url{https://www.unidata.ucar.edu/software/thredds/current/netcdf-java/v4.0/javadocAll/ucar/nc2/dt/GridCoordSystem.html}
-#' @author J. Bedia \email{joaquin.bedia@@gmail.com} and A. Cofin\~no
+#' @author J. Bedia and A. Cofin\~no
+#' @keywords internal
 
 getLatLonDomainForecast <- function(grid, lonLim, latLim) {
       if (any(lonLim > 180) | any(lonLim < -180) | any(latLim > 90) | any(latLim < -90)) {
-            stop("Invalid geographical coordinates. Check 'lonLim' and/or 'latLim' argument values")
+            stop("Invalid geographical coordinates. Check 'lonLim' and/or 'latLim' argument values", call. = FALSE)
       }
       message("[", Sys.time(), "] Defining geo-location parameters")
       gcs <- grid$getCoordinateSystem()

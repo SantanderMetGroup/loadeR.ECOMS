@@ -8,7 +8,7 @@
 #' @details When leadMonth equals 0, there is not a previous day for starting deaccumulation, and therefore the
 #'  first value of the time series is taken 'as is'. Otherwise, one value before the start has to be taken
 #'  to preserve time series length (this is previously done by getForecastTimeDomain.S4).
-#' @author J. Bedia \email{joaquin.bedia@@gmail.com}
+#' @author J. Bedia 
 #' @keywords internal
 
 deaccumulate <- function(x, dff) {

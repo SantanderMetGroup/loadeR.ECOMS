@@ -12,12 +12,15 @@
 #' \end{itemize}
 #' @details The input/outoputs are slightly different than getRuntimeDomain.CFS because of the 
 #' different ensemble member configuration
-#' @author J. Bedia \email{joaquin.bedia@@gmail.com}
-#' 
+#' @author J. Bedia 
+#' @keywords internal
+
 getRunTimeDomain.S4 <- function(runDatesAll, validMonth, years) {
       runTimesAll <- which(runDatesAll$mon == (validMonth - 1))
       if (length(runTimesAll) == 0) {
-            stop(paste("Incompatible 'leadMonth' and 'season' argument values.\nInitializations in", paste(month.name[unique(runDatesAll$mon + 1)], collapse = ", ")))
+            stop(paste("Incompatible 'leadMonth' and 'season' argument values.\nInitializations in", 
+                       paste(month.name[unique(runDatesAll$mon + 1)], collapse = ", ")),
+                 call. = FALSE)
       }
       runDatesValidMonth <- runDatesAll[runTimesAll]
       runTimes <- runTimesAll[which((runDatesValidMonth$year + 1900) %in% years)]

@@ -13,7 +13,8 @@
 #' \item{y}{y coordinates in ascending order}
 #' \item{revLat}{A logical indicating if the ordering of latitudes should be reversed or not}
 #' \end{itemize}
-#' @author J Bedia \email{joaquin.bedia@@gmail.com}
+#' @keywords internal
+#' @author J Bedia
 
 getXYcoordinatesForecast <- function(grid, pointXYindex, llRanges) {
       if (pointXYindex[1] >= 0) {

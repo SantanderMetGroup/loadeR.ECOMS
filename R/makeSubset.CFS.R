@@ -18,7 +18,7 @@
 #' This function performs the temporal aggregations.
 #' 
 #' @references \url{http://www.unidata.ucar.edu/software/thredds/v4.3/netcdf-java/v4.3/javadocAll/ucar/nc2/dt/grid/GeoGrid.html}
-#' @author J Bedia \email{joaquin.bedia@@gmail.com} and A. Cofi\~no
+#' @author J Bedia and A. Cofi\~no
 #' 
 makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
       message("[", Sys.time(), "] Retrieving data subset ..." )

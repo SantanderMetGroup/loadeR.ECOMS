@@ -28,6 +28,7 @@
 #'  functions for subsetting and are recicled for loading also the northward component \code{"vas"}
 #'   needed to compute the velocity module.
 #' @author J Bedia 
+#' @keywords internal
 
 deriveInterface <- function(dataset, var, dictionary, time) {
       if (dictionary == FALSE) {

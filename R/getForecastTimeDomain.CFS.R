@@ -17,7 +17,7 @@
 #' \item{dailyAggr}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
 #' to \code{\link{makeSubset.CFS}} to undertake the pertinent aggregation if TRUE.}
 #' \end{itemize}
-#' @author J. Bedia \email{joaquin.bedia@@gmail.com} 
+#' @author J. Bedia 
 #' 
 getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, time, aggr.d, aggr.m) {
       gcs <- grid$getCoordinateSystem()

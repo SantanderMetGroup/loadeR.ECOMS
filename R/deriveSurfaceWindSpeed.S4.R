@@ -16,7 +16,9 @@
 #'  corresponds to uas, and \code{grid1} to vas.
 #' @references \url{https://www.unidata.ucar.edu/software/thredds/current/netcdf-java/v4.0/javadocAll/ucar/nc2/dt/grid/GeoGrid.html}
 #' \url{http://meteo.unican.es/ecoms-udg/DataServer/ListOfVariables}
-#' @author J Bedia \email{joaquin.bedia@@gmail.com} 
+#' @author J Bedia
+#' @keywords internal 
+#' @importFrom abind abind
 
 deriveSurfaceWindSpeed.S4 <- function(gds, grid, latLon, runTimePars, memberRangeList, foreTimePars) {
       message("[", Sys.time(), "] Retrieving data subset ..." )
@@ -53,7 +55,7 @@ deriveSurfaceWindSpeed.S4 <- function(gds, grid, latLon, runTimePars, memberRang
                         # Computation of derived wss from uas and vas
                         uas <- subSet$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray()
                         vas <- subSet1$readDataSlice(-1L, -1L, -1L, -1L, latLon$pointXYindex[2], latLon$pointXYindex[1])$copyTo1DJavaArray()
-                        wss <- sqrt(uas^2 + vas^2)
+                        wss <- sqrt(uas ^ 2 + vas ^ 2)
                         uas <- NULL
                         vas <- NULL
                         aux.list2[[k]] <- array(wss, dim = shapeArray)
