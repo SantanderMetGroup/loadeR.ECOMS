@@ -17,19 +17,20 @@
 #' \item{dailyAggr}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
 #' to \code{makeSubset.GS5} to undertake the pertinent aggregation if TRUE.}
 #' \end{itemize}
+#' @keywords internal
 #' @author J. Bedia 
-#' 
-getForecastTimeDomain.GS5 <- function (grid, dic, runTimePars, time, aggr.d, aggr.m) {
+
+getForecastTimeDomain.GS5 <- function(grid, dic, runTimePars, time, aggr.d, aggr.m) {
       gcs <- grid$getCoordinateSystem()
       foreTimesList <- rep(list(bquote()), length(runTimePars$runTimeRanges)) 
       foreDatesList <- foreTimesList
       timeResInSeconds <- gcs$getTimeAxisForRun(0L)$getTimeResolution()$getValueInSeconds()
       if ((aggr.d == "none") & (time == "DD") & ((timeResInSeconds / 3600) < 24)) {
-            stop("Data is sub-daily:\nA daily aggregation function must be indicated to perform daily aggregation")
+            stop("Data is sub-daily:\nA daily aggregation function must be indicated to perform daily aggregation", call. = FALSE)
       }
       # Si es MM hay que asegurarse de que se calcula sobre dato diario
       if ((aggr.m != "none") & ((timeResInSeconds / 3600) < 24) & (time == "none")) {
-            stop("Data is sub-daily:\nA daily aggregation function must be indicated first to perform monthly aggregation")
+            stop("Data is sub-daily:\nA daily aggregation function must be indicated first to perform monthly aggregation", call. = FALSE)
       }
       if ((timeResInSeconds / 3600) == 24) {
             time <- "DD"
@@ -52,30 +53,27 @@ getForecastTimeDomain.GS5 <- function (grid, dic, runTimePars, time, aggr.d, agg
             foreTimesList[[x]] <- aux.foreTimesList
             foreDatesList[[x]] <- aux.foreDatesList
       }
-      # Subroutine to adjust forecast dates among all members for equal length (applies only for leadMonth=0 queries)
+      # Subroutine to adjust forecast dates among all members for equal length 
       aux <- rep(NA, length(foreTimesList))
       for (i in 1:length(foreTimesList)) {
             aux[i] <- length(foreTimesList[[i]][[1]])
       }
       if (length(unique(aux)) > 1) {
-            message("NOTE: some forecast times at the beginning of the initialization may be lost so all members have equal length")
-            aux.dates <- rep(list(bquote()), length(foreTimesList))
+            message("NOTE: Forecast times will be lost for some initializations so all members have equal length")
+            ind.aux <- which(c(1,diff(aux)) != 0)
+            aux.foreDates <- sapply(ind.aux, function(x) foreDatesList[[x]][[1]])
+            ref.foreDates <- Reduce(intersect, aux.foreDates)
+            aux.foreDates <- NULL
             for (i in 1:length(foreTimesList)) {
-                  aux.dates[[i]] <- head(foreDatesList[[i]][[1]], 1)
-            }
-            init <- do.call("max", aux.dates)
-            for (i in 1:length(foreTimesList)) {
-                  if (head(foreDatesList[[i]][[1]], 1) < init) {
-                        for (j in 1:length(foreTimesList[[i]])) {
-                              retain <- which(foreDatesList[[i]][[1]] >= init)
-                              foreTimesList[[i]][[j]] <- foreTimesList[[i]][[j]][retain] 
-                              foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][retain] 
-                        }
+                  retain <- which(foreDatesList[[i]][[1]] %in% ref.foreDates)
+                  for (j in 1:length(foreTimesList[[i]])) {
+                        foreTimesList[[i]][[j]] <- foreTimesList[[i]][[j]][retain]
+                        foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][retain]
                   }
             }
       }
-      aux <- aux.dates <- NULL
-      # Sub-routine for setting stride and shift along time dimension    
+      aux <- NULL
+      # Subroutine for setting stride and shift along time dimension    
       if (time == "DD" | time == "none") {
             foreTimeStride <- 1L
             foreTimeShift <- 0L
@@ -83,7 +81,7 @@ getForecastTimeDomain.GS5 <- function (grid, dic, runTimePars, time, aggr.d, agg
             time <- as.integer(time)
             timeInd <- which(foreDatesList[[1]][[1]]$hour == time)
             if (length(timeInd) == 0) {
-                  stop("Non-existing verification time selected.\nCheck value of argument 'time'")
+                  stop("Non-existing verification time selected.\nCheck value of argument 'time'", call. = FALSE)
             }
             for (i in 1:length(foreDatesList)) {
                   for (j in 1:length(foreDatesList[[i]])) {
@@ -91,10 +89,10 @@ getForecastTimeDomain.GS5 <- function (grid, dic, runTimePars, time, aggr.d, agg
                   }
             }
             foreTimeStride <- as.integer(diff(timeInd)[1])
-            foreTimeShift <- as.integer(-(timeInd[1]-1))
+            foreTimeShift <- as.integer(-(timeInd[1] - 1))
             timeInd <- NULL
       }
-      # Sub-routine for adjusting times in case of deaccumulation (unused so far in GS5)
+      # Subroutine for adjusting times in case of deaccumulation (unused so far in GS5)
       deaccumFromFirst <- NULL
       if (!is.null(dic) & dic$deaccum == 1) {
             if (foreTimesList[[1]][[1]][1] > 1) {
