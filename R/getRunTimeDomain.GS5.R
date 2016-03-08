@@ -58,6 +58,7 @@ getRunTimeDomain.GS5 <- function(dataset, season, leadMonth, runDatesAll, validM
       }
       runDatesList <- lapply(runDatesList, "as.POSIXct", format = "%Y-%m-%d %H:%M:%S", tz = "GMT", usetz = TRUE)
       runDatesEnsList <- rep(list(runDatesList), length(rt.ref))
+      runDatesList <- NULL
       runDatesEnsList <- lapply(1:length(rt.ref), function(x) lapply(runDatesEnsList[[x]], "[", rt.ref[x]))
       names(runTimesEnsList) <- names(runDatesEnsList) <- paste0("Member_", members)
       runDatesEnsList <- lapply(runDatesEnsList, function(x) do.call(c, x))

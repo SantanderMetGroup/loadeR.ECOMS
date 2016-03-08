@@ -58,7 +58,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       # Exception in NCEP due to different grids within the same dataset
       if (dataset == "NCEP_reanalysis1") {
             if (length(lonLim) == 1 || length(latLim) == 1) {
-                  stop("Single-point selections are invalid for the NCEP_reanalysis1 dataset\nConsider using a small rectangular domain")
+                  stop("Single-point selections are invalid for the NCEP_reanalysis1 dataset\nConsider using a small rectangular domain", call. = FALSE)
             }
       }
       # Note when loading gridded datasets
@@ -72,18 +72,18 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       }, error = function(e) {
             if (grepl("return status=503", e)) {
                   stop("UDG SERVICE TEMPORARILY UNAVAILABLE\nThe UDG server is temporarily unable to service your request due to maintenance downtime or capacity problems, please try again later.\n
-                        If the problem persists after 24 h please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)")
+                        If the problem persists after 24 h please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)", call. = FALSE)
             } else if (grepl("Unauthorized to open dataset", e)) {
-                  stop("UNAUTHORIZED TO OPEN DATASET\nPlease check your login details in loginUDG function.\nIf you don\'t have a valid username/password or OpenID please the UDG Administration Panel (http://www.meteo.unican.es/udg-tap/login)")
+                  stop("UNAUTHORIZED TO OPEN DATASET\nPlease check your login details in loginUDG function.\nIf you don\'t have a valid username/password or OpenID please the UDG Administration Panel (http://www.meteo.unican.es/udg-tap/login)", call. = FALSE)
             }
       })
       if (is.null(gds)) {
-            stop("Requested URL not found\nThe problem may be momentary. Try again and if the error persists please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)")      
+            stop("Requested URL not found\nThe problem may be momentary. Try again and if the error persists please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)", call. = FALSE)      
       }
       message("[", Sys.time(), "] ", "Connected successfuly")
       grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
-            stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog")
+            stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog", call. = FALSE)
       }
       # Grid datasets
       if (grepl("WFDEI|NCEP_reanalysis1|ERA_interim", dataset)) {
@@ -98,10 +98,10 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   members <- sort(members)
             }
             if (is.null(leadMonth) & dic$time_step != "static") {
-                  stop("A lead month for forecast initialization must be specified")
+                  stop("A lead month for forecast initialization must be specified", call. = FALSE)
             }
             if (leadMonth < 0 & dic$time_step != "static") {
-                  stop("Invalid lead time definition")
+                  stop("Invalid lead time definition", call. = FALSE)
             }
             if (leadMonth == 0 & dic$time_step != "static") {
                   message("NOTE: 'leadMonth = 0' selected")
@@ -109,22 +109,22 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             # Season range constraints
             if (dic$time_step != "static") {
                   if (grepl("CFSv2", dataset) & (length(season) + leadMonth) > 9) {
-                        stop("Max. forecast extent is 9 months. Reduce season length or lead month value accordingly")            
+                        stop("Max. forecast extent is 9 months. Reduce season length or lead month value accordingly", call. = FALSE)            
                   }
                   if (grepl("System4_seasonal", dataset) & (length(season) + leadMonth) > 7) {
-                        stop("Max. forecast extent is 7 months. Reduce season length or lead month value accordingly")            
+                        stop("Max. forecast extent is 7 months. Reduce season length or lead month value accordingly", call. = FALSE)            
                   }
                   if (grepl("Glosea5.*12", dataset) & (length(season) + leadMonth) > 4) {
-                        stop("Max. forecast extent is 130 days. Reduce season length or lead month value accordingly")            
+                        stop("Max. forecast extent is 130 days. Reduce season length or lead month value accordingly", call. = FALSE)            
                   }
                   if (grepl("Glosea5.*24", dataset) & (length(season) + leadMonth) > 4) {
-                        stop("Max. forecast extent is 120 days. Reduce season length or lead month value accordingly")            
+                        stop("Max. forecast extent is 120 days. Reduce season length or lead month value accordingly", call. = FALSE)            
                   }
                   if (grepl("System4_annual", dataset) & (length(season) + leadMonth) > 13) {
-                        stop("Max. forecast extent is 13 months. Reduce season length or lead month value accordingly")            
+                        stop("Max. forecast extent is 13 months. Reduce season length or lead month value accordingly", call. = FALSE)            
                   }
                   if (grepl("SMHI-EC-EARTH_EUPORIAS", dataset) & (length(season) + leadMonth) > 4) {
-                        stop("Max. forecast extent is 4 months. Reduce season length or lead month value accordingly")            
+                        stop("Max. forecast extent is 4 months. Reduce season length or lead month value accordingly", call. = FALSE)            
                   }
             }
             leadMonth <- as.integer(leadMonth)
