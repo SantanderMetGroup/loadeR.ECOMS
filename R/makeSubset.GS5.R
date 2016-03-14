@@ -85,11 +85,11 @@ makeSubset.GS5 <- function(grid, latLon, runTimePars, foreTimePars) {
                         } else {
                               dimNamesRef[mar]
                         }
-#                         aux.foreDatesList[[i]][[j]] <- if (aux.foreDatesList[[i]][[j]][1]$mday != 1) { # case of lm0 precip
-#                               append(aux.foreDatesList[[i]][[j]][1], aux.foreDatesList[[i]][[j]][which(day == 1)])
-#                         } else {
-                              aux.foreDatesList[[i]][[j]] <- aux.foreDatesList[[i]][[j]][1]      
-#                         }
+                        aux.foreDatesList[[i]][[j]] <- if (aux.foreDatesList[[i]][[j]][1]$mday != 1) { # case of lm0 precip
+                              append(aux.foreDatesList[[i]][[j]][1], aux.foreDatesList[[i]][[j]][which(day == 1)])
+                        } else {
+                              aux.foreDatesList[[i]][[j]][which(day == 1)]      
+                        }
                   }
             }
             if (foreTimePars$aggr.m != "none") {
