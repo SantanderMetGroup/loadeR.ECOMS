@@ -1,9 +1,5 @@
 loadeR.ECOMS
 ============
 
-* First package release superseding former ecomsUDG.Raccess package capabilitites:
-  * GloSea5 hindcasts available
-  * Updated attributes list 
-  * Dataset URLs mapped from a new lookup table as a csv text file.
-  * Other minor bug fixes and enhancements
-  * To see all new available variables and datasets go to: http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog
+* Bug fix in GloSea5 24 member data retrieval
+* Other minor bug fixes and enhancements
