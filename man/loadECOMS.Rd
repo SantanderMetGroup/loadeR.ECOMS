@@ -63,7 +63,7 @@ Integer value indicating the lead forecast time, relative to the first month of 
 
 
 \value{
-A list with the following elements providing the necessary information for data representation and analysis:
+A list with the following components providing the necessary information for data representation and analysis:
 \item{Variable}{A list with two elements, and some other attributes including units and temporal aggregation details:}
 \itemize{ 
       \item \code{varName} A character string indicating which is the variable returned. Same as value provided for argument \code{var}
@@ -101,6 +101,10 @@ For the possible values that the argument \code{var} can take for each dataset a
 
 
 The different nature of the various databases, models and variables, and the idiosyncratic naming and storage conventions often applied by the different modelling centres, makes necessary a previous homogeneization across datasets in order to implement a truly user-friendly toolbox for data access. This package achieves this aim by defining a common vocabulary to all climate datasets. The particular variables of each dataset are translated -and transformed if necessary- to the standard variables by means of a dictionary, provided by the argument \code{dictionary}. In essence, the \file{dictionary} is a csv file particular for each individual dataset, containing the necessary information for performing the unit conversions to match the standard variable definitions contained in the vocabulary. This feature is described in more detail in the \href{http://meteo.unican.es/trac/wiki/udg/ecoms/RPackage/homogeneization}{data homogenization section} of the ECOMS UDG wiki. 
+
+\strong{Deaccumulation (System4 models)}
+
+In case of variables that are deaccumulated (e.g. precipitation amount and radiations in System4 models), it must be noted that the original forecast dates correspond to the start of each verification step. Thus, the first value is always zero, and then it starts accumulating. The deaccumulation routine computes a lagged difference between forecast dates (R function \code{\link{diff}}) to provide the deaccumulated series. Therefore, the first value is always lost. To avoid a systematic loss of the first day, when a deaccumulable variable is requested the function internally loads the previous time step (e.g., \code{season = c(12,1,2)} for daily precipitation, the forecast date 30-Nov is also loaded, being the first value of the series -1st December- the difference between 1 december and 30 november in the model). As a result, in \code{leadMonth = 0} requests, the first day of the series is lost, because there is not a previous forecast time in the initialization to start deaccumulating.
 
 \strong{Ensemble member definition}
 
