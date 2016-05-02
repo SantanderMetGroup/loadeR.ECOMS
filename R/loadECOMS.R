@@ -1,3 +1,47 @@
+# loadECOMS.R Load a user-defined spatio-temporal slice from decadal forecasts
+#
+#     Copyright (C) 2015 Santander Meteorology Group (http://www.meteo.unican.es)
+#
+#     This program is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+# 
+#     This program is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+# 
+#     You should have received a copy of the GNU General Public License
+#     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+#' @title Load a field from decadal forecasts
+#' @description Load a user-defined spatio-temporal slice from decadal forecasts
+#' @import rJava
+#' 
+#' @template templateParams
+#' @param members Vector of integers indicating the members to be loaded.
+#' @param time A character vector indicating the temporal filtering/aggregation 
+#' of the output data. Default to \code{"none"}, which returns the original time 
+#' series as stored in the dataset. For sub-daily variables, instantantaneous data at 
+#' selected verification times can be filtered using one of the character strings 
+#' \code{"00"}, \code{"03"}, \code{"06"}, \code{"09"}, \code{"12"}, \code{"15"},
+#'  \code{"18"}, \code{"21"},and \code{"00"} when applicable. If daily aggregated data are 
+#' required use \code{"DD"}. If the requested variable is static (e.g. orography) it will be ignored. 
+#' See the next arguments for time aggregation options.
+#' @param aggr.d Character string. Function of aggregation of sub-daily data for daily data calculation. 
+#' Currently accepted values are \code{"none"}, \code{"mean"}, \code{"min"}, \code{"max"} and \code{"sum"}.
+#' @param aggr.m Same as \code{aggr.d}, bun indicating the aggregation function to compute monthly from daily data.
+#' If \code{aggr.m = "none"} (the default), no monthly aggregation is undertaken.
+#' 
+#' @template templateReturnGridData
+#' @template templateDicDetails  
+#' @template templateGeolocation
+#' @export
+#' @author J. Bedia, S. Herrera, M. Iturbide, J.M. Gutierrez 
+#' @family loading.grid
+
+
 loadECOMS <- function(dataset, var, dictionary = TRUE, 
                      members = NULL, lonLim = NULL, latLim = NULL, season = NULL,
                      years = NULL, leadMonth = 1, time = "none",
@@ -88,6 +132,8 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       # Grid datasets
       if (grepl("WFDEI|NCEP_reanalysis1|ERA_interim", dataset)) {
             latLon <- getLatLonDomain(grid, lonLim, latLim)
+            proj <- grid$getCoordinateSystem()$getProjection()
+            if (!proj$isLatLon()) latLon <- adjustRCMgrid(gds, latLon, lonLim, latLim) 
             out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m)
       # Forecasts
       } else {
@@ -128,7 +174,9 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   }
             }
             leadMonth <- as.integer(leadMonth)
-            latLon <- getLatLonDomainForecast(grid, lonLim, latLim)
+            latLon <- getLatLonDomain(grid, lonLim, latLim)
+            proj <- grid$getCoordinateSystem()$getProjection()
+            if (!proj$isLatLon()) latLon <- adjustRCMgrid(gds, latLon, lonLim, latLim) 
             runTimePars <- getRunTimeDomain(dataset, grid, members, season, years, leadMonth)
             if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
                   out <- loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
