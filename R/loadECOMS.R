@@ -129,12 +129,12 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       if (is.null(grid)) {
             stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog", call. = FALSE)
       }
+      latLon <- getLatLonDomain(grid, lonLim, latLim)
+      proj <- grid$getCoordinateSystem()$getProjection()
+      if (!proj$isLatLon()) latLon <- adjustRCMgrid(gds, latLon, lonLim, latLim) 
       # Grid datasets
       if (grepl("WFDEI|NCEP_reanalysis1|ERA_interim", dataset)) {
-            latLon <- getLatLonDomain(grid, lonLim, latLim)
-            proj <- grid$getCoordinateSystem()$getProjection()
-            if (!proj$isLatLon()) latLon <- adjustRCMgrid(gds, latLon, lonLim, latLim) 
-            out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m)
+           out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m)
       # Forecasts
       } else {
             if (dic$time_step == "static") {
@@ -174,9 +174,6 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   }
             }
             leadMonth <- as.integer(leadMonth)
-            latLon <- getLatLonDomain(grid, lonLim, latLim)
-            proj <- grid$getCoordinateSystem()$getProjection()
-            if (!proj$isLatLon()) latLon <- adjustRCMgrid(gds, latLon, lonLim, latLim) 
             runTimePars <- getRunTimeDomain(dataset, grid, members, season, years, leadMonth)
             if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
                   out <- loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
