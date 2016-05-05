@@ -11,7 +11,7 @@
 #'  @param members Numeric vector indicating the members to be retrieved.
 #'  @param latLon A list of geolocation parameters as returned by \code{getLatLonDomainForecast}
 #'  @param runTimePars A list of parameters defining de initializations to be taken and other.
-#'  auxiliary parameters, as returned by \code{getRunTimeDomain}.
+#'  auxiliary parameters, as returned by \code{getRunTimeDomain.ECOMS}.
 #'  @param time Verification time. See \code{\link{loadSeasonalForecast}}
 #'  @param derInterface A list of components indicating the interface for derived variables,
 #'   when relevant. See details.
@@ -27,7 +27,8 @@
 #'   \sQuote{derive} prefix.
 #'  @references \url{http://meteo.unican.es/ecoms-udg/ListOfVariables}
 #'  @author J. Bedia 
-#'  @importFrom loadeR showVocabulary
+#'  @importFrom loadeR UDG.vocabulary
+#'  @importFrom loadeR dictionaryTransformForecast
 
 loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface) {    
       memberRangeList <- getMemberDomain.S4(grid, dataset, members)
@@ -42,7 +43,7 @@ loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLo
       foreTimePars <- NULL
       if (!is.null(dic)) {
             isStandard <- TRUE
-            cube$mdArray <- dictionaryTransformForecast(dic, cube$foreTimePars, cube$mdArray)
+            cube$mdArray <- dictionaryTransformForecast(dic, cube$mdArray)
             var <- derInterface$origVar
       } else {
             isStandard <- FALSE
@@ -61,9 +62,9 @@ loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLo
       attr(Variable, "use_dictionary") <- isStandard
       attr(Variable, "description") <- grid$getDescription()
       if (isStandard) {
-            vocabulary <- loadeR::showVocabulary()
-            attr(Variable, "units") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 3])
-            attr(Variable, "longname") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier,), 2])
+            vocabulary <- UDG.vocabulary()
+            attr(Variable, "units") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier), 3])
+            attr(Variable, "longname") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier), 2])
       } else {
             attr(Variable, "units") <- "undefined"
             attr(Variable, "longname") <- "undefined"

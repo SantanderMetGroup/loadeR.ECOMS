@@ -9,7 +9,7 @@ loadSeasonalForecast.GS5 = function(var, gds, grid, dic, latLon, runTimePars, ti
       }
       if (!is.null(dic)) {
             isStandard <- TRUE
-            cube$mdArray <- dictionaryTransformForecast(dic, cube$foreTimePars, cube$mdArray)
+            cube$mdArray <- loadeR::dictionaryTransformForecast(dic, cube$mdArray)
             var <- derInterface$origVar
       } else {
             isStandard <- FALSE
@@ -27,7 +27,7 @@ loadSeasonalForecast.GS5 = function(var, gds, grid, dic, latLon, runTimePars, ti
       attr(Variable, "use_dictionary") <- isStandard
       attr(Variable, "description") <- grid$getDescription()
       if (isStandard) {
-            vocabulary <- loadeR::showVocabulary()
+            vocabulary <- UDG.vocabulary()
             attr(Variable, "units") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier), 3])
             attr(Variable, "longname") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier), 2])
       } else {

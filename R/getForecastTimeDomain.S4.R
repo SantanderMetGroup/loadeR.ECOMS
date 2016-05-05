@@ -5,7 +5,7 @@
 #' @param grid a java \sQuote{GeoGrid}
 #' @param dataset character string of the dataset
 #' @param dictionary dictionary information
-#' @param runTimePars A list of elements as returned by \code{\link{getRunTimeDomain}}
+#' @param runTimePars A list of elements as returned by \code{\link{getRunTimeDomain.ECOMS}}
 #' @param time Verification time.
 #' @return A list with the following elements:
 #' \begin{itemize}

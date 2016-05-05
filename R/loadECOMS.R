@@ -110,21 +110,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             message("NOTE: The dataset is not a forecast. Argument 'members' will be ignored")      
       }
       # Discover dataset and open grid
-      message("[", Sys.time(), "] ", "Opening connection with the UDG...")
-      gds <- tryCatch(expr = {
-            J("ucar.nc2.dt.grid.GridDataset")$open(url$URL)
-      }, error = function(e) {
-            if (grepl("return status=503", e)) {
-                  stop("UDG SERVICE TEMPORARILY UNAVAILABLE\nThe UDG server is temporarily unable to service your request due to maintenance downtime or capacity problems, please try again later.\n
-                        If the problem persists after 24 h please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)", call. = FALSE)
-            } else if (grepl("Unauthorized to open dataset", e)) {
-                  stop("UNAUTHORIZED TO OPEN DATASET\nPlease check your login details in loginUDG function.\nIf you don\'t have a valid username/password or OpenID go to the UDG Administration Panel (http://www.meteo.unican.es/udg-tap/login)", call. = FALSE)
-            }
-      })
-      if (is.null(gds)) {
-            stop("Requested URL not found\nThe problem may be momentary. Try again and if the error persists please drop a ticket (http://meteo.unican.es/trac/wiki/udg/ecoms)", call. = FALSE)      
-      }
-      message("[", Sys.time(), "] ", "Connected successfuly")
+      gds <- openDataset(url$URL)
       grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
             stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog", call. = FALSE)
@@ -174,7 +160,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   }
             }
             leadMonth <- as.integer(leadMonth)
-            runTimePars <- getRunTimeDomain(dataset, grid, members, season, years, leadMonth)
+            runTimePars <- getRunTimeDomain.ECOMS(dataset, grid, members, season, years, leadMonth)
             if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
                   out <- loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
             } else if (grepl("CFSv2", dataset)) {

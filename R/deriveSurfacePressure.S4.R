@@ -8,7 +8,7 @@
 #' for subsetting parameter retrieval (see \code{\link{deriveInterface}} for details).
 #' @param latLon A list of geolocation parameters, as returned by getLatLonDomainForecast
 #' @param memberRangeList A list of ensemble java ranges as returned by getMemberDomain.S4
-#' @param runTimePars A list of run time definition parameters, as returned by getRunTimeDomain
+#' @param runTimePars A list of run time definition parameters, as returned by getRunTimeDomain.ECOMS
 #' @param foreTimePars A list of forecast time definition parameters, as returned by getForecastTimeDomain.S4
 #' @return A n-dimensional array. Dimensions are labelled by the \dQuote{dimnames} attribute
 #' @details The function essentially follows the same approach as \code{\link{makeSubset.S4}}, excepting that at each time step

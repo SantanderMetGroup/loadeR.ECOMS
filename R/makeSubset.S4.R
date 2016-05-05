@@ -5,7 +5,7 @@
 #' 
 #' @param grid An input java GeoGrid
 #' @param latLon A list of geolocation parameters, as returned by getLatLonDomainForecast
-#' @param runTimePars A list of run time definition parameters, as returned by getRunTimeDomain
+#' @param runTimePars A list of run time definition parameters, as returned by getRunTimeDomain.ECOMS
 #' @param memberRangeList A list of ensemble java ranges as returned by getMemberDomain.S4
 #' @param foreTimePars A list of forecast time definition parameters, as returned by getForecastTimeDomain.S4
 #' @param verticalPars A list with vertical level definition, as returned by \code{getVerticalLevelPars.ECOMS}. Only the last element (the kava index position) is used

@@ -3,7 +3,7 @@
 #' This is a subroutine of \code{\link{loadSeasonalForecast.CFS}}
 #' 
 #' @param gcs a java \sQuote{GridCoordinateSystem}
-#' @param runTimePars A list of elements as returned by \code{\link{getRunTimeDomain}}
+#' @param runTimePars A list of elements as returned by \code{\link{getRunTimeDomain.ECOMS}}
 #' @return A list with the following elements:
 #' \begin{itemize}
 #' \item{forecastDates}{A list with POSIXlt dates defining the start and end of the 

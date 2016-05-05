@@ -23,8 +23,9 @@
 #' runtime configurations. The function also takes care of selecting the appropriate initialization
 #' in the case of year-crossing seasons 
 #' @author J Bedia 
+#' @keywords internal
 
-getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
+getRunTimeDomain.ECOMS <- function(dataset, grid, members, season, years, leadMonth) {
       message("[", Sys.time(), "] Defining initialization time parameters")
       gcs <- grid$getCoordinateSystem()
       if (is.null(season)) {
@@ -36,7 +37,7 @@ getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
       endDay <- javaCalendarDate2rPOSIXlt(rt.axis$getCalendarDateRange()$getEnd())
       startYear <- startDay$year + 1900
       endYear <- endDay$year + 1900
-      allYears <- startYear : endYear
+      allYears <- startYear:endYear
       if (is.null(years)) {
             if (grepl("CFSv2", dataset)) {
                   years <- 1983:2009
@@ -74,7 +75,7 @@ getRunTimeDomain <- function(dataset, grid, members, season, years, leadMonth) {
       if (!identical(season, sort(season))) {
             year.cross.ind <- which(diff(season) < 0) # indicates the position of year-crossing within season
             if (years[1] == startYear) { 
-                  warning(paste("First forecast date in dataset: ", startDay, ".\nRequested seasonal data for ", startYear," not available", sep=""))
+                  warning(paste0("First forecast date in dataset: ", startDay, ".\nRequested seasonal data for ", startYear," not available"))
                   years <- years[-length(years)]
             } else {
                   years <- years - 1      

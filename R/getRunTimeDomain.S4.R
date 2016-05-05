@@ -1,6 +1,6 @@
 #' Provides run time definition for ECMWF's S4 models
 #' 
-#' Output is passed to \code{getRunTimeDomain} for used-defined subsets.
+#' Output is passed to \code{getRunTimeDomain.ECOMS} for used-defined subsets.
 #' 
 #' @param runDatesAll A POSIXlt vector with all runtime dates in the dataset    
 #' @param validMonth Integer. Initialization month.

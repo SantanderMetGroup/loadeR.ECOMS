@@ -5,7 +5,7 @@
 #' 
 #' @param grid An input java GeoGrid
 #' @param latLon A list of geolocation parameters, as returned by getLatLonDomainForecast
-#' @param runTimePars A list of run time definition parameters, as returned by \code{getRunTimeDomain}
+#' @param runTimePars A list of run time definition parameters, as returned by \code{getRunTimeDomain.ECOMS}
 #' @param foreTimePars A list of forecast time definition parameters, as returned by \code{getForecastTimeDomain.CFS}
 #' @return A list with the n-dimensional array of data and the modified foreTimePars with adjusted dates depending on the
 #' temporal aggregation performed.
