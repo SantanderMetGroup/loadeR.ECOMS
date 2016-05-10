@@ -2,4 +2,7 @@ loadeR.ECOMS
 ============
 
 * Bug fix in GloSea5 24 member data retrieval
+* Improved authentication user interface
+* Improved remote connection error handling
+* Internal changes to import from loadeR
 * Other minor bug fixes and enhancements
