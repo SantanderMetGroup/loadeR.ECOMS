@@ -1,8 +1,5 @@
 loadeR.ECOMS
 ============
 
-* New variables available in CFS:
-  * Surface pressure
-  * Specific humidity
-  * Relative humidity (derived on-the-fly)
+* Bug fix in temporal aggregations of year-crossing seasons
 * Other minor bug fixes and enhancements
