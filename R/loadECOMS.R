@@ -1,4 +1,4 @@
-# loadECOMS.R Load a user-defined spatio-temporal slice from decadal forecasts
+# loadECOMS.R Load a user-defined spatio-temporal slice from ECOMS-UDG datasets
 #
 #     Copyright (C) 2015 Santander Meteorology Group (http://www.meteo.unican.es)
 #

@@ -1,7 +1,7 @@
 Package: loadeR.ECOMS
 Depends:
-    R(>= 3.0.0),
-    loadeR(>= 1.0.0),
+    R(>= 3.1.0),
+    loadeR(>= 1.0.1),
     rJava
 Imports:
     loadeR.java (>= 1.0.0),
@@ -12,8 +12,8 @@ Suggests:
     downscaleR,
 Type: Package
 Title: A loadeR extension for accessing the ECOMS User Data Gateway datasets
-Version: 1.0-0
-Date: 2016-05-10
+Version: 1.0-1
+Date: 2016-06-21
 Authors@R: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [aut]",
     "Joaquin Bedia <bediaj@unican.es> [ctb,cre]",

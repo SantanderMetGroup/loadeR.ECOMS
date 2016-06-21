@@ -1,8 +1,8 @@
 loadeR.ECOMS
 ============
 
-* Bug fix in GloSea5 24 member data retrieval
-* Improved authentication user interface
-* Improved remote connection error handling
-* Internal changes to import from loadeR
+* New variables available in CFS:
+  * Surface pressure
+  * Specific humidity
+  * Relative humidity (derived on-the-fly)
 * Other minor bug fixes and enhancements
