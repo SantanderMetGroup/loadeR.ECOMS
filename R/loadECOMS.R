@@ -43,13 +43,14 @@
 
 
 loadECOMS <- function(dataset, var, dictionary = TRUE, 
-                     members = NULL, lonLim = NULL, latLim = NULL, season = NULL,
+                     members = NULL, lonLim = NULL, latLim = NULL, season = NULL, url = NULL,
                      years = NULL, leadMonth = 1, time = "none",
                      aggr.d = "none", aggr.m = "none") {
       dataset <- match.arg(dataset, c("System4_seasonal_15",
                                       "System4_seasonal_51",
                                       "System4_annual_15",
                                       "CFSv2_seasonal",
+                                      "CFSv2_seasonal_operative",
                                       "SMHI-EC-EARTH_EUPORIAS",
                                       "Glosea5_seasonal_12",
                                       "Glosea5_seasonal_24",
@@ -68,22 +69,33 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       aux.level <- findVerticalLevel(derInterface$leadVar)
       var <- aux.level$var
       level <- aux.level$level
-      url <- dataURL(dataset)
+      if(is.null(url)){
+            url <- dataURL(dataset)
+      }else{
+            url = list("URL" = url, "excludeVars" = NULL)
+      }
       # Dictionary/shortName search
-      if (isTRUE(dictionary)) {
-            dicPath <- file.path(find.package("loadeR.ECOMS"), "dictionaries", paste0(dataset, ".dic"))
-            # for devel only 
-            # dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
+      if(typeof(dictionary)=="character"){
+            dicPath = file.path(dictionary, paste0(dataset, ".dic"));
+            dictionary = TRUE;
             dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)
             shortName <- dic$short_name
-            if (grepl("System4\\_seasonal\\_15", dataset) & grepl("^u$|^v$|^z$|^t$|^q$", shortName)) {
-                  shortName <- paste0(dic$short_name, level, "mb")
-            } else if (grepl("ERA\\_interim", dataset) & grepl("^U$|^V$|^Z$|^T$|^Q$", shortName)) {
-                  shortName <- paste0(dic$short_name, level)
+      }else{
+            if (isTRUE(dictionary)) {
+                  dicPath <- file.path(find.package("loadeR.ECOMS"), "dictionaries", paste0(dataset, ".dic"))
+                  # for devel only 
+                  # dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
+                  dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)
+                  shortName <- dic$short_name
+                  if (grepl("System4\\_seasonal\\_15", dataset) & grepl("^u$|^v$|^z$|^t$|^q$", shortName)) {
+                        shortName <- paste0(dic$short_name, level, "mb")
+                  } else if (grepl("ERA\\_interim", dataset) & grepl("^U$|^V$|^Z$|^T$|^Q$", shortName)) {
+                        shortName <- paste0(dic$short_name, level)
+                  }
+            } else {
+                  dic <- NULL
+                  shortName <- var
             }
-      } else {
-            dic <- NULL
-            shortName <- var
       }
       # Static variable requests
       if (dic$time_step == "static") {

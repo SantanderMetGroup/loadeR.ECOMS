@@ -39,16 +39,28 @@ getRunTimeDomain.ECOMS <- function(dataset, grid, members, season, years, leadMo
       endYear <- endDay$year + 1900
       allYears <- startYear:endYear
       if (is.null(years)) {
-            if (grepl("CFSv2", dataset)) {
+            if (grepl("CFSv2_seasonal_operative", dataset)) {
+                  years <- 2015:as.numeric(format(Sys.time(),"%Y"))
+            }else if (grepl("CFSv2", dataset)) {
                   years <- 1983:2009
             } else {
                   years <- allYears
             }
       } 
       if (grepl("CFSv2", dataset)) {
-            aux <- intersect(years, 1983:2009)      
-            if (!identical(as.integer(aux), as.integer(years))) {
-                  warning("Available years in dataset: 1983-2009\nSome years were removed")
+            if (grepl("CFSv2_seasonal_operative", dataset)) {
+                  aux <- intersect(years, 2015:as.numeric(format(Sys.time(),"%Y")))
+                  if(length(aux)>1){
+                    stop('Multiple year requests are not allowed for CFSv2 operative')
+                  }
+                  if(length(aux)<1){
+                    stop('Requested year not available')
+                  }
+            }else{
+                  aux <- intersect(years, 1983:2009)
+                  if (!identical(as.integer(aux), as.integer(years))) {
+                        warning("Available years in dataset: 1983-2009\nSome years were removed")
+                  }
             }
             years <- aux
             aux <- NULL
@@ -85,7 +97,7 @@ getRunTimeDomain.ECOMS <- function(dataset, grid, members, season, years, leadMo
       }
       # runtime parameters depending on model
       if (grepl("CFSv2", dataset)) {
-            rtPars <- getRunTimeDomain.CFS(runDatesAll, validMonth, members, years)
+            rtPars <- getRunTimeDomain.CFS(runDatesAll, validMonth, members, years, dataset)
             # years <- rtPars$years
       } else if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
             rtPars <- getRunTimeDomain.S4(runDatesAll, validMonth, years)  

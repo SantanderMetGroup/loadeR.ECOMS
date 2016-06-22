@@ -23,7 +23,7 @@
 #' @references \url{http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2}      
 #' @author J. Bedia 
 
-getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years) {
+getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years, datasetName) {
       if (is.null(members)) {
             members <- 1:15      
       }
@@ -31,23 +31,42 @@ getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years) {
       m <- runDatesAll$mon + 1
       y <- runDatesAll$year + 1900
       h <- runDatesAll$hour
-      jan.inits <- which(((d == 12 | d == 17 | d == 22 | d == 27) & (m == 12 & h != 6)) | ((d == 1 | d == 6) & m == 1))
-      feb.inits <- which(((d == 11 | d == 16 | d == 21 | d == 26 | d == 31) & m == 1) | (d == 5 & m == 2))
-      mar.inits <- which(((d == 10 | d == 15 | d == 20 | d == 25) & m == 2) | (((d == 2 & h != 0) | d == 7) & (m == 3)))
-      apr.inits <- which(((d == 12 | d == 17 | d == 22 | d == 27) & m == 3) | ((d == 1 | d == 6) & m == 4))
-      may.inits <- which(((d == 11 | d == 16 | d == 21 | d == 26) & m == 4) | ((d == 1 | d == 6) & m == 5))
-      jun.inits <- which(((d == 11 | d == 16 | d == 21 | d == 26 | d == 31) & m == 5) | (d == 5 & m == 6))
-      jul.inits <- which(((d == 10 | d == 15 | d == 20 | d == 25 | d == 30) & m == 6) | (d == 5 & m == 7))
-      aug.inits <- which(((d == 10 | d == 15 | d == 20 | d == 25 | d == 30) & m == 7) | (d == 4 & m == 8))
-      sep.inits <- which(((d == 9 | d == 14 | d == 19 | d == 24 | d == 29) & m == 8) | (d == 3 & m == 9))
-      oct.inits <- which(((d == 8 | d == 13 | d == 18 | d == 23 | d == 28) & m == 9) | (d == 3 & m == 10))
-      nov.inits <- which(((d == 8 | d == 13 | d == 18 | d == 23 | d == 28) & m == 10) | ((d == 2 | d == 7) & (m == 11 & h != 0)))
-      dec.inits <- which(((d == 12 | d == 17 | d == 22 | d == 27) & (m == 11 & h != 0)) | ((d == 2 | d == 7) & (m == 12 & h != 6)))
+      if(identical(datasetName,'CFSv2_seasonal_operative')){
+        jan.inits <- which(((d == 12 | d == 17 | d == 22 | d == 27) & (m == 12)) | ((d == 1 | d == 6) & m == 1))
+        feb.inits <- which(((d == 11 | d == 16 | d == 21 | d == 26 | d == 31) & m == 1) | (d == 5 & m == 2))
+        mar.inits <- which(((d == 10 | d == 15 | d == 20 | d == 25) & m == 2) | (((d == 2) | d == 7) & (m == 3)))
+        apr.inits <- which(((d == 12 | d == 17 | d == 22 | d == 27) & m == 3) | ((d == 1 | d == 6) & m == 4))
+        may.inits <- which(((d == 11 | d == 16 | d == 21 | d == 26) & m == 4) | ((d == 1 | d == 6) & m == 5))
+        jun.inits <- which(((d == 11 | d == 16 | d == 21 | d == 26 | d == 31) & m == 5) | (d == 5 & m == 6))
+        jul.inits <- which(((d == 10 | d == 15 | d == 20 | d == 25 | d == 30) & m == 6) | (d == 5 & m == 7))
+        aug.inits <- which(((d == 10 | d == 15 | d == 20 | d == 25 | d == 30) & m == 7) | (d == 4 & m == 8))
+        sep.inits <- which(((d == 9 | d == 14 | d == 19 | d == 24 | d == 29) & m == 8) | (d == 3 & m == 9))
+        oct.inits <- which(((d == 8 | d == 13 | d == 18 | d == 23 | d == 28) & m == 9) | (d == 3 & m == 10))
+        nov.inits <- which(((d == 8 | d == 13 | d == 18 | d == 23 | d == 28) & m == 10) | ((d == 2 | d == 7) & (m == 11)))
+        dec.inits <- which(((d == 12 | d == 17 | d == 22 | d == 27) & (m == 11)) | ((d == 2 | d == 7) & (m == 12)))
+      }else{
+        jan.inits <- which(((d == 12 | d == 17 | d == 22 | d == 27) & (m == 12 & h != 6)) | ((d == 1 | d == 6) & m == 1))
+        feb.inits <- which(((d == 11 | d == 16 | d == 21 | d == 26 | d == 31) & m == 1) | (d == 5 & m == 2))
+        mar.inits <- which(((d == 10 | d == 15 | d == 20 | d == 25) & m == 2) | (((d == 2 & h != 0) | d == 7) & (m == 3)))
+        apr.inits <- which(((d == 12 | d == 17 | d == 22 | d == 27) & m == 3) | ((d == 1 | d == 6) & m == 4))
+        may.inits <- which(((d == 11 | d == 16 | d == 21 | d == 26) & m == 4) | ((d == 1 | d == 6) & m == 5))
+        jun.inits <- which(((d == 11 | d == 16 | d == 21 | d == 26 | d == 31) & m == 5) | (d == 5 & m == 6))
+        jul.inits <- which(((d == 10 | d == 15 | d == 20 | d == 25 | d == 30) & m == 6) | (d == 5 & m == 7))
+        aug.inits <- which(((d == 10 | d == 15 | d == 20 | d == 25 | d == 30) & m == 7) | (d == 4 & m == 8))
+        sep.inits <- which(((d == 9 | d == 14 | d == 19 | d == 24 | d == 29) & m == 8) | (d == 3 & m == 9))
+        oct.inits <- which(((d == 8 | d == 13 | d == 18 | d == 23 | d == 28) & m == 9) | (d == 3 & m == 10))
+        nov.inits <- which(((d == 8 | d == 13 | d == 18 | d == 23 | d == 28) & m == 10) | ((d == 2 | d == 7) & (m == 11 & h != 0)))
+        dec.inits <- which(((d == 12 | d == 17 | d == 22 | d == 27) & (m == 11 & h != 0)) | ((d == 2 | d == 7) & (m == 12 & h != 6))) 
+      }
       init.list <- lapply(ls(pattern = "\\.inits$")[pmatch(tolower(month.abb), ls(pattern = "\\.inits$"))], function(x) get(x))
+      if(identical(datasetName,'CFSv2_seasonal_operative')){
+        nmem <- length(init.list[[validMonth]] )
+      }else{
+        nmem <- length(init.list[[validMonth]] ) / 28        
+      }
       rm(list = c("d", "m", "y", ls(pattern = "\\.inits$")))
       runTimesValidMonth <- init.list[[validMonth]]
-      runDatesValidMonth <- runDatesAll[runTimesValidMonth]
-      nmem <- length(init.list[[validMonth]] ) / 28
+      runDatesValidMonth <- runDatesAll[runTimesValidMonth]      
       init.list <- NULL
       if (length(members) > nmem | any(members > nmem)) {
             stop("Maximum number of members for this initialization is ", nmem, "\nSee details in <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2>")
