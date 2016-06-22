@@ -54,7 +54,7 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
                   # Daily aggregator
                   if (foreTimePars$aggr.d != "none") {
                         aux.string <- paste((foreTimePars$forecastDates[[i]][[j]])$mon, (foreTimePars$forecastDates[[i]][[j]])$mday, sep = "-")
-                        aux.factor <- factor(aux.string, levels = unique(aux.string))
+                        aux.factor <- factor(aux.string, levels = unique(aux.string), ordered = TRUE)
                         mar <- grep("^time", dimNamesRef, invert = TRUE)
                         aux.list1[[j]] <- apply(aux.list1[[j]], mar, function(x) {
                               tapply(x, INDEX = aux.factor, FUN = foreTimePars$aggr.d, na.rm = TRUE)
@@ -67,6 +67,7 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
                   # Monthly aggregator
                   if (foreTimePars$aggr.m != "none") {
                         mes <- (foreTimePars$forecastDates[[i]][[j]])$mon
+                        mes <- factor(mes, levels = unique(mes), ordered = TRUE)
                         day <- (foreTimePars$forecastDates[[i]][[j]])$mday
                         mar <- grep("^time", dimNamesRef, invert = TRUE)
                         aux.list1[[j]] <- apply(aux.list1[[j]], MARGIN = mar, FUN = function(x) {

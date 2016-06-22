@@ -62,7 +62,7 @@ deriveSurfaceRelativeHumidity.S4 <- function(gds, grid, latLon, runTimePars, mem
                   # Daily aggregator
                   if (foreTimePars$aggr.d != "none") {
                         aux.string <- paste((aux.foreDatesList[[i]][[j]])$mon, (aux.foreDatesList[[i]][[j]])$mday, sep = "-")
-                        aux.factor <- factor(aux.string, levels = unique(aux.string))
+                        aux.factor <- factor(aux.string, levels = unique(aux.string), ordered = TRUE)
                         mar <- grep("^time", dimNamesRef, invert = TRUE)
                         aux.list1[[j]] <- apply(aux.list1[[j]], mar, function(x) {
                               tapply(x, INDEX = aux.factor, FUN = foreTimePars$aggr.d, na.rm = TRUE)
@@ -76,6 +76,7 @@ deriveSurfaceRelativeHumidity.S4 <- function(gds, grid, latLon, runTimePars, mem
                   if (foreTimePars$aggr.m != "none") {
                         mes <- (aux.foreDatesList[[i]][[j]])$mon
                         day <- (aux.foreDatesList[[i]][[j]])$mday
+                        mes <- factor(mes, levels = unique(mes), ordered = TRUE)
                         mar <- grep("^time", dimNamesRef, invert = TRUE)
                         aux.list1[[j]] <- apply(aux.list1[[j]], MARGIN = mar, FUN = function(x) {
                               tapply(x, INDEX = mes, FUN = foreTimePars$aggr.m)
