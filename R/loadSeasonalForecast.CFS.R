@@ -1,9 +1,9 @@
-loadSeasonalForecast.CFS = function(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface) {
+loadSeasonalForecast.CFS = function(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface, datasetName) {
       foreTimePars <- getForecastTimeDomain.CFS(grid, dic, runTimePars, time, aggr.d, aggr.m)
       cube <- switch(derInterface$deriveInterface,
             none = makeSubset.CFS(grid, latLon, runTimePars, foreTimePars),
             deriveSurfaceWindSpeed = deriveSurfaceWindSpeed.CFS(gds, grid, latLon, runTimePars, foreTimePars),
-            deriveSurfaceRelativeHumidity = deriveSurfaceRelativeHumidity.CFS(gds, grid, latLon, runTimePars, foreTimePars))
+            deriveSurfaceRelativeHumidity = deriveSurfaceRelativeHumidity.CFS(gds, grid, latLon, runTimePars, foreTimePars, datasetName))
       foreTimePars <- NULL      
       if (!is.null(derInterface$deriveInterface)) {
             var <- derInterface$origVar

@@ -176,7 +176,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
                   out <- loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
             } else if (grepl("CFSv2", dataset)) {
-                  out <- loadSeasonalForecast.CFS(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
+                  out <- loadSeasonalForecast.CFS(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface, dataset)
             } else if (grepl("Glosea", dataset)) {
                   out <- loadSeasonalForecast.GS5(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)                                    
             }
