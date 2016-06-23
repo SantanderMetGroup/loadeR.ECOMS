@@ -1,7 +1,7 @@
 Package: loadeR.ECOMS
 Depends:
     R(>= 3.1.0),
-    loadeR(>= 1.0.1),
+    loadeR(>= 1.0.3),
     rJava
 Imports:
     loadeR.java (>= 1.0.0),
