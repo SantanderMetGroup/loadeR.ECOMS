@@ -69,18 +69,18 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       aux.level <- findVerticalLevel(derInterface$leadVar)
       var <- aux.level$var
       level <- aux.level$level
-      if(is.null(url)){
-            url <- dataURL(dataset)
-      }else{
-            url = list("URL" = url, "excludeVars" = NULL)
+      url <- if (is.null(url)) {
+            dataURL(dataset)
+      } else {
+            list("URL" = url, "excludeVars" = NULL)
       }
       # Dictionary/shortName search
-      if(typeof(dictionary)=="character"){
-            dicPath = file.path(dictionary, paste0(dataset, ".dic"));
-            dictionary = TRUE;
+      if (is.character(dictionary)) {
+            dicPath <- file.path(dictionary, paste0(dataset, ".dic"))
+            dictionary <- TRUE
             dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)
             shortName <- dic$short_name
-      }else{
+      } else {
             if (isTRUE(dictionary)) {
                   dicPath <- file.path(find.package("loadeR.ECOMS"), "dictionaries", paste0(dataset, ".dic"))
                   # for devel only 

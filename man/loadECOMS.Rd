@@ -10,7 +10,7 @@ A simple interface for accesing and retrieving dimensional slices of the various
 
 \usage{
 loadECOMS(dataset, var, dictionary = TRUE, members = NULL, lonLim = NULL, 
-      latLim = NULL, season = NULL, years = NULL, leadMonth = 1,
+      latLim = NULL, season = NULL, url = NULL, years = NULL, leadMonth = 1,
       time = "none", aggr.d = "none", aggr.m = "none") 
 }
 
@@ -40,6 +40,10 @@ Same as \code{lonLim}, but for the selection of the latitudinal range.
 
   \item{season}{
 An integer vector specifying the desired season (in months, January = 1 ..., December = 12). Options include one to several (contiguous) months. For full year selections (not possible for all datasets, e.g. seasonal forecasts), the argument value must be set to \code{season = 1:12}. If the requested variable is static (e.g. orography) it will be ignored. See details on the definition of temporal slices. 
+}
+
+  \item{url}{
+Currently unused.
 }
 
   \item{years}{

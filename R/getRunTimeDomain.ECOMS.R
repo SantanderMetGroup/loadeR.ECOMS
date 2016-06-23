@@ -50,13 +50,13 @@ getRunTimeDomain.ECOMS <- function(dataset, grid, members, season, years, leadMo
       if (grepl("CFSv2", dataset)) {
             if (grepl("CFSv2_seasonal_operative", dataset)) {
                   aux <- intersect(years, 2015:as.numeric(format(Sys.time(),"%Y")))
-                  if(length(aux)>1){
-                    stop('Multiple year requests are not allowed for CFSv2 operative')
+                  if (length(aux) > 1) {
+                        stop("Multiple year requests are not allowed for CFSv2 operative forecast")
                   }
-                  if(length(aux)<1){
-                    stop('Requested year not available')
+                  if (length(aux) < 1) {
+                        stop('Requested year not available')
                   }
-            }else{
+            } else {
                   aux <- intersect(years, 1983:2009)
                   if (!identical(as.integer(aux), as.integer(years))) {
                         warning("Available years in dataset: 1983-2009\nSome years were removed")

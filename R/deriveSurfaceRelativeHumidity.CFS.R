@@ -1,12 +1,12 @@
 deriveSurfaceRelativeHumidity.CFS <- function(gds, grid, latLon, runTimePars, foreTimePars, datasetName) {
       message("[", Sys.time(), "] Retrieving data subset ..." )
       # grid = uas      
-      if(identical(datasetName,'CFSv2_seasonal_operative')){
-        grid.ps <- gds$findGridByName("pressfc") 
-        grid.huss <- gds$findGridByName("q2m") 
-      }else{
-        grid.ps <- gds$findGridByName("ps") 
-        grid.huss <- gds$findGridByName("huss")         
+      if (identical(datasetName, "CFSv2_seasonal_operative")) {
+            grid.ps <- gds$findGridByName("pressfc") 
+            grid.huss <- gds$findGridByName("q2m") 
+      } else {
+            grid.ps <- gds$findGridByName("ps") 
+            grid.huss <- gds$findGridByName("huss")         
       }
       gcs <- grid$getCoordinateSystem()
       dimNames <- rev(names(scanVarDimensions(grid))) # reversed!
