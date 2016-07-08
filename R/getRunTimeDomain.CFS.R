@@ -77,6 +77,9 @@ getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years, data
       } else {
             yr.ind <- which(unique(runDatesValidMonth$year + 1900) %in% (years))
       }
+      if(length(yr.ind) == 0){
+            stop("Forecast times requested not available for the requested initialization. Check model configuration at < http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2>")
+      }
       aux.ind <- findInterval(1:length(runDatesValidMonth), vec = seq(1, length(runDatesValidMonth), nmem))
       runTimes.aux <- unlist(lapply(yr.ind, function(x) runTimesValidMonth[aux.ind == x][members]))
       runDates.aux <- do.call("c", lapply(yr.ind, function(x) runDatesValidMonth[aux.ind == x][members]))
