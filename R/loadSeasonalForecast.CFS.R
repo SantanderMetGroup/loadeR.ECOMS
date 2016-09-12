@@ -1,5 +1,10 @@
 loadSeasonalForecast.CFS = function(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface, datasetName) {
-      foreTimePars <- getForecastTimeDomain.CFS(grid, dic, runTimePars, time, aggr.d, aggr.m)
+      foreTimePars <- if (dic$time_step == "static") {
+            list("forecastDates" = list(list(NULL)), "ForeTimeRangesList" = list(list(.jnull())), "deaccumFromFirst" = FALSE,
+                 "aggr.d" = aggr.d, "aggr.m" = aggr.m)     
+      } else {
+            getForecastTimeDomain.CFS(grid, dic, runTimePars, time, aggr.d, aggr.m)
+      }
       cube <- switch(derInterface$deriveInterface,
             none = makeSubset.CFS(grid, latLon, runTimePars, foreTimePars),
             deriveSurfaceWindSpeed = deriveSurfaceWindSpeed.CFS(gds, grid, latLon, runTimePars, foreTimePars),
@@ -19,8 +24,15 @@ loadSeasonalForecast.CFS = function(var, gds, grid, dic, latLon, runTimePars, ti
             cube$mdArray <- revArrayLatDim(cube$mdArray, grid)
       }
       # formatting initialization dates
-      for (x in 1:length(runTimePars$runDates)) {
-            runTimePars$runDates[[x]] <- format(as.POSIXct(runTimePars$runDates[[x]], tz = "GMT"), format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
+      if (dic$time_step != "static") {
+            for (x in 1:length(runTimePars$runDates)) {
+                  runTimePars$runDates[[x]] <- format(as.POSIXct(runTimePars$runDates[[x]], tz = "GMT"), format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
+            }
+      } else {
+            runTimePars$runDates <- NULL
+            time <- "static"
+            fakedate <- as.POSIXct("2000-01-01 00:00:00", tz = "GMT")
+            cube$foreTimePars$forecastDates <- list("start" = fakedate, "end" = fakedate)
       }
       # variable info
       Variable <- list("varName" = var, "level" = level)

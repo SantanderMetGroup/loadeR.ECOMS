@@ -83,8 +83,8 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       } else {
             if (isTRUE(dictionary)) {
                   dicPath <- file.path(find.package("loadeR.ECOMS"), "dictionaries", paste0(dataset, ".dic"))
-                  # for devel only 
-                  # dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
+                  ## for devel only 
+                  ## dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
                   dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)
                   shortName <- dic$short_name
                   if (grepl("System4\\_seasonal\\_15", dataset) & grepl("^u$|^v$|^z$|^t$|^q$", shortName)) {
@@ -173,12 +173,12 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             }
             leadMonth <- as.integer(leadMonth)
             runTimePars <- getRunTimeDomain.ECOMS(dataset, grid, members, season, years, leadMonth)
-            if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
-                  out <- loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
+            out <- if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
+                  loadSeasonalForecast.S4(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)
             } else if (grepl("CFSv2", dataset)) {
-                  out <- loadSeasonalForecast.CFS(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface, dataset)
+                  loadSeasonalForecast.CFS(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface, dataset)
             } else if (grepl("Glosea", dataset)) {
-                  out <- loadSeasonalForecast.GS5(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)                                    
+                  loadSeasonalForecast.GS5(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface)                                    
             }
             if (derInterface$deriveInterface != "none") {
                   out$Variable$varName <- derInterface$origVar

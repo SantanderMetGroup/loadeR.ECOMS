@@ -32,50 +32,54 @@ getRunTimeDomain.ECOMS <- function(dataset, grid, members, season, years, leadMo
             season <- unique(javaCalendarDate2rPOSIXlt(gcs$getTimeAxisForRun(0L)$getCalendarDates())$mon + 1)
       }
       rt.axis <- gcs$getRunTimeAxis()
-      runDatesAll <- javaCalendarDate2rPOSIXlt(rt.axis$getCalendarDates())
-      startDay <- javaCalendarDate2rPOSIXlt(rt.axis$getCalendarDateRange()$getStart())
-      endDay <- javaCalendarDate2rPOSIXlt(rt.axis$getCalendarDateRange()$getEnd())
-      startYear <- startDay$year + 1900
-      endYear <- endDay$year + 1900
-      allYears <- startYear:endYear
-      if (is.null(years)) {
-            if (grepl("CFSv2_seasonal_operative", dataset)) {
-                  years <- 2015:as.numeric(format(Sys.time(),"%Y"))
-            }else if (grepl("CFSv2", dataset)) {
-                  years <- 1983:2009
-            } else {
+      if (!is.null(rt.axis)) {
+            runDatesAll <- javaCalendarDate2rPOSIXlt(rt.axis$getCalendarDates())
+            startDay <- javaCalendarDate2rPOSIXlt(rt.axis$getCalendarDateRange()$getStart())
+            endDay <- javaCalendarDate2rPOSIXlt(rt.axis$getCalendarDateRange()$getEnd())
+            startYear <- startDay$year + 1900
+            endYear <- endDay$year + 1900
+            allYears <- startYear:endYear
+            if (is.null(years)) {
+                  if (grepl("CFSv2_seasonal_operative", dataset)) {
+                        years <- 2015:as.numeric(format(Sys.time(),"%Y"))
+                  }else if (grepl("CFSv2", dataset)) {
+                        years <- 1983:2009
+                  } else {
+                        years <- allYears
+                  }
+            } 
+            if (grepl("CFSv2", dataset)) {
+                  if (grepl("CFSv2_seasonal_operative", dataset)) {
+                        aux <- intersect(years, 2015:as.numeric(format(Sys.time(),"%Y")))
+                        if (length(aux) > 1) {
+                              stop("Multiple year requests are not allowed for CFSv2 operative forecast")
+                        }
+                        if (length(aux) < 1) {
+                              stop('Requested year not available')
+                        }
+                  } else {
+                        aux <- intersect(years, 1983:2009)
+                        if (!identical(as.integer(aux), as.integer(years))) {
+                              warning("Available years in dataset: 1983-2009\nSome years were removed")
+                        }
+                  }
+                  years <- aux
+                  aux <- NULL
+            }
+            if (years[1] < startYear & years[length(years)] > endYear) {
+                  warning("Year selection out of dataset range. Only available years will be returned")
                   years <- allYears
             }
-      } 
-      if (grepl("CFSv2", dataset)) {
-            if (grepl("CFSv2_seasonal_operative", dataset)) {
-                  aux <- intersect(years, 2015:as.numeric(format(Sys.time(),"%Y")))
-                  if (length(aux) > 1) {
-                        stop("Multiple year requests are not allowed for CFSv2 operative forecast")
-                  }
-                  if (length(aux) < 1) {
-                        stop('Requested year not available')
-                  }
-            } else {
-                  aux <- intersect(years, 1983:2009)
-                  if (!identical(as.integer(aux), as.integer(years))) {
-                        warning("Available years in dataset: 1983-2009\nSome years were removed")
-                  }
+            if (years[1] < startYear) {
+                  warning("First year in dataset: ", startYear,". Only available years will be returned")
+                  years <- startYear:years[length(years)]
             }
-            years <- aux
-            aux <- NULL
-      }
-      if (years[1] < startYear & years[length(years)] > endYear) {
-            warning("Year selection out of dataset range. Only available years will be returned")
-            years <- allYears
-      }
-      if (years[1] < startYear) {
-            warning("First year in dataset: ", startYear,". Only available years will be returned")
-            years <- startYear:years[length(years)]
-      }
-      if (years[length(years)] > endYear) {
-            warning("Last initialization in the dataset in year: ", endYear,". Only available years will be returned")
-            years <- years[which(years <= endYear + 1)]
+            if (years[length(years)] > endYear) {
+                  warning("Last initialization in the dataset in year: ", endYear,". Only available years will be returned")
+                  years <- years[which(years <= endYear + 1)]
+            }
+      } else { ## STATIC variables
+            runDatesAll <- NULL
       }
       # Month to take the initialization 
       validMonth <- season[1] - leadMonth 
@@ -96,13 +100,12 @@ getRunTimeDomain.ECOMS <- function(dataset, grid, members, season, years, leadMo
             year.cross.ind <- NULL
       }
       # runtime parameters depending on model
-      if (grepl("CFSv2", dataset)) {
-            rtPars <- getRunTimeDomain.CFS(runDatesAll, validMonth, members, years, dataset)
-            # years <- rtPars$years
+      rtPars <- if (grepl("CFSv2", dataset)) {
+            getRunTimeDomain.CFS(runDatesAll, validMonth, members, years, dataset)
       } else if (grepl("^System4|SMHI-EC-EARTH_EUPORIAS", dataset)) {
-            rtPars <- getRunTimeDomain.S4(runDatesAll, validMonth, years)  
+            getRunTimeDomain.S4(runDatesAll, validMonth, years)  
       } else if (grepl("^Glosea5", dataset)) {
-            rtPars <- getRunTimeDomain.GS5(dataset, season, leadMonth, runDatesAll, validMonth, members, years) 
+            getRunTimeDomain.GS5(dataset, season, leadMonth, runDatesAll, validMonth, members, years) 
       }
       return(list("validMonth" = validMonth, "years" = years, "season" = season, "year.cross" = year.cross.ind, "memberRangeList" = rtPars$memberRangeList, "runDates" = rtPars$runDates, "runTimeRanges" = rtPars$runTimeRanges))
 }

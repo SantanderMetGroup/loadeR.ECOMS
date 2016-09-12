@@ -108,7 +108,9 @@ makeSubset.CFS <- function(grid, latLon, runTimePars, foreTimePars) {
       mdArray <- unname(mdArray)
       attr(mdArray, "dimensions") <- dimNames
       # Date adjustment
-      foreTimePars$forecastDates <- adjustDates.forecast(foreTimePars)
+      if (!is.null(foreTimePars$forecastDates[[1]][[1]])) { ## STATIC are null
+            foreTimePars$forecastDates <- adjustDates.forecast(foreTimePars)
+      }
       return(list("mdArray" = mdArray, "foreTimePars" = foreTimePars))
 }
 # End
