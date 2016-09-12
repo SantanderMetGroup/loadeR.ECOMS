@@ -1,6 +1,5 @@
 loadeR.ECOMS
 ============
 
-* Bug fix in temporal aggregations of year-crossing seasons
-* Internal changes for reading operational forecast data (unavailable through ECOMS-UDG)
+* Added new static variables in CFSv2 (orography, land mask)
 * Other minor bug fixes and enhancements

@@ -10,3 +10,5 @@ wss,wss,6h,0,0,none,0,1,0,1,deriveSurfaceWindSpeed
 huss,huss,6h,0,0,none,0,1,0,0,
 ps,ps,6h,0,0,none,0,1,0,0,
 hurs,hurs,6h,0,0,none,0,1,0,1,deriveSurfaceRelativeHumidity
+lm,sftlf,static,0,0,none,0,.01,0,0,
+orog,orog,static,0,0,none,0,1,0,0,

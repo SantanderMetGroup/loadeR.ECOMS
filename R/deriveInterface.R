@@ -34,10 +34,10 @@ deriveInterface <- function(dataset, var, dictionary, time) {
       if (dictionary == FALSE) {
             stop("The requested variable is non-standard. The dictionary must be used for homogenization and conversion of input variables\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables> for details")
       }
-      if(typeof(dictionary)=="character"){
-            dicPath = file.path(dictionary, paste0(dataset, ".dic"));
-      }else{
-            dicPath <- file.path(find.package("loadeR.ECOMS"), "dictionaries", paste0(dataset, ".dic"))
+      dicPath <- if (typeof(dictionary) == "character") {
+            file.path(dictionary, paste0(dataset, ".dic"));
+      } else {
+            file.path(find.package("loadeR.ECOMS"), "dictionaries", paste0(dataset, ".dic"))
       }      
       # devel (comment before package building)
       # dicPath <- file.path("./inst/dictionaries", paste(dataset,".dic", sep = ""))
