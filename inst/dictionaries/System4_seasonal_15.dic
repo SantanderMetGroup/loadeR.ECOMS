@@ -15,7 +15,7 @@ ps,ps,6h,0,0,none,0,1,0,1,deriveSurfacePressure
 hurs,hurs,6h,0,0,none,0,1,0,1,deriveSurfaceRelativeHumidity
 huss,huss,6h,0,0,none,0,1,0,1,deriveSurfaceSpecificHumidity
 wss,wss,6h,0,0,none,0,1,0,1,deriveSurfaceWindSpeed
-zsg,zsfc,static,0,0,static,0,0.102040816,0,0,
+zgs,zsfc,static,0,0,static,0,0.102040816,0,0,
 ua,u,12h,0,0,none,0,1,0,0,
 va,v,12h,0,0,none,0,1,0,0,
 zg,z,12h,0,0,none,0,0.102040816,0,0,
