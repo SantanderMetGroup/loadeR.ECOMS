@@ -103,6 +103,8 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             season <- 1
             years <- 2000
             time <- "none"
+            aggr.d <- "none"
+            aggr.m <- "none"
       } else {
             if (is.null(season)) {
                   stop("Argument 'season' must be provided")
