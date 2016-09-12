@@ -57,6 +57,8 @@ loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLo
       if (dic$time_step == "static") {
             runTimePars$runDates <- NA
             names(memberRangeList) <- NA
+            fakedate <- as.POSIXct("2000-01-01 00:00:00", tz = "GMT")
+            cube$foreTimePars$forecastDates <- list("start" = fakedate, "end" = fakedate)
       }
       Variable <- list("varName" = var, "level" = level)
       attr(Variable, "use_dictionary") <- isStandard
