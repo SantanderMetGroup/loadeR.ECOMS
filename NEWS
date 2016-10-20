@@ -1,5 +1,4 @@
 loadeR.ECOMS
 ============
 
-* Added new static variables in CFSv2 (orography, land mask)
-* Other minor bug fixes and enhancements
+* Minor enhancements 
