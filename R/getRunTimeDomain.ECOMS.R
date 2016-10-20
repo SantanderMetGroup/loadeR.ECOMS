@@ -41,9 +41,13 @@ getRunTimeDomain.ECOMS <- function(dataset, grid, members, season, years, leadMo
             allYears <- startYear:endYear
             if (is.null(years)) {
                   if (grepl("CFSv2_seasonal_operative", dataset)) {
-                        years <- 2015:as.numeric(format(Sys.time(),"%Y"))
-                  }else if (grepl("CFSv2", dataset)) {
-                        years <- 1983:2009
+                        years <- 2015:as.numeric(format(Sys.time(), "%Y"))
+                  } else if (grepl("CFSv2", dataset)) {
+#                         if (tail(season, 1) < 4) { ## Used to get 2010 data until March 
+#                               years <- 1983:2010
+#                         } else {
+                              years <- 1983:2009
+#                         }
                   } else {
                         years <- allYears
                   }
@@ -52,10 +56,10 @@ getRunTimeDomain.ECOMS <- function(dataset, grid, members, season, years, leadMo
                   if (grepl("CFSv2_seasonal_operative", dataset)) {
                         aux <- intersect(years, 2015:as.numeric(format(Sys.time(),"%Y")))
                         if (length(aux) > 1) {
-                              stop("Multiple year requests are not allowed for CFSv2 operative forecast")
+                              stop("Multiple year requests are not allowed for CFSv2 operative forecasts", call. = FALSE)
                         }
                         if (length(aux) < 1) {
-                              stop('Requested year not available')
+                              stop('Requested year not available', call. = FALSE)
                         }
                   } else {
                         aux <- intersect(years, 1983:2009)
@@ -107,6 +111,12 @@ getRunTimeDomain.ECOMS <- function(dataset, grid, members, season, years, leadMo
       } else if (grepl("^Glosea5", dataset)) {
             getRunTimeDomain.GS5(dataset, season, leadMonth, runDatesAll, validMonth, members, years) 
       }
-      return(list("validMonth" = validMonth, "years" = years, "season" = season, "year.cross" = year.cross.ind, "memberRangeList" = rtPars$memberRangeList, "runDates" = rtPars$runDates, "runTimeRanges" = rtPars$runTimeRanges))
+      return(list("validMonth" = validMonth,
+                  "years" = years,
+                  "season" = season,
+                  "year.cross" = year.cross.ind,
+                  "memberRangeList" = rtPars$memberRangeList,
+                  "runDates" = rtPars$runDates,
+                  "runTimeRanges" = rtPars$runTimeRanges))
 }
 # End
