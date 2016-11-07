@@ -38,16 +38,20 @@ getRunTimeDomain.ECOMS <- function(dataset, grid, members, season, years, leadMo
             endDay <- javaCalendarDate2rPOSIXlt(rt.axis$getCalendarDateRange()$getEnd())
             startYear <- startDay$year + 1900
             endYear <- endDay$year + 1900
+            ## Used to get 2010 data until March 
+            if (tail(season, 1) < 4) { 
+                  endYear <- endYear + 1
+            }
             allYears <- startYear:endYear
             if (is.null(years)) {
                   if (grepl("CFSv2_seasonal_operative", dataset)) {
                         years <- 2015:as.numeric(format(Sys.time(), "%Y"))
                   } else if (grepl("CFSv2", dataset)) {
-#                         if (tail(season, 1) < 4) { ## Used to get 2010 data until March 
-#                               years <- 1983:2010
-#                         } else {
+                         if (tail(season, 1) < 4) { ## Used to get 2010 data until March 
+                               years <- 1983:2010
+                         } else {
                               years <- 1983:2009
-#                         }
+                         }
                   } else {
                         years <- allYears
                   }
@@ -62,9 +66,9 @@ getRunTimeDomain.ECOMS <- function(dataset, grid, members, season, years, leadMo
                               stop('Requested year not available', call. = FALSE)
                         }
                   } else {
-                        aux <- intersect(years, 1983:2009)
+                        aux <- intersect(years, allYears)
                         if (!identical(as.integer(aux), as.integer(years))) {
-                              warning("Available years in dataset: 1983-2009\nSome years were removed")
+                              warning("Available years in dataset: ", paste(startYear, endYear, sep = "-"), "\nSome years were removed")
                         }
                   }
                   years <- aux
