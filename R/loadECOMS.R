@@ -49,6 +49,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       dataset <- match.arg(dataset, c("System4_seasonal_15",
                                       "System4_seasonal_51",
                                       "System4_annual_15",
+                                      "System4_seasonal_51_monthly",
                                       "CFSv2_seasonal",
                                       "CFSv2_seasonal_operative",
                                       "SMHI-EC-EARTH_EUPORIAS",
@@ -84,7 +85,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             if (isTRUE(dictionary)) {
                   dicPath <- file.path(find.package("loadeR.ECOMS"), "dictionaries", paste0(dataset, ".dic"))
                   ## for devel only 
-                  ## dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
+                  # dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
                   dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)
                   shortName <- dic$short_name
                   if (grepl("System4\\_seasonal\\_15", dataset) & grepl("^u$|^v$|^z$|^t$|^q$", shortName)) {

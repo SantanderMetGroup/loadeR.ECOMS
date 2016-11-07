@@ -39,8 +39,10 @@ getRunTimeDomain.ECOMS <- function(dataset, grid, members, season, years, leadMo
             startYear <- startDay$year + 1900
             endYear <- endDay$year + 1900
             ## Used to get 2010 data until March 
-            if (tail(season, 1) < 4) { 
-                  endYear <- endYear + 1
+            if (grepl("CFSv2_seasonal$", dataset)) {
+                  if (tail(season, 1) < 4) { 
+                        endYear <- endYear + 1
+                  }
             }
             allYears <- startYear:endYear
             if (is.null(years)) {

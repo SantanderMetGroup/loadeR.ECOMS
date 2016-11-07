@@ -55,7 +55,7 @@ makeSubset.S4 <- function(grid, latLon, runTimePars, memberRangeList, foreTimePa
                   # Deaccumulator
                   if (foreTimePars$deaccum) {
                         mar <- c(1:length(dim(aux.list1[[j]])))[-grep("^time", dimNamesRef)] 
-                        aux.list1[[j]] <- apply(aux.list1[[j]], mar, diff)#deaccumulate, foreTimePars$deaccumFromFirst)
+                        aux.list1[[j]] <- apply(aux.list1[[j]], mar, diff) #deaccumulate, foreTimePars$deaccumFromFirst)
                         dimNamesRef <- c("time", dimNamesRef[grep("^time$", dimNamesRef, invert = TRUE)])
                   }      
                   # Daily aggregator

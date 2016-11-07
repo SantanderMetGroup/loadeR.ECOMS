@@ -1,5 +1,6 @@
 loadeR.ECOMS
 ============
 
+* New S4-51 seasonal monthly dataset
 * Allow for DJF-2010 requests in CFSv2 hindcast
 * Minor enhancements 

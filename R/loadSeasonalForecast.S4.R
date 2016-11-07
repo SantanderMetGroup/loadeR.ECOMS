@@ -74,6 +74,10 @@ loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLo
       attr(Variable, "daily_agg_cellfun") <- cube$foreTimePars$aggr.d
       attr(Variable, "monthly_agg_cellfun") <- cube$foreTimePars$aggr.m
       attr(Variable, "verification_time") <- time
+      ## Monthly datasets
+      if (grepl("m", dic$time_step)) {
+            attr(Variable, "monthly_agg_cellfun") <- dic$aggr_fun
+      }
       return(list("Variable" = Variable,
                   "Data" = cube$mdArray,
                   "xyCoords" = latLon$xyCoords,
