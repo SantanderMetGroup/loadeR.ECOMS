@@ -13,7 +13,7 @@ Suggests:
 Type: Package
 Title: A loadeR extension for accessing the ECOMS User Data Gateway datasets
 Version: 1.0-4
-Date: 2016-10-20
+Date: 2016-11-07
 Authors@R: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [aut]",
     "Joaquin Bedia <bediaj@unican.es> [ctb,cre]",
