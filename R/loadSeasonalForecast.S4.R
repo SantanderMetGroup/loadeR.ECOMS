@@ -78,11 +78,13 @@ loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLo
       if (grepl("m", dic$time_step)) {
             attr(Variable, "monthly_agg_cellfun") <- dic$aggr_fun
       }
+      rtList <- rep(list(runTimePars$runDates), length(memberRangeList))
+      names(rtList) <- names(memberRangeList)
       return(list("Variable" = Variable,
                   "Data" = cube$mdArray,
                   "xyCoords" = latLon$xyCoords,
                   "Dates" = cube$foreTimePars$forecastDates,
-                  "InitializationDates" = runTimePars$runDates,
+                  "InitializationDates" = rtList,
                   "Members" = names(memberRangeList)))
 }
 # End
