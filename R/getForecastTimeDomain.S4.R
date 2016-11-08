@@ -45,7 +45,7 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, agg
                         aggr.d <- "none"
                         message("NOTE: The original data is daily: argument 'aggr.d' ignored")
                   }
-            } else if ((timeResInSeconds / 3600) > 100) { # Monthly, typically 724
+            } else if ((timeResInSeconds / 3600) > 100) { # Monthly, typically 700something
                   aggr.d <- aggr.m <- "none"
             }
             if (aggr.d != "none") message("NOTE: Daily aggregation will be computed from ", timeResInSeconds / 3600, "-hourly data")
