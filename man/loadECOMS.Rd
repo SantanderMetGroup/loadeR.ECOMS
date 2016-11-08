@@ -17,7 +17,7 @@ loadECOMS(dataset, var, dictionary = TRUE, members = NULL, lonLim = NULL,
 
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{dataset}{A character string indicating the database to be accessed (partial matching is enabled). Currently accepted values are \code{"System4_seasonal_15"}, \code{"System4_seasonal_51"}, \code{"System4_annual_15"}, \code{"CFSv2_seasonal"}, \code{"SMHI-EC-EARTH_EUPORIAS"}, \code{"Glosea5_seasonal_12"} and \code{"Glosea5_seasonal_24"} for hindcasts, \code{"WFDEI"} for the WATCH Forcing Dataset based on ERA-Interim (gridded observations) and \code{"ERA_interim"} and \code{"NCEP_reanalysis1"} for the ECMWF Interim and NCEP/NCAR reanalyses respectively. There is also a monthly-aggregated version of SYstem 4: \code{"System4_seasonal_51_monthly"}, to speed-up monthly data load for some frequently demanded surface variables. See details on available datasets.}
+  \item{dataset}{A character string indicating the database to be accessed (partial matching is enabled). Currently accepted values are \code{"System4_seasonal_15"}, \code{"System4_seasonal_51"}, \code{"System4_annual_15"}, \code{"CFSv2_seasonal"}, \code{"SMHI-EC-EARTH_EUPORIAS"}, \code{"Glosea5_seasonal_12"} and \code{"Glosea5_seasonal_24"} for hindcasts, \code{"WFDEI"} for the WATCH Forcing Dataset based on ERA-Interim (gridded observations) and \code{"ERA_interim"} and \code{"NCEP_reanalysis1"} for the ECMWF Interim and NCEP/NCAR reanalyses respectively. See details on available datasets.}
   
   \item{var}{
 Variable code (character string). This is the name of the variable according to the R standard naming (see the next argument). For variables with vertical levels, the vertical level is specified next to the variable name followed by the \dQuote{@} symbol (e.g. \code{var = "z@700"} for geopotential at 700 mb isobaric surface pressure level). It is also possible to enter the variable name as originally coded in the dataset to skip data homogenization, although this is not recommended (see the next argument). See details on available variables. 
@@ -75,7 +75,8 @@ A list with the following components providing the necessary information for dat
 \item{Data}{A N-dimensional array. The number of dimensions (N) depends on the type of request given that dimensions of length one are dropped. Thus, N can take values from 4 (several members for a rectangular domain with different values for longitude, latitude, ensemble and time dimensions) to 1 (atomic vector), for single-point and single-member selections, for which only the time dimension is required. The dimensions are labelled by the \dQuote{dimnames} attribute, and are always arranged in canonical order (i.e.: [member, time, level, lat, lon]).}
 \item{xyCoords}{A list with \code{x} and \code{y} components, as required by many standard mapping functions in R (see e.g. \code{\link[graphics]{image}}. In addition, the attribute \code{projection} provides geo-referencing information for more advanced spatial operations/conversions, in the form of a character string following the \href{http://trac.osgeo.org/proj/}{PROJ.4 specifications}.}
 \item{Dates}{A list with two \code{POSIXct} time elements of the same length as the \sQuote{time} dimension in \code{Data}, defining the time boundaries of the time axis coordinates in the interval \emph{[start, end)}, or if the loaded field is static, a character string indicating it. See details.}
-\item{InitializationDates}{A \code{POSIXct} time object corresponding to the initialization times selected. Only for forecast datasets. NA for static variables (e.g. orography). See details.}
+\item{InitializationDates}{A list of \code{POSIXct} vectors corresponding to the initialization times selected. The 
+length of the list equals the number of members. Only for forecast datasets. NA for static variables (e.g. orography). See details.}
 \item{Members}{A character vector with the names of the ensemble members returned, in the same order as arranged in the \code{Data} array. Only for forecast datasets. NA for static variables (e.g. orography). See details.}
 
 Additionally, there are three global attributes with metadata, (\code{"dataset"}, \code{"source"} and \code{"URL"}), providing information on the dataset loaded, their source (the ECOMS UDG) and the URL for reference.
@@ -92,19 +93,19 @@ Additionally, there are three global attributes with metadata, (\code{"dataset"}
 \strong{Available datasets}
 
 
-The values of the argument \code{dataset} are consistent with the nomenclature of the reference table containing a summary of all available datasets and variables: \url{http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog}. Currently, there are 7 different seasonal to annual hindcasts, two reanalysis products and one observational gridded dataset available at the ECOMS-UDG. All of them are available through the common interface \code{loadECOMS}, and therefore the argument values may vary slightly. For instance, arguments \code{members} and \code{leadMonth} do not apply in the case of observations/reanalysis, and are therefore ignored if their value is not NULL. Similarly, the output structure may vary consequently, and forecast data types include the initialization dates and the names of the chosen members, while this information is not included for other types of gridded data.
+The values of the argument \code{dataset} are consistent with the nomenclature of the reference table containing a summary of all available datasets and variables: \url{http://meteo.unican.es/ecoms-udg/dataserver/catalog}. Currently, there are 7 different seasonal to annual hindcasts, two reanalysis products and one observational gridded dataset available at the ECOMS-UDG. All of them are available through the common interface \code{loadECOMS}, and therefore the argument values may vary slightly. For instance, arguments \code{members} and \code{leadMonth} do not apply in the case of observations/reanalysis, and are therefore ignored if their value is not NULL. Similarly, the output structure may vary consequently, and forecast data types include the initialization dates and the names of the chosen members, while this information is not included for other types of gridded data.
 
 
 \strong{Available variables}
 
 
-For the possible values that the argument \code{var} can take for each dataset at ECOMS-UDG, check the first column of the \href{http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog}{variables table}, that is continuously updated as new variables are made available. The table also contains further details regarding the native temporal aggregation/resolution of each variable and the available vertical levels.
+For the possible values that the argument \code{var} can take for each dataset at ECOMS-UDG, check the first column of the \href{http://meteo.unican.es/ecoms-udg/dataserver/catalog}{variables table}, that is continuously updated as new variables are made available. The table also contains further details regarding the native temporal aggregation/resolution of each variable and the available vertical levels.
 
 
 \strong{Variable homogeneization}
 
 
-The different nature of the various databases, models and variables, and the idiosyncratic naming and storage conventions often applied by the different modelling centres, makes necessary a previous homogeneization across datasets in order to implement a truly user-friendly toolbox for data access. This package achieves this aim by defining a common vocabulary to all climate datasets. The particular variables of each dataset are translated -and transformed if necessary- to the standard variables by means of a dictionary, provided by the argument \code{dictionary}. In essence, the \file{dictionary} is a csv file particular for each individual dataset, containing the necessary information for performing the unit conversions to match the standard variable definitions contained in the vocabulary. This feature is described in more detail in the \href{http://meteo.unican.es/trac/wiki/udg/ecoms/RPackage/homogeneization}{data homogenization section} of the ECOMS UDG wiki. 
+The different nature of the various databases, models and variables, and the idiosyncratic naming and storage conventions often applied by the different modelling centres, makes necessary a previous homogeneization across datasets in order to implement a truly user-friendly toolbox for data access. This package achieves this aim by defining a common vocabulary to all climate datasets. The particular variables of each dataset are translated -and transformed if necessary- to the standard variables by means of a dictionary, provided by the argument \code{dictionary}. In essence, the \file{dictionary} is a csv file particular for each individual dataset, containing the necessary information for performing the unit conversions to match the standard variable definitions contained in the vocabulary. This feature is described in more detail in the \href{http://meteo.unican.es/ecoms-udg/RPackage/homogeneization}{data homogenization section} of the ECOMS UDG wiki. 
 
 \strong{Deaccumulation (System4 models)}
 
@@ -112,7 +113,7 @@ In case of variables that are deaccumulated (e.g. precipitation amount and radia
 
 \strong{Ensemble member definition}
 
-In the case of the CFSv2 reforecast there are four initializations (4 cycles) from every 5th day running for 9 months (see \href{http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2}{CFSv2 members} for more detailed information of members' construction). Thus, the lagged-time configuration of members results in a different number of possible members depending on the initialization chosen (more precisely, 24 members excepting the November initializations, which have 28). This theoretical configuration has been slightly modified to avoid some missing initializations in the original dataset (see details in the previous link). For better comparability with its ECMWF's counterpart (the System4 seasonal forecast of 15 members), \code{loadECOMS} defines by default an ensemble of 15 members for each lead month and forecast season in the case of CFS, although it is possible to request all available members for that particular lead month. This way, all default members are ensured to belong to the antecedent month's initializations or first days of the current month. In addition, due to the lagged runtime configuration of the ensemble members in CFSv2, in case of lead month 0 requests, some of the first days of the period may be missing, as only common days for all members requested are returned.
+In the case of the CFSv2 reforecast there are four initializations (4 cycles) from every 5th day running for 9 months (see \href{http://meteo.unican.es/ecoms-udg/dataserver/datasets/CFSv2}{CFSv2 members} for more detailed information of members' construction). Thus, the lagged-time configuration of members results in a different number of possible members depending on the initialization chosen (more precisely, 24 members excepting the November initializations, which have 28). This theoretical configuration has been slightly modified to avoid some missing initializations in the original dataset (see details in the previous link). For better comparability with its ECMWF's counterpart (the System4 seasonal forecast of 15 members), \code{loadECOMS} defines by default an ensemble of 15 members for each lead month and forecast season in the case of CFS, although it is possible to request all available members for that particular lead month. This way, all default members are ensured to belong to the antecedent month's initializations or first days of the current month. In addition, due to the lagged runtime configuration of the ensemble members in CFSv2, in case of lead month 0 requests, some of the first days of the period may be missing, as only common days for all members requested are returned.
 
 
 \strong{Definition of spatial domains}
@@ -151,13 +152,16 @@ The argument \code{time} controls the temporal filtering/aggregation options tha
 \item For monthly aggregations, the process is similar to daily data. It must be beared in mind that in this case, the daily aggregation must be previously indicated for sub-daily variables, prior to apply the monthly aggregation function.
 }
 
+In some cases, some monthly aggregated variables have been pre-calculated in order to speed-up data retrieval. A message appears on-screen in those cases.
+
+
 }
 
 
 
 \references{
 
-\url{http://meteo.unican.es/trac/wiki/udg/ecoms}
+\url{http://meteo.unican.es/ecoms-udg}
 
 %Saha, S. et al., 2013. The NCEP Climate Forecast System Version 2. J Clim. DOI: 10.1175/JCLI-D-12-00823.1.
 
@@ -170,6 +174,6 @@ The argument \code{time} controls the temporal filtering/aggregation options tha
 
 
 \examples{\dontrun{
-# Go to <http://meteo.unican.es/trac/wiki/udg/ecoms/RPackage/examples>
+# Go to <http://meteo.unican.es/ecoms-udg/RPackage/examples>
 }}
 
