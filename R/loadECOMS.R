@@ -70,6 +70,13 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       aux.level <- findVerticalLevel(derInterface$leadVar)
       var <- aux.level$var
       level <- aux.level$level
+      # Redirecting to monthly datasets when appropriate
+      if (dataset == "System4_seasonal_51") {
+            if ((var == "psl" & time == "DD" & aggr.d == "mean" & aggr.m == "mean") | (var == "tas" & aggr.m == "mean")) {
+                  message("NOTE: Redirected to System4 monthly dataset\nSee <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog>")
+                  dataset <- "System4_seasonal_51_monthly"
+            }            
+      }
       url <- if (is.null(url)) {
             dataURL(dataset)
       } else {
