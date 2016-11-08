@@ -37,7 +37,7 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, agg
             }
             # Si es MM hay que asegurarse de que se calcula sobre dato diario
             if ((aggr.m != "none") & ((timeResInSeconds / 3600) < 24) & (time == "none")) {
-                  stop("Data is sub-daily:\nA daily aggregation function must be indicated first to perform monthly aggregation", call. = FALSE)
+                  stop("Data is sub-daily:\nA daily aggregation function must be indicated before performing a monthly aggregation", call. = FALSE)
             }
             if ((timeResInSeconds / 3600) == 24) {
                   time <- "DD"
