@@ -60,9 +60,9 @@ getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years, data
       }
       init.list <- lapply(ls(pattern = "\\.inits$")[pmatch(tolower(month.abb), ls(pattern = "\\.inits$"))], function(x) get(x))
       nmem <- if (identical(dataset, "CFSv2_seasonal_operative")) {
-            length(init.list[[validMonth]])
-      } else {
             length(init.list[[validMonth]]) / length(unique(runDatesAll[init.list[[validMonth]]]$year)) 
+      } else {
+            length(init.list[[validMonth]])
       }
       rm(list = c("d", "m", "y", ls(pattern = "\\.inits$")))
       runTimesValidMonth <- init.list[[validMonth]]
