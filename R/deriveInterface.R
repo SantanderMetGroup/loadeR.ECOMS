@@ -46,7 +46,7 @@ deriveInterface <- function(dataset, var, dictionary, time) {
       var <- findVerticalLevel(var)$var
       dicRow <- grep(paste("^", var, "$", sep = ""), dictionary$identifier) 
       if (length(dicRow) == 0) {
-            stop("Variable requested not found\nCheck variable naming and availability in <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog>")
+            stop("Variable requested not found\nCheck variable naming and availability in <http://meteo.unican.es/ecoms-udg/dataserver/catalog>")
       }
       if (length(dicRow) > 1) {
             if (time == "DD") {
@@ -56,7 +56,7 @@ deriveInterface <- function(dataset, var, dictionary, time) {
             }
       }
       if (dictionary$derived[dicRow] == 1) {
-            message("NOTE: The requested variable is not originally stored in model's database\nIt will be derived on-the-fly using an approximation\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog> for details")
+            message("NOTE: The requested variable is not originally stored in model's database\nIt will be derived on-the-fly using an approximation\nGo to <http://meteo.unican.es/ecoms-udg/dataserver/catalog> for details")
             deriveInterface <- dictionary$interface[dicRow]
             leadVar <- switch(deriveInterface, 
                                     deriveSurfacePressure = "tas",
