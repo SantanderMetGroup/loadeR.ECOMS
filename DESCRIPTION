@@ -13,7 +13,7 @@ Suggests:
 Type: Package
 Title: A loadeR extension for accessing the ECOMS User Data Gateway (<http://meteo.unican.es/ecoms-udg>)
 Version: 1.2-0
-Date: 2016-11-30
+Date: 2017-02-22
 Authors@R: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [aut]",
     "Joaquin Bedia <bediaj@unican.es> [ctb,cre]",
@@ -24,7 +24,7 @@ Authors@R: as.person(c(
     "Manuel Vega <manuel.vega@unican.es> [ctb]"))
 BugReports: https://github.com/SantanderMetGroup/loadeR.ECOMS/issues
 URL: http://meteo.unican.es/trac/wiki/udg/ecoms
-Description: Enables homogenized access via OPeNDAP to hindcast and other
+Description: Enables harmonized access via OPeNDAP to hindcast and other
     climate databases of the FP-7 ECOMS consortium, stored at the Santander MetGroup's User Data Gateway
     (<http://meteo.unican.es/trac/wiki/udg>). Previous registration via the Santander MetGroup's THREDDS Administration Panel (TAP) is required.
     Data access is regulated through a fine-grained authorization scheme depending on data access policies,
