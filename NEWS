@@ -1,5 +1,5 @@
 loadeR.ECOMS
 ============
 
-* Added the operative CFSv2 seasonal forecast (this will be not regularly updated)
-* Other minor enhancements and documentation updates
+* Added System-4 landmask (`var = lm`) in S4-seasonal-51 (same as the rest of S4 products)
+* Other minor changes and message http link updates

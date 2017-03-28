@@ -32,7 +32,7 @@
 
 deriveInterface <- function(dataset, var, dictionary, time) {
       if (dictionary == FALSE) {
-            stop("The requested variable is non-standard. The dictionary must be used for homogenization and conversion of input variables\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables> for details")
+            stop("The requested variable is non-standard. The dictionary must be used for homogenization and conversion of input variables\nGo to <http://meteo.unican.es/ecoms-udg/dataserver/catalog> for details")
       }
       dicPath <- if (typeof(dictionary) == "character") {
             file.path(dictionary, paste0(dataset, ".dic"));
