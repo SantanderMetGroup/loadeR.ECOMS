@@ -20,7 +20,7 @@
 #'  the data for all the initializations requested. In this case, the last year in selection
 #'  is suppressed with a warning. If the selection corresponds to one single year, the query
 #'  is automatically updated to the maximum number of available members, with a warning.
-#' @references \url{http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2}      
+#' @references \url{http://meteo.unican.es/ecoms-udg/dataserver/datasets/CFSv2}      
 #' @author J. Bedia 
 
 getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years, dataset) {
@@ -74,7 +74,7 @@ getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years, data
             nmem <- 1L
       }
       if (length(members) > nmem | any(members > nmem)) {
-            stop("Maximum number of members for this initialization is ", nmem, "\nSee details in <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2>")
+            stop("Maximum number of members for this initialization is ", nmem, "\nSee details in <http://meteo.unican.es/ecoms-udg/dataserver/datasets/CFSv2>")
       }
       # Excepcion cuando valid month = 1 toma inicializaciones del a\~no anterior
       yr.ind <- if (validMonth == 1) {
@@ -83,7 +83,7 @@ getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years, data
             which(unique(runDatesValidMonth$year + 1900) %in% (years))
       }
       if (length(yr.ind) == 0 && !is.null(runDatesAll)) {
-            stop("Forecast times requested not available for the requested initialization. Check model configuration at < http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2>")
+            stop("Forecast times requested not available for the requested initialization. Check model configuration at < http://meteo.unican.es/ecoms-udg/dataserver/datasets/CFSv2>")
       }
       if (!is.null(runDatesAll)) {
             aux.ind <- findInterval(1:length(runDatesValidMonth), vec = seq(1, length(runDatesValidMonth), nmem))
