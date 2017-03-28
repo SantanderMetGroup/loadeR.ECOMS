@@ -104,7 +104,9 @@ makeSubset.S4 <- function(grid, latLon, runTimePars, memberRangeList, foreTimePa
             }
             aux.list1 <- NULL
       }
-      mdArray <- do.call("abind", c(aux.list, along = grep(gcs$getEnsembleAxis()$getDimensionsString(), dimNamesRef, fixed = TRUE)))
+      along <- tryCatch(expr = grep(gcs$getEnsembleAxis()$getDimensionsString(), dimNamesRef, fixed = TRUE),
+                        error = function(err) 1L) ## Static grids lack EnsembleAxis and yield error
+      mdArray <- do.call("abind", c(aux.list, along = along))
       aux.list <- NULL
       if (any(dim(mdArray) == 1)) {
             dimNames <- dimNamesRef[-which(dim(mdArray) == 1)]
@@ -117,7 +119,9 @@ makeSubset.S4 <- function(grid, latLon, runTimePars, memberRangeList, foreTimePa
       attr(mdArray, "dimensions") <- dimNames
       # Date adjustment
       foreTimePars$forecastDates <- aux.foreDatesList
-      foreTimePars$forecastDates <- adjustDates.forecast(foreTimePars)
+      if (!is.null(aux.foreDatesList[[1]][[1]])) { ## Otherwise static
+            foreTimePars$forecastDates <- adjustDates.forecast(foreTimePars)
+      }
       return(list("mdArray" = mdArray, "foreTimePars" = foreTimePars))
 }
 # End

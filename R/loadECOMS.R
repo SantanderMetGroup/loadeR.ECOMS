@@ -110,7 +110,8 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       # Static variable requests
       if (dic$time_step == "static") {
             message("NOTE: The requested variable is static. All time-related arguments will be ignored")
-            season <- 1
+            leadMonth <- 1
+            season <- 6
             years <- 2000
             time <- "none"
             aggr.d <- "none"
@@ -137,7 +138,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       gds <- openDataset(url$URL)
       grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
-            stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog", call. = FALSE)
+            stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/dataserver/catalog", call. = FALSE)
       }
       latLon <- getLatLonDomain(grid, lonLim, latLim)
       proj <- grid$getCoordinateSystem()$getProjection()
@@ -206,7 +207,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       # Source Dataset and other metadata 
       attr(out, "dataset") <- dataset
       attr(out, "source") <- "ECOMS User Data Gateway" 
-      attr(out, "URL") <- "<http://meteo.unican.es/trac/wiki/udg/ecoms>"
+      attr(out, "URL") <- "<http://meteo.unican.es/ecoms-udg>"
       return(out)
 }      
 # End

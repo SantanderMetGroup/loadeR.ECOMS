@@ -52,7 +52,10 @@ loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLo
             cube$mdArray <- revArrayLatDim(cube$mdArray, grid)
       }
       # formatting initialization dates
-      runTimePars$runDates <- format(as.POSIXct(runTimePars$runDates, tz = "GMT"), format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
+      if (!is.null(runTimePars$runDates)) { ## Otherwise static variable
+            runTimePars$runDates <- format(as.POSIXct(runTimePars$runDates, tz = "GMT"),
+                                           format = "%Y-%m-%d %H:%M:%S", usetz = TRUE)
+      }
       # Static fields
       if (dic$time_step == "static") {
             runTimePars$runDates <- NA

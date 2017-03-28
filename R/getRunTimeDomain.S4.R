@@ -16,20 +16,25 @@
 #' @keywords internal
 
 getRunTimeDomain.S4 <- function(runDatesAll, validMonth, years) {
-      runTimesAll <- which(runDatesAll$mon == (validMonth - 1))
-      if (length(runTimesAll) == 0) {
-            stop(paste("Incompatible 'leadMonth' and 'season' argument values.\nInitializations in", 
-                       paste(month.name[unique(runDatesAll$mon + 1)], collapse = ", ")),
-                 call. = FALSE)
+      if (!is.null(runDatesAll)) {
+            runTimesAll <- which(runDatesAll$mon == (validMonth - 1))
+            if (length(runTimesAll) == 0) {
+                  stop(paste("Incompatible 'leadMonth' and 'season' argument values.\nInitializations in", 
+                             paste(month.name[unique(runDatesAll$mon + 1)], collapse = ", ")),
+                       call. = FALSE)
+            }
+            runDatesValidMonth <- runDatesAll[runTimesAll]
+            runTimes <- runTimesAll[which((runDatesValidMonth$year + 1900) %in% years)]
+            runDatesValidMonth <- runTimesAll <- NULL
+            runDates <- runDatesAll[runTimes]
+            # java ranges
+            runTimeRanges <- lapply(1:length(runTimes), function(x) {
+                  .jnew("ucar/ma2/Range", as.integer(runTimes[x] - 1), as.integer(runTimes[x] - 1))
+            })
+      } else { ## Static variables
+            runDates <- NULL
+            runTimeRanges <- list(.jnull())
       }
-      runDatesValidMonth <- runDatesAll[runTimesAll]
-      runTimes <- runTimesAll[which((runDatesValidMonth$year + 1900) %in% years)]
-      runDatesValidMonth <- runTimesAll <- NULL
-      runDates <- runDatesAll[runTimes]
-      # java ranges
-      runTimeRanges <- lapply(1:length(runTimes), function(x) {
-            .jnew("ucar/ma2/Range", as.integer(runTimes[x] - 1), as.integer(runTimes[x] - 1))
-      })
       return(list("runDates" = runDates, "runTimeRanges" = runTimeRanges))
 }
 # End
