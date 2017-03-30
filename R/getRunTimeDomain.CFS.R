@@ -60,7 +60,8 @@ getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years, data
       }
       init.list <- lapply(ls(pattern = "\\.inits$")[pmatch(tolower(month.abb), ls(pattern = "\\.inits$"))], function(x) get(x))
       nmem <- if (identical(dataset, "CFSv2_seasonal_operative")) {
-            length(init.list[[validMonth]]) / length(unique(runDatesAll[init.list[[validMonth]]]$year)) 
+            length(unique(substr(runDatesAll[init.list[[validMonth]]],6,13)))
+            #length(init.list[[validMonth]]) / length(unique(runDatesAll[init.list[[validMonth]]]$year)) 
       } else {
             length(init.list[[validMonth]])
       }
@@ -84,25 +85,31 @@ getRunTimeDomain.CFS  <- function (runDatesAll, validMonth, members, years, data
             stop("Forecast times requested not available for the requested initialization. Check model configuration at < http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/datasets/CFSv2>")
       }
       if (!is.null(runDatesAll)) {
-            aux.ind <- findInterval(1:length(runDatesValidMonth), vec = seq(1, length(runDatesValidMonth), nmem))
-            runTimes.aux <- unlist(lapply(yr.ind, function(x) runTimesValidMonth[aux.ind == x][members]))
-            runDates.aux <- do.call("c", lapply(yr.ind, function(x) runDatesValidMonth[aux.ind == x][members]))
+            if (identical(dataset, "CFSv2_seasonal_operative")){
+              aux.ind <- which(as.integer(substr(runDatesValidMonth,1,4)) == years)
+              runDates.aux <- runDatesValidMonth[aux.ind][members]
+              runTimes.aux <- runTimesValidMonth[aux.ind][members]
+            }else{
+              aux.ind <- findInterval(1:length(runDatesValidMonth), vec = seq(1, length(runDatesValidMonth), nmem))
+              runTimes.aux <- unlist(lapply(yr.ind, function(x) runTimesValidMonth[aux.ind == x][members]))
+              runDates.aux <- do.call("c", lapply(yr.ind, function(x) runDatesValidMonth[aux.ind == x][members]))
+            }
             runTimesValidMonth <- runDatesValidMonth <- aux.ind <- NULL
             runTimesEnsList <- lapply(1:length(members), function(x) {
-                  ind <- seq(x, by = length(members), length.out = length(years))
-                  return(runTimes.aux[ind])
+              ind <- seq(x, by = length(members), length.out = length(years))
+              return(runTimes.aux[ind])
             })
             runDatesEnsList <- lapply(1:length(members), function(x) {
-                  ind <- seq(x, by = length(members), length.out = length(years))
-                  return(format(as.POSIXct(runDates.aux[ind]), format = "%Y-%m-%d %H:%M:%S", tz = "GMT", usetz = TRUE))
+              ind <- seq(x, by = length(members), length.out = length(years))
+              return(format(as.POSIXct(runDates.aux[ind]), format = "%Y-%m-%d %H:%M:%S", tz = "GMT", usetz = TRUE))
             })
             runTimes.aux <- runDates.aux <- NULL
             names(runTimesEnsList) <- names(runDatesEnsList) <- paste("Member", members, sep = "_")
             for (i in 1:length(runTimesEnsList)) {
-                  runTimesEnsList[[i]] <- lapply(1:length(runTimesEnsList[[i]]), function(j) {
-                        rt <- as.integer(runTimesEnsList[[i]][j] - 1)
-                        .jnew("ucar.ma2.Range", rt, rt)
-                  })
+              runTimesEnsList[[i]] <- lapply(1:length(runTimesEnsList[[i]]), function(j) {
+                rt <- as.integer(runTimesEnsList[[i]][j] - 1)
+                .jnew("ucar.ma2.Range", rt, rt)
+              })
             }
       } else { ## STATIC variables
             runDatesEnsList <- NULL
