@@ -1,7 +1,5 @@
 loadeR.ECOMS
 ============
 
-* New S4-51 seasonal monthly dataset
-* Redefinition of initialization date structure in System4 products, consistent with all other hindcasts
-* Allow for DJF-2010 requests in CFSv2 hindcast
-* Minor enhancements 
+* Added System-4 landmask (`var = lm`) in S4-seasonal-51 (same as the rest of S4 products)
+* Other minor changes and message http link updates

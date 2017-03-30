@@ -13,15 +13,15 @@
 #' (i.e., the variable to be derived) but at the end replaces the \code{shortName} by that of the
 #'  \sQuote{leading variable} (see \code{\link{deriveInterface}} for a description of this concept),
 #'  in order to open an existing \dQuote{GeoGrid}.
-#' @references \url{http://meteo.unican.es/trac/wiki/udg/ecoms/RPackage/homogeneization}
+#' @references \url{http://meteo.unican.es/ecoms-udg/RPackage/homogeneization}
 #' @author J. Bedia 
 
 dictionaryLookup.ECOMS <- function(dicPath, derInterface, time) {
-      message("[", Sys.time(), "] Defining homogeneization parameters for variable \"", derInterface$origVar, "\"")
-      dictionary <- tryCatch({read.csv(dicPath, stringsAsFactors = FALSE)}, error = function(e) stop("Dictionary not found"))
+      message("[", Sys.time(), "] Defining harmonization parameters for variable \"", derInterface$origVar, "\"")
+      dictionary <- tryCatch({read.csv(dicPath, stringsAsFactors = FALSE)}, error = function(e) stop("Dictionary not found", call. = FALSE))
       dicRow <- grep(paste("^", findVerticalLevel(derInterface$leadVar)$var, "$", sep = ""), dictionary$identifier) 
       if (length(dicRow) == 0) {
-            stop("Variable requested not found\nCheck available variables at https://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/listofvariables")
+            stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/dataserver/listofvariables")
       }
       if (length(dicRow) > 1) {
             if (time == "DD" & derInterface$deriveInterface == "none") {
