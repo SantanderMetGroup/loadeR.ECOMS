@@ -1,5 +1,4 @@
 loadeR.ECOMS
 ============
 
-* Added System-4 landmask (`var = lm`) in S4-seasonal-51 (same as the rest of S4 products)
-* Other minor changes and message http link updates
+* Minor bug fix for loading CFSv2 Operative Forecasts (internal SMG usage only)
