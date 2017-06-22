@@ -1,5 +1,4 @@
 loadeR.ECOMS
 ============
 
-* Added the operative CFSv2 seasonal forecast (this will be not regularly updated)
-* Other minor enhancements and documentation updates
+* Minor bug fix for loading CFSv2 Operative Forecasts (internal SMG usage only)

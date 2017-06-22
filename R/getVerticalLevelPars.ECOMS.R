@@ -14,13 +14,13 @@ getVerticalLevelPars.ECOMS <- function(grid, dataset, level) {
     gcs <- grid$getCoordinateSystem()
     if (gcs$hasVerticalAxis()) {
         if (is.null(level)) {
-            stop("Variable with vertical levels: '@level' following the variable name is required.\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog> for details", call. = FALSE)
+            stop("Variable with vertical levels: '@level' following the variable name is required.\nGo to <http://meteo.unican.es/ecoms-udg/dataserver/catalog> for details", call. = FALSE)
         }
         levelInd <- gcs$getVerticalAxis()$findCoordElement(level)
         if (grepl("System4", dataset)) {
             levelInd <- 0L      
         } else if (levelInd < 0) {
-            stop("Vertical level not found.\nGo to <http://meteo.unican.es/trac/wiki/udg/ecoms/dataserver/catalog> for valid vertical level values", call. = FALSE)
+            stop("Vertical level not found.\nGo to <http://meteo.unican.es/ecoms-udg/dataserver/catalog> for valid vertical level values", call. = FALSE)
         }
         zRange <- .jnew("ucar/ma2/Range", levelInd, levelInd)
     } else {

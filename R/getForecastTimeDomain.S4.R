@@ -26,9 +26,11 @@
 
 getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, aggr.d, aggr.m) {
       gcs <- grid$getCoordinateSystem()
+      deaccum <- FALSE
       #deaccumFromFirst <- NULL
       if (dic$time_step == "static") {
             foreDates <- "static field"
+            foreDatesList <- list(NULL)
             foreTimeRangesList <- list(.jnew("ucar/ma2/Range", 0L, 0L))
       } else {
             timeResInSeconds <- gcs$getTimeAxisForRun(runTimePars$runTimeRanges[[1]]$element(0L))$getTimeResolution()$getValueInSeconds()
@@ -95,7 +97,6 @@ getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, agg
                   timeIndList <- NULL
             }
             # Sub-routine for adjusting times in case of deaccumulation
-            deaccum <- FALSE
             if (!is.null(dic)) {
                   if (dic$deaccum == 1) {
                         deaccum <- TRUE

@@ -8,3 +8,4 @@ ignore
 .Rbuildignore
 hs_err_pid*
 .directory
+^#.*#$
