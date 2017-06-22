@@ -194,6 +194,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       gds$close()
       message("[", Sys.time(), "]", " Done")
       attr(out$xyCoords, "projection") <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
+      attributes(out$xyCoords) <- attributes(getGrid(out))
       # Dimension ordering
       x <- attr(out$Data, "dimensions")
       if (length(x) > 1) {
