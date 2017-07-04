@@ -1,4 +1,5 @@
 identifier,short_name,time_step,lower_time_bound,upper_time_bound,aggr_fun,offset,scale,deaccum,derived,interface
 tas,t2m,1m,0,1,mean,-273.15,1,0,0,
 tp,tp,1m,0,1,sum,0,2606400000,0,0,
+pr,tp,1m,0,1,sum,0,2606400000,0,0,
 psl,mslp,1m,0,1,mean,0,1,0,0,

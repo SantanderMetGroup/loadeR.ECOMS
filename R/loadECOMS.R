@@ -1,6 +1,6 @@
-# loadECOMS.R Load a user-defined spatio-temporal slice from ECOMS-UDG datasets
+#     loadECOMS.R Load harmonized spatio-temporal slices from ECOMS-UDG datasets
 #
-#     Copyright (C) 2016 Santander Meteorology Group (http://www.meteo.unican.es)
+#     Copyright (C) 2017 Santander Meteorology Group (http://www.meteo.unican.es)
 #
 #     This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -65,6 +65,10 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             message("NOTE: Argument 'aggr.d' ignored as 'time' was set to ", time)
       }
       aggr.m <- match.arg(aggr.m, choices = c("none", "mean", "min", "max", "sum"))
+      if (var == "tp") {
+            warning("The use of the \"tp\" variable name is deprecated. Use \"pr\" instead ('tp' usage is temporarily maintained for backwards compatibility)")
+            if (dataset == "WFDEI") var <- "pr"
+      } 
       derInterface <- deriveInterface(dataset, var, dictionary, time)
       var <- derInterface$leadVar
       aux.level <- findVerticalLevel(derInterface$leadVar)
@@ -101,7 +105,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                         shortName <- paste0(dic$short_name, level, "mb")
                   } else if (grepl("ERA\\_interim", dataset) & grepl("^U$|^V$|^Z$|^T$|^Q$", shortName)) {
                         shortName <- paste0(dic$short_name, level)
-                  }
+                  } 
             } else {
                   dic <- NULL
                   shortName <- var
@@ -145,7 +149,10 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       if (!proj$isLatLon()) latLon <- adjustRCMgrid(gds, latLon, lonLim, latLim) 
       # Grid datasets
       if (grepl("WFDEI|NCEP_reanalysis1|ERA_interim", dataset)) {
-           out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m)
+            #            out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m)
+            out <- switch(derInterface$deriveInterface,
+                          none = loadGridDataset(var, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m),
+                          deriveTotalPrecipitation = deriveTotalPrecipitation(gds, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m))
       # Forecasts
       } else {
             if (dic$time_step == "static") {
@@ -195,6 +202,12 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       gds$close()
       message("[", Sys.time(), "]", " Done")
       attr(out$xyCoords, "projection") <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
+      attr(out, "resX") <- (tail(out$xyCoords$x, 1) - out$xyCoords$x[1]) / (length(out$xyCoords$x) - 1)
+      attr(out, "resY") <- (tail(out$xyCoords$y, 1) - out$xyCoords$y[1]) / (length(out$xyCoords$y) - 1)
+      if("lon" %in% names(out$xyCoords)){
+            attr(out, "resLON") <- NA 
+            attr(out, "resLAT") <- NA
+      } 
       # Dimension ordering
       x <- attr(out$Data, "dimensions")
       if (length(x) > 1) {
