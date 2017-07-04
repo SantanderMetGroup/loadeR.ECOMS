@@ -31,8 +31,8 @@
 #' @keywords internal
 
 deriveInterface <- function(dataset, var, dictionary, time) {
-      if (dictionary == FALSE) {
-            stop("The requested variable is non-standard. The dictionary must be used for homogenization and conversion of input variables\nGo to <http://meteo.unican.es/ecoms-udg/dataserver/catalog> for details")
+      if (!dictionary) {
+            stop("The requested variable is non-standard. The dictionary must be used for data harmonization\nGo to <http://meteo.unican.es/ecoms-udg/dataserver/catalog> for details")
       }
       dicPath <- if (typeof(dictionary) == "character") {
             file.path(dictionary, paste0(dataset, ".dic"));
@@ -56,13 +56,14 @@ deriveInterface <- function(dataset, var, dictionary, time) {
             }
       }
       if (dictionary$derived[dicRow] == 1) {
-            message("NOTE: The requested variable is not originally stored in model's database\nIt will be derived on-the-fly using an approximation\nGo to <http://meteo.unican.es/ecoms-udg/dataserver/catalog> for details")
+            message("NOTE: The requested variable is not originally stored in the requested database\nIt will be derived on-the-fly using an approximation\nGo to <http://meteo.unican.es/ecoms-udg/dataserver/catalog> for details")
             deriveInterface <- dictionary$interface[dicRow]
             leadVar <- switch(deriveInterface, 
-                                    deriveSurfacePressure = "tas",
-                                    deriveSurfaceRelativeHumidity = "tas",
-                                    deriveSurfaceSpecificHumidity = "tas",
-                                    deriveSurfaceWindSpeed = "uas")
+                              deriveSurfacePressure = "tas",
+                              deriveSurfaceRelativeHumidity = "tas",
+                              deriveSurfaceSpecificHumidity = "tas",
+                              deriveSurfaceWindSpeed = "uas",
+                              deriveTotalPrecipitation = "prsn")
       } else {
             deriveInterface <- "none"
             leadVar <- var
