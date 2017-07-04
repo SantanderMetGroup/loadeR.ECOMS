@@ -24,7 +24,7 @@
 #' \end{itemize}
 #' @author J. Bedia 
 
-getForecastTimeDomain.S4 <- function (grid, dataset, dic, runTimePars, time, aggr.d, aggr.m) {
+getForecastTimeDomain.S4 <- function(grid, dataset, dic, runTimePars, time, aggr.d, aggr.m) {
       gcs <- grid$getCoordinateSystem()
       deaccum <- FALSE
       #deaccumFromFirst <- NULL

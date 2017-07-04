@@ -1,4 +1,6 @@
 loadeR.ECOMS
 ============
 
-* Minor bug fix for loading CFSv2 Operative Forecasts (internal SMG usage only)
+* Redefinition of precipitation variable. 
+  * The total precipitation amount (snow + rain) is now referred to as "pr". WFDEI now uses "pr" by default, for compatibility with model outputs. "tp" nomenclature is preserved in model data for backwards compatibility (with a warning).
+* Other minor changes and on-screen message updates
