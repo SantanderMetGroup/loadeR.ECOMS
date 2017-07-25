@@ -1,6 +1,4 @@
 loadeR.ECOMS
 ============
 
-* Redefinition of precipitation variable. 
-  * The total precipitation amount (snow + rain) is now referred to as "pr". WFDEI now uses "pr" by default, for compatibility with model outputs. "tp" nomenclature is preserved in model data for backwards compatibility (with a warning).
-* Other minor changes and on-screen message updates
+* Add CITATION file with [Climate Services paper](http://www.meteo.unican.es/en/node/73360)

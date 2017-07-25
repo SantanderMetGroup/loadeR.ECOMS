@@ -1,0 +1,16 @@
+bibentry(bibtype = "Article",
+         title = "The ECOMS User Data Gateway: Towards seasonal forecast data provision and research reproducibility in the era of Climate Services",
+         author = c(person(given = "Antonio S.", family = "Cofino", role = "aut"),
+                  person(given = "Joaquin", family = "Bedia", role = "aut"),
+                  person(given = "Maialen", family =  "Iturbide", role = "aut"),
+                  person(given = "Manuel", family =  "Vega", role = "aut"),
+                  person(given = "Sixto", family = "Herrera", role = "aut"),
+                  person(given = "Jesus", family =  "Fernandez", role = "aut"),
+                  person(given = "M. Dolores", family =  "Frias", role = "aut"),
+                  person(given = "Rodrigo", family =  "Manzanas", role = "aut"),
+                  person(given = "Jose Manuel", family =  "Gutierrez", role = "aut")),
+         url = "http://www.meteo.unican.es/en/node/73360",
+         doi = "10.1016/j.cliser.2017.07.001",
+         journal = "Climate Services",
+         year = "2017"
+         )
