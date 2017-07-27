@@ -139,7 +139,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
             message("NOTE: The dataset is not a forecast. Argument 'members' will be ignored")      
       }
       # Discover dataset and open grid
-      gds <- openDataset(url$URL)
+      gds <- openDataset(URLencode(url$URL))
       grid <- gds$findGridByShortName(shortName)
       if (is.null(grid)) {
             stop("Variable requested not found\nCheck available variables at http://meteo.unican.es/ecoms-udg/dataserver/catalog", call. = FALSE)

@@ -1,6 +1,7 @@
 importFrom(loadeR.java, javaCalendarDate2rPOSIXlt)
 importFrom(loadeR.java, javaString2rChar)
 importFrom(utils, packageDescription)
+importFrom(utils, URLencode)
 importFrom(abind, abind)
 importFrom(RCurl, getURL)
 importFrom("stats", "na.exclude", "var")
