@@ -1,4 +1,4 @@
 loadeR.ECOMS
 ============
 
-* Add CITATION file with [Climate Services paper](http://www.meteo.unican.es/en/node/73360)
+* Bug fix in the retrieval of WFDEI precipitation metadata (derived from snow + rain)

@@ -100,13 +100,13 @@ deriveTotalPrecipitation <- function(gds, grid, dic, level, season, years, time,
       if (isTRUE(latLon$revLat)) {
             cube$mdArray <- revArrayLatDim(cube$mdArray, grid)
       }
-      Variable <- list("varName" = var, "level" = levelPars$level)
+      Variable <- list("varName" = "pr", "level" = levelPars$level)
       attr(Variable, "use_dictionary") <- isStandard
-      attr(Variable, "description") <- grid$getDescription()
+      attr(Variable, "description") <- "total precipitation amount (rain + snow)"
       if (isStandard) {
             vocabulary <- UDG.vocabulary()
-            attr(Variable, "units") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier), 3])
-            attr(Variable, "longname") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier), 2])
+            attr(Variable, "units") <- as.character(vocabulary[grep("^pr$", vocabulary$identifier), 3])
+            attr(Variable, "longname") <- as.character(vocabulary[grep("^pr$", vocabulary$identifier), 2])
       } else {
             attr(Variable, "units") <- grid$getUnitsString()
             attr(Variable, "longname") <- grid$getFullName()

@@ -1,7 +1,7 @@
 Package: loadeR.ECOMS
 Depends:
     R(>= 3.1.0),
-    loadeR(>= 1.1.0),
+    loadeR(>= 1.2.0),
     rJava
 Imports:
     loadeR.java (>= 1.0.0),
@@ -9,11 +9,10 @@ Imports:
     abind,
     RCurl
 Suggests:
-    downscaleR,
 Type: Package
 Title: A loadeR extension for accessing the ECOMS User Data Gateway (<http://meteo.unican.es/ecoms-udg>)
-Version: 1.3.1
-Date: 2017-07-25
+Version: 1.3.2
+Date: 2017-11-03
 Authors@R: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [aut]",
     "Joaquin Bedia <bediaj@unican.es> [ctb,cre]",
@@ -32,4 +31,4 @@ Description: Enables harmonized access via OPeNDAP to hindcast and other
     although permission for the PUBLIC role is granted by default.
     Go to <http://meteo.unican.es/ecoms-udg/dataserver/registration> for more details.
 License: GPL (>= 3)
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

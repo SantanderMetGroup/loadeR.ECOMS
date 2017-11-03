@@ -151,7 +151,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       if (grepl("WFDEI|NCEP_reanalysis1|ERA_interim", dataset)) {
             #            out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m)
             out <- switch(derInterface$deriveInterface,
-                          none = loadGridDataset(var, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m),
+                          none = loadGridDataset(var, grid, dic, level, season, years, members, time, latLon, aggr.d, aggr.m),
                           deriveTotalPrecipitation = deriveTotalPrecipitation(gds, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m))
       # Forecasts
       } else {
