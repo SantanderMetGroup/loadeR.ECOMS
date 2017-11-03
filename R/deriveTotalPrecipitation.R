@@ -1,5 +1,5 @@
  
-deriveTotalPrecipitation <- function(gds, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m) {
+deriveTotalPrecipitation <- function(var, gds, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m) {
       timePars <- getTimeDomain(grid, dic, season, years, time, aggr.d, aggr.m)
       levelPars <- getVerticalLevelPars(grid, level)
       message("[", Sys.time(), "] Retrieving data subset ..." )
