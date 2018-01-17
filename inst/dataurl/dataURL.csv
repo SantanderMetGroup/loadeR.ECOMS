@@ -4,6 +4,7 @@ System4_annual_15,http://www.meteo.unican.es/tds5/dodsC/system4/System4_Annual_1
 System4_seasonal_51,http://www.meteo.unican.es/tds5/dodsC/system4/System4_Seasonal_51Members.ncml,
 System4_seasonal_51_monthly,http://meteo.unican.es/tds5/dodsC/system4/monthly/system4_od1_msmm_51.ncml,
 CFSv2_seasonal,http://meteo.unican.es/tds5/dodsC/cfsrr/CFSv2_Seasonal.ncml,
+CFSv2_seasonal_monthly,http://meteo.unican.es/tds5/dodsC/cfsrr/CFSv2_Seasonal_Monthly.ncml,
 CFSv2_seasonal_operative,http://meteo.unican.es/tds5/dodsC/cfsrr/CFSv2_Seasonal_Operative.ncml,
 SMHI-EC-EARTH_EUPORIAS,http://meteo.unican.es/tds5/dodsC/ec_earth_v3/smhi_ec_earth_4xDaily.ncml,
 Glosea5_seasonal_12,http://meteo.unican.es/tds5/dodsC/glosea5/day_GloSea5_12_members_seasonal_sfc.ncml,

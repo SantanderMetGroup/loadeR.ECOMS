@@ -51,6 +51,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                                       "System4_annual_15",
                                       "System4_seasonal_51_monthly",
                                       "CFSv2_seasonal",
+                                      "CFSv2_seasonal_monthly",
                                       "CFSv2_seasonal_operative",
                                       "SMHI-EC-EARTH_EUPORIAS",
                                       "Glosea5_seasonal_12",
@@ -82,6 +83,24 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                   message("NOTE: Accesing the monthly dataset")
                   dataset <- "System4_seasonal_51_monthly"
             }            
+      }
+      if (dataset == "CFSv2_seasonal_monthly") {
+        flag <- 0
+        if (time != "none") {
+          time <- "none"
+          flag <- 1
+        }
+        if (aggr.d != "none") {
+          aggr.d <- "none"
+          flag <- 1
+        }
+        if (aggr.m != "none") {
+          aggr.m <- "none"
+          flag <- 1
+        }
+        if (flag == 1) {
+          message("NOTE: Accesing a monthly dataset (one or more temporal aggregation parameters were ignored)")
+        }
       }
       url <- if (is.null(url)) {
             dataURL(dataset)
