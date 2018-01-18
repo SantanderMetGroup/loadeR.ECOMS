@@ -1,7 +1,10 @@
 loadSeasonalForecast.CFS = function(var, gds, grid, dic, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface, datasetName) {
       foreTimePars <- if (dic$time_step == "static") {
-            list("forecastDates" = list(list(NULL)), "ForeTimeRangesList" = list(list(.jnull())), "deaccumFromFirst" = FALSE,
-                 "aggr.d" = aggr.d, "aggr.m" = aggr.m)     
+            list("forecastDates" = list(list(NULL)),
+                 "ForeTimeRangesList" = list(list(.jnull())),
+                 "deaccumFromFirst" = FALSE,
+                 "aggr.d" = aggr.d,
+                 "aggr.m" = aggr.m)     
       } else {
             getForecastTimeDomain.CFS(grid, dic, runTimePars, time, aggr.d, aggr.m)
       }
@@ -21,7 +24,7 @@ loadSeasonalForecast.CFS = function(var, gds, grid, dic, latLon, runTimePars, ti
             isStandard <- FALSE
       }
       if (isTRUE(latLon$revLat)) {
-            cube$mdArray <- revArrayLatDim(cube$mdArray, grid)
+            cube$mdArray <- revArrayLatDim(cube$mdArray)
       }
       # formatting initialization dates
       if (dic$time_step != "static") {

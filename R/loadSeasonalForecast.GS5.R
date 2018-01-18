@@ -15,7 +15,7 @@ loadSeasonalForecast.GS5 = function(var, gds, grid, dic, latLon, runTimePars, ti
             isStandard <- FALSE
       }
       if (isTRUE(latLon$revLat)) {
-            cube$mdArray <- revArrayLatDim(cube$mdArray, grid)
+            cube$mdArray <- revArrayLatDim(cube$mdArray)
       }
       # formatting initialization dates
       for (x in 1:length(runTimePars$runDates)) {

@@ -98,7 +98,7 @@ deriveTotalPrecipitation <- function(gds, grid, dic, level, season, years, time,
             isStandard <- FALSE
       }
       if (isTRUE(latLon$revLat)) {
-            cube$mdArray <- revArrayLatDim(cube$mdArray, grid)
+            cube$mdArray <- revArrayLatDim(cube$mdArray)
       }
       Variable <- list("varName" = "pr", "level" = levelPars$level)
       attr(Variable, "use_dictionary") <- isStandard

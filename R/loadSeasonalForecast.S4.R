@@ -49,7 +49,7 @@ loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLo
             isStandard <- FALSE
       }
       if (isTRUE(latLon$revLat)) {
-            cube$mdArray <- revArrayLatDim(cube$mdArray, grid)
+            cube$mdArray <- revArrayLatDim(cube$mdArray)
       }
       # formatting initialization dates
       if (!is.null(runTimePars$runDates)) { ## Otherwise static variable
