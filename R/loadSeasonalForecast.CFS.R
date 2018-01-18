@@ -24,7 +24,7 @@ loadSeasonalForecast.CFS = function(var, gds, grid, dic, latLon, runTimePars, ti
             isStandard <- FALSE
       }
       if (isTRUE(latLon$revLat)) {
-            cube$mdArray <- revArrayLatDim(cube$mdArray, grid)
+            cube$mdArray <- revArrayLatDim(cube$mdArray)
       }
       # formatting initialization dates
       if (dic$time_step != "static") {
