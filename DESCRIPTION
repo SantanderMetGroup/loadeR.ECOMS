@@ -1,7 +1,7 @@
 Package: loadeR.ECOMS
 Depends:
     R(>= 3.1.0),
-    loadeR(>= 1.2.0),
+    loadeR(>= 1.2.1),
     rJava
 Imports:
     loadeR.java (>= 1.0.0),
@@ -12,7 +12,7 @@ Suggests:
 Type: Package
 Title: A loadeR extension for accessing the ECOMS User Data Gateway (<http://meteo.unican.es/ecoms-udg>)
 Version: 1.4.0
-Date: 2018-01-17
+Date: 2018-01-18
 Authors@R: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [aut]",
     "Joaquin Bedia <bediaj@unican.es> [ctb,cre]",
@@ -26,7 +26,8 @@ BugReports: https://github.com/SantanderMetGroup/loadeR.ECOMS/issues
 URL: http://meteo.unican.es/trac/wiki/udg/ecoms
 Description: Enables harmonized access via OPeNDAP to hindcast and other
     climate databases of the FP-7 ECOMS consortium, stored at the Santander MetGroup's User Data Gateway
-    (<http://meteo.unican.es/ecoms-udg>). Previous registration via the Santander MetGroup's THREDDS Administration Panel (TAP) is required.
+    (<http://meteo.unican.es/ecoms-udg>), as described in Cofiño et al 2017 <http://dx.doi.org/10.1016/j.cliser.2017.07.001>.
+    Previous registration via the Santander MetGroup's THREDDS Administration Panel (TAP) is required.
     Data access is regulated through a fine-grained authorization scheme depending on data access policies,
     although permission for the PUBLIC role is granted by default.
     Go to <http://meteo.unican.es/ecoms-udg/dataserver/registration> for more details.

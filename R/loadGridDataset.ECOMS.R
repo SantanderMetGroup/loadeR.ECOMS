@@ -17,7 +17,7 @@ loadGridDataset.ECOMS <- function(var, grid, dic, level, season, years, time, la
             isStandard <- FALSE
       }
       if (isTRUE(latLon$revLat)) {
-            mdArray <- revArrayLatDim(mdArray, grid)
+            mdArray <- revArrayLatDim(mdArray)
       }
       return(list("Variable" = list("varName" = var, "isStandard" = isStandard, "level" = levelPars$level),
             "Data" = mdArray,
