@@ -1,5 +1,4 @@
 loadeR.ECOMS
 ============
 
-* New CFSv2 seasonal hindcast at precalculated monthly temporal resolution, for a dramatically faster data retrieval of monthly data
-* Add new global attributes to output grid
+* Add new variables to CFSv2_seasonal at various isobaric levels (see <http://meteo.unican.es/ecoms-udg/dataserver/catalog>)

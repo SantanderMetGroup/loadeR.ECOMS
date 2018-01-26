@@ -1,6 +1,6 @@
 #     loadECOMS.R Load harmonized spatio-temporal slices from ECOMS-UDG datasets
 #
-#     Copyright (C) 2017 Santander Meteorology Group (http://www.meteo.unican.es)
+#     Copyright (C) 2018 Santander Meteorology Group (http://www.meteo.unican.es)
 #
 #     This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -121,11 +121,13 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
       # dicPath <- file.path("./inst/dictionaries", paste(dataset, ".dic", sep = ""))
       dic <- dictionaryLookup.ECOMS(dicPath, derInterface, time)
       shortName <- dic$short_name
-      if (grepl("System4\\_seasonal\\_15", dataset) & grepl("^u$|^v$|^z$|^t$|^q$", shortName)) {
+      if ((dataset == "System4_seasonal_15") & grepl("^u$|^v$|^z$|^t$|^q$", shortName)) {
         shortName <- paste0(dic$short_name, level, "mb")
-      } else if (grepl("ERA\\_interim", dataset) & grepl("^U$|^V$|^Z$|^T$|^Q$", shortName)) {
+      } else if ((dataset == "ERA_interim") & grepl("^U$|^V$|^Z$|^T$|^Q$", shortName)) {
         shortName <- paste0(dic$short_name, level)
-      } 
+      } else if ((dataset == "CFSv2_seasonal") & grepl("^u$|^v$|^z$|^t$", shortName)) {
+        shortName <- paste0(dic$short_name, level)
+      }
     } else {
       dic <- NULL
       shortName <- var
