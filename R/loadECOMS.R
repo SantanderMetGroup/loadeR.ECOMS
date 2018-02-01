@@ -43,7 +43,8 @@
 
 
 loadECOMS <- function(dataset, var, dictionary = TRUE, 
-                      members = NULL, lonLim = NULL, latLim = NULL, season = NULL, url = NULL,
+                      members = NULL, lonLim = NULL, latLim = NULL,
+                      season = NULL, url = NULL,
                       years = NULL, leadMonth = 1, time = "none",
                       aggr.d = "none", aggr.m = "none") {
   dataset <- match.arg(dataset, c("System4_seasonal_15",
@@ -125,7 +126,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
         shortName <- paste0(dic$short_name, level, "mb")
       } else if ((dataset == "ERA_interim") & grepl("^U$|^V$|^Z$|^T$|^Q$", shortName)) {
         shortName <- paste0(dic$short_name, level)
-      } else if ((dataset == "CFSv2_seasonal") & grepl("^u$|^v$|^z$|^t$", shortName)) {
+      } else if ((dataset == "CFSv2_seasonal") & grepl("^ua$|^va$|^zg$|^ta$", shortName)) {
         shortName <- paste0(dic$short_name, level)
       }
     } else {
