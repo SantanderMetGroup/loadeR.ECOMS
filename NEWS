@@ -1,4 +1,4 @@
 loadeR.ECOMS
 ============
 
-* Add new variables to CFSv2_seasonal at various isobaric levels (see <http://meteo.unican.es/ecoms-udg/dataserver/catalog>)
+* Internal change to account for a recent variable renaming 
