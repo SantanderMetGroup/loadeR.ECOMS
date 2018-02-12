@@ -1,4 +1,4 @@
 loadeR.ECOMS
 ============
 
-* Internal change to account for a recent variable renaming 
+* Internal changes to make compatible with loadeR 1.3.0
