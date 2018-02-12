@@ -64,10 +64,10 @@ Integer value indicating the lead forecast time, relative to the first month of 
   \item{aggr.m}{Same as argument \code{aggr.d} but for monthly aggregation of data. It requires the specification of the daily aggregation in case of subdaily data. See details for time aggregation options.
 }
 
- \item{threshold}{A threshold for frequency data loading. Mainly for compatibility with \code{loadGridData}, currently it can't be used with seasonal forecast datasets. See \code{\link[loadeR]{loadGridData}} for details. 
+ \item{threshold}{Currently ignored. Introduced for compatibility with \code{loadGridData}. 
 }
 
-\item{condition}{Exceedance criteria when threshold is not \code{NULL}.Mainly for compatibility with \code{loadGridData}, currently it can't be used with seasonal forecast datasets. See \code{\link[loadeR]{loadGridData}} for details.  
+\item{condition}{Currently ignored. Introduced for compatibility with \code{loadGridData}
 }
 
 }
