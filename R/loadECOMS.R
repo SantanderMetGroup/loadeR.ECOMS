@@ -46,7 +46,8 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
                       members = NULL, lonLim = NULL, latLim = NULL,
                       season = NULL, url = NULL,
                       years = NULL, leadMonth = 1, time = "none",
-                      aggr.d = "none", aggr.m = "none") {
+                      aggr.d = "none", aggr.m = "none",
+                      threshold = NULL, condition = NULL) {
   dataset <- match.arg(dataset, c("System4_seasonal_15",
                                   "System4_seasonal_51",
                                   "System4_annual_15",
@@ -172,9 +173,9 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
   if (!proj$isLatLon()) latLon <- adjustRCMgrid(gds, latLon, lonLim, latLim) 
   # Grid datasets
   if (grepl("WFDEI|NCEP_reanalysis1|ERA_interim", dataset)) {
-    #            out <- loadGridDataset(var, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m)
     out <- switch(derInterface$deriveInterface,
-                  none = loadGridDataset(var, grid, dic, level, season, years, members, time, latLon, aggr.d, aggr.m),
+                  none = loadGridDataset(var, grid, dic, level, season, years, members, time, latLon, aggr.d, aggr.m,
+                                         threshold, condition),
                   deriveTotalPrecipitation = deriveTotalPrecipitation(gds, grid, dic, level, season, years, time, latLon, aggr.d, aggr.m))
     # Forecasts
   } else {
@@ -227,7 +228,7 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
   attr(out$xyCoords, "projection") <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
   attr(out, "resX") <- (tail(out$xyCoords$x, 1) - out$xyCoords$x[1]) / (length(out$xyCoords$x) - 1)
   attr(out, "resY") <- (tail(out$xyCoords$y, 1) - out$xyCoords$y[1]) / (length(out$xyCoords$y) - 1)
-  if("lon" %in% names(out$xyCoords)){
+  if ("lon" %in% names(out$xyCoords)) {
     attr(out, "resLON") <- NA 
     attr(out, "resLAT") <- NA
   } 

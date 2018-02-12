@@ -11,7 +11,8 @@ A simple interface for accesing and retrieving dimensional slices of the various
 \usage{
 loadECOMS(dataset, var, dictionary = TRUE, members = NULL, lonLim = NULL, 
       latLim = NULL, season = NULL, url = NULL, years = NULL, leadMonth = 1,
-      time = "none", aggr.d = "none", aggr.m = "none") 
+      time = "none", aggr.d = "none", aggr.m = "none",
+      threshold = NULL, condition = NULL) 
 }
 
 
@@ -61,6 +62,12 @@ Integer value indicating the lead forecast time, relative to the first month of 
 }
 
   \item{aggr.m}{Same as argument \code{aggr.d} but for monthly aggregation of data. It requires the specification of the daily aggregation in case of subdaily data. See details for time aggregation options.
+}
+
+ \item{threshold}{Currently ignored. Introduced for compatibility with \code{loadGridData}. 
+}
+
+\item{condition}{Currently ignored. Introduced for compatibility with \code{loadGridData}
 }
 
 }
