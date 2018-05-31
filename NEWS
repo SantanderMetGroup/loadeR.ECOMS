@@ -1,4 +1,4 @@
-loadeR.ECOMS
+New in loadeR.ECOMS
 ============
 
-* Internal changes to make compatible with loadeR 1.3.0
+* Internal change to accomodate an internal [function rename](https://github.com/SantanderMetGroup/loadeR/commit/30b695c4e1a17f420b43ae67dea2492a732e2e52#diff-424473e6ccf757b62e465a56a3cc6f8c) in `loadeR`

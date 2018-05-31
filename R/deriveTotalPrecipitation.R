@@ -104,7 +104,7 @@ deriveTotalPrecipitation <- function(gds, grid, dic, level, season, years, time,
       attr(Variable, "use_dictionary") <- isStandard
       attr(Variable, "description") <- "total precipitation amount (rain + snow)"
       if (isStandard) {
-            vocabulary <- UDG.vocabulary()
+            vocabulary <- C4R.vocabulary()
             attr(Variable, "units") <- as.character(vocabulary[grep("^pr$", vocabulary$identifier), 3])
             attr(Variable, "longname") <- as.character(vocabulary[grep("^pr$", vocabulary$identifier), 2])
       } else {
