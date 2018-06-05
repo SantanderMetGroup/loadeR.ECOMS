@@ -242,6 +242,9 @@ loadECOMS <- function(dataset, var, dictionary = TRUE,
     attr(out$Data, "dimensions")  <- dimNames
   }
   # Source Dataset and other metadata 
+  if ("member" %in% attr(out$Data, "dimensions")) {
+    attr(out$Variable, "initMonth") <- season[1] - leadMonth
+  }
   attr(out, "dataset") <- dataset
   attr(out, "source") <- "ECOMS User Data Gateway" 
   attr(out, "URL") <- "<http://meteo.unican.es/ecoms-udg>"

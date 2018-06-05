@@ -27,7 +27,7 @@
 #'   \sQuote{derive} prefix.
 #'  @references \url{http://meteo.unican.es/ecoms-udg/ListOfVariables}
 #'  @author J. Bedia 
-#'  @importFrom loadeR UDG.vocabulary
+#'  @importFrom loadeR C4R.vocabulary
 #'  @importFrom loadeR dictionaryTransformForecast
 
 loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLon, runTimePars, time, level, aggr.d, aggr.m, derInterface) {    
@@ -67,7 +67,7 @@ loadSeasonalForecast.S4 <- function(dataset, gds, var, grid, dic, members, latLo
       attr(Variable, "use_dictionary") <- isStandard
       attr(Variable, "description") <- grid$getDescription()
       if (isStandard) {
-            vocabulary <- UDG.vocabulary()
+            vocabulary <- C4R.vocabulary()
             attr(Variable, "units") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier), 3])
             attr(Variable, "longname") <- as.character(vocabulary[grep(paste0("^", var, "$"), vocabulary$identifier), 2])
       } else {
