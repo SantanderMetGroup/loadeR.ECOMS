@@ -1,5 +1,5 @@
 New in loadeR.ECOMS
 ============
 
-* Internal change to accomodate an internal [function rename](https://github.com/SantanderMetGroup/loadeR/commit/30b695c4e1a17f420b43ae67dea2492a732e2e52#diff-424473e6ccf757b62e465a56a3cc6f8c) in `loadeR`
-* Add "initMonth" attribute (integer [1-12]) in seasonal forecast outputs
+* Set encoding in DESCRIPTION file (avoids [installation issues](https://github.com/SantanderMetGroup/loadeR.ECOMS/issues/5))
+* Bug fix in NCEP_reanalysis 1 dictionary (shortwave/longwave downwelling surface radiation was pointing to net)
