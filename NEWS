@@ -8,6 +8,8 @@ Go to [releases](https://github.com/SantanderMetGroup/loadeR.ECOMS/releases) for
 * Bug fix in NCEP_reanalysis 1 dictionary (shortwave/longwave downwelling surface radiation was pointing to net)
 * Add downwelling surface radiations to CFSv2_seasonal 
 
-## v1.4.6 (13 Jul 2018)
+## v1.4.6 (20 Oct 2018)
 
 * Update dictionaries for accessing sst in CFSv2 and ts in CFSv2-monthly 
+* Update CITATION
+* Other minor documentation updates

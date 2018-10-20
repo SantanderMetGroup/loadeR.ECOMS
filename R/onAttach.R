@@ -1,6 +1,6 @@
 .onAttach <- function(...) {
       pkgname <- "loadeR.ECOMS"
-      lib <- system.file(package = pkgname)
+      # lib <- system.file(package = pkgname)
       ver <- packageDescription(pkgname)$Version
       builddate <- packageDescription(pkgname)$Date
       mess <- paste(pkgname, " version ", ver, " (", builddate,") is loaded", sep = "")
@@ -21,7 +21,7 @@
                   packageStartupMessage(ver.mess)
             }
       }
-      packageStartupMessage("Please use 'citation(\"loadeR.ECOMS\")' to cite this package.")
+      packageStartupMessage("Please use 'citation(\"", pkgname, "\")' to cite this package.")
 }
 # End
 
