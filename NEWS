@@ -1,6 +1,15 @@
-New in loadeR.ECOMS
-============
+# loadeR.ECOMS changelog
 
-* Set encoding in DESCRIPTION file (avoids [installation issues](https://github.com/SantanderMetGroup/loadeR.ECOMS/issues/5))
+Go to [releases](https://github.com/SantanderMetGroup/loadeR.ECOMS/releases) for older version changes
+
+## v1.4.5 (14 Jun 2018)
+
+* Set encoding in DESCRIPTION file (fixes [installation issues](https://github.com/SantanderMetGroup/loadeR.ECOMS/issues/5))
 * Bug fix in NCEP_reanalysis 1 dictionary (shortwave/longwave downwelling surface radiation was pointing to net)
 * Add downwelling surface radiations to CFSv2_seasonal 
+
+## v1.4.6 (20 Oct 2018)
+
+* Update dictionaries for accessing sst in CFSv2 and ts in CFSv2-monthly 
+* Update CITATION
+* Other minor documentation updates
