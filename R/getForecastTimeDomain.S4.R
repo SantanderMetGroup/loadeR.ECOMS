@@ -98,7 +98,6 @@ getForecastTimeDomain.S4 <- function(grid, dataset, dic, runTimePars, time, aggr
             }
             # Sub-routine for adjusting times in case of deaccumulation
             if (!is.null(dic)) {
-                  cell_method <- dic$cell_method
                   if (dic$deaccum == 1) {
                         deaccum <- TRUE
                         foreTimesList <- lapply(1:length(foreTimesList), function(x) {
@@ -112,7 +111,7 @@ getForecastTimeDomain.S4 <- function(grid, dataset, dic, runTimePars, time, aggr
                         foreTimeStride)$shiftOrigin(foreTimeShift)
             })
       }
-      return(list("forecastDates" = foreDatesList, "ForeTimeRangesList" = foreTimeRangesList, "deaccum" = deaccum, 
-                  "aggr.d" = aggr.d, "aggr.m" = aggr.m, "cell_method" = cell_method))
+      return(list("forecastDates" = foreDatesList, "ForeTimeRangesList" = foreTimeRangesList, "deaccum" = deaccum,
+                  "aggr.d" = aggr.d, "aggr.m" = aggr.m))
 }
 # End
