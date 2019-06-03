@@ -57,23 +57,31 @@ getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, time, aggr.d, agg
       for (i in 1:length(foreTimesList)) {
             aux[i] <- length(foreTimesList[[i]][[1]])
       }
+      
+      
       if (length(unique(aux)) > 1) {
             aux.dates <- rep(list(bquote()), length(foreTimesList))
             for (i in 1:length(foreTimesList)) {
                   aux.dates[[i]] <- head(foreDatesList[[i]][[1]], 1)
             }
             init <- do.call("max", aux.dates)
+            maxLength <- min(aux, na.rm = TRUE)
             for (i in 1:length(foreTimesList)) {
-                  if(head(foreDatesList[[i]][[1]], 1) < init) {
-                        message("NOTE: some forecast times at the beginning of the initialization may be lost so all members have equal length")
+                  if (head(foreDatesList[[i]][[1]], 1) <= init) {
+                        if (head(foreDatesList[[i]][[1]], 1) < init) {
+                              message("NOTE: some forecast times at the beginning of the initialization may be lost so all members have equal length")
+                        }
+                        retain <- which(foreDatesList[[i]][[1]] >= init)
+                        retain <- retain[1:maxLength]
                         for (j in 1:length(foreTimesList[[i]])) {
-                              retain <- which(foreDatesList[[i]][[1]] >= init)
-                              foreTimesList[[i]][[j]] <- foreTimesList[[i]][[j]][retain] 
-                              foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][retain] 
+                              foreTimesList[[i]][[j]] <- foreTimesList[[i]][[j]][retain]
+                              foreDatesList[[i]][[j]] <- foreDatesList[[i]][[j]][retain]
                         }
                   }
             }
       }
+      
+      
       aux <- aux.dates <- NULL
       # Sub-routine for setting stride and shift along time dimension    
       if (time == "DD" | time == "none") {
