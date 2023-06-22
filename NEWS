@@ -13,3 +13,7 @@ Go to [releases](https://github.com/SantanderMetGroup/loadeR.ECOMS/releases) for
 * Update dictionaries for accessing sst in CFSv2 and ts in CFSv2-monthly 
 * Update CITATION
 * Other minor documentation updates
+
+## v1.4.7 (22 Jun 2023)
+
+* Add LICENSE file

@@ -5,6 +5,8 @@
 #' @param runDatesAll A POSIXlt vector with all runtime dates in the dataset    
 #' @param validMonth Integer. Initialization month.
 #' @param members A vector defining members to select, as passed by \code{\link{loadSeasonlForecast}}
+#' @param years Years selected (see \code{\link{loadECOMS}})
+#' @param dataset Target hindcast dataset (see \code{\link{loadECOMS}})
 #' @return A list with two elements:
 #' \begin{itemize}
 #' \item runDatesEnsList a list of the same length as the number of members selected, with the initialization dates

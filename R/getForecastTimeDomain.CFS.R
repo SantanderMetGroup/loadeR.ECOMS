@@ -2,8 +2,21 @@
 #' 
 #' This is a subroutine of \code{\link{loadSeasonalForecast.CFS}}
 #' 
-#' @param gcs a java \sQuote{GridCoordinateSystem}
+#' @param grid a java \sQuote{GeoGrid}
+#' @param dic dictionary information
 #' @param runTimePars A list of elements as returned by \code{\link{getRunTimeDomain.ECOMS}}
+#' @param time A character vector indicating the temporal filtering/aggregation 
+#' of the output data. Default to \code{"none"}, which returns the original time 
+#' series as stored in the dataset. For sub-daily variables, instantantaneous data at 
+#' selected verification times can be filtered using one of the character strings 
+#' \code{"00"}, \code{"03"}, \code{"06"}, \code{"09"}, \code{"12"}, \code{"15"},
+#'  \code{"18"}, \code{"21"},and \code{"00"} when applicable. If daily aggregated data are 
+#' required use \code{"DD"}. If the requested variable is static (e.g. orography) it will be ignored. 
+#' See the next arguments for time aggregation options.
+#' @param aggr.d Character string. Function of aggregation of sub-daily data for daily data calculation. 
+#' Currently accepted values are \code{"none"}, \code{"mean"}, \code{"min"}, \code{"max"} and \code{"sum"}.
+#' @param aggr.m Same as \code{aggr.d}, bun indicating the aggregation function to compute monthly from daily data.
+#' If \code{aggr.m = "none"} (the default), no monthly aggregation is undertaken.
 #' @return A list with the following elements:
 #' \begin{itemize}
 #' \item{forecastDates}{A list with POSIXlt dates defining the start and end of the 
