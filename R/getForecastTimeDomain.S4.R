@@ -4,9 +4,13 @@
 #' 
 #' @param grid a java \sQuote{GeoGrid}
 #' @param dataset character string of the dataset
-#' @param dictionary dictionary information
+#' @param dic dictionary information
 #' @param runTimePars A list of elements as returned by \code{\link{getRunTimeDomain.ECOMS}}
 #' @param time Verification time.
+#' @param aggr.d Character string. Function of aggregation of sub-daily data for daily data calculation. 
+#' Currently accepted values are \code{"none"}, \code{"mean"}, \code{"min"}, \code{"max"} and \code{"sum"}.
+#' @param aggr.m Same as \code{aggr.d}, bun indicating the aggregation function to compute monthly from daily data.
+#' If \code{aggr.m = "none"} (the default), no monthly aggregation is undertaken.
 #' @return A list with the following elements:
 #' \begin{itemize}
 #' \item{forecastDates}{A list with POSIXlt dates defining the start and end of the 
