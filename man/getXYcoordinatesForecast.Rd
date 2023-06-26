@@ -16,11 +16,11 @@ with the java \sQuote{LatLonRect} objects defining the spatial ranges.}
 }
 \value{
 A list of the following components:
-\begin{itemize}
+\itemize{
 \item{x}{x coordinates in ascending order} 
 \item{y}{y coordinates in ascending order}
 \item{revLat}{A logical indicating if the ordering of latitudes should be reversed or not}
-\end{itemize}
+}
 }
 \description{
 Retrieves the geographical coordinates of the data subset, taking care of its adequate ordering

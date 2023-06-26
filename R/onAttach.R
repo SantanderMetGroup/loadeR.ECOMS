@@ -1,8 +1,8 @@
 .onAttach <- function(...) {
       pkgname <- "loadeR.ECOMS"
       # lib <- system.file(package = pkgname)
-      ver <- packageDescription(pkgname)$Version
-      builddate <- packageDescription(pkgname)$Date
+      ver <- utils::packageDescription(pkgname)$Version
+      builddate <- utils::packageDescription(pkgname)$Date
       mess <- paste(pkgname, " version ", ver, " (", builddate,") is loaded", sep = "")
       packageStartupMessage(mess)
       url <- paste0("https://raw.githubusercontent.com/SantanderMetGroup/", pkgname, "/master/DESCRIPTION")

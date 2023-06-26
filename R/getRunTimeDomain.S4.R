@@ -6,10 +6,10 @@
 #' @param validMonth Integer. Initialization month.
 #' @param years Numeric vector of years selected
 #' @return A list with two elements:
-#' \begin{itemize}
+#' \itemize{
 #' \item runDates a POSIXlt vector of initialization dates
 #' \item runTimeRanges a list of of initialization times, in the form of java ranges, as required by makeSubset.
-#' \end{itemize}
+#' }
 #' @details The input/outoputs are slightly different than getRuntimeDomain.CFS because of the 
 #' different ensemble member configuration
 #' @author J. Bedia 

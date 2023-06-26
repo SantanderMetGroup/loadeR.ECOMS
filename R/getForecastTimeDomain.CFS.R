@@ -18,7 +18,7 @@
 #' @param aggr.m Same as \code{aggr.d}, bun indicating the aggregation function to compute monthly from daily data.
 #' If \code{aggr.m = "none"} (the default), no monthly aggregation is undertaken.
 #' @return A list with the following elements:
-#' \begin{itemize}
+#' \itemize{
 #' \item{forecastDates}{A list with POSIXlt dates defining the start and end of the 
 #' representative verification time. If start and end are identical, the variable is instantaneous
 #' and therefore the representative time interval is 0}
@@ -29,7 +29,7 @@
 #' of each element of the runTimeList to avoid losing the first day when performing deaccumulation.}
 #' \item{dailyAggr}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
 #' to \code{\link{makeSubset.CFS}} to undertake the pertinent aggregation if TRUE.}
-#' \end{itemize}
+#' }
 #' @author J. Bedia 
 #' 
 getForecastTimeDomain.CFS <- function (grid, dic, runTimePars, time, aggr.d, aggr.m) {

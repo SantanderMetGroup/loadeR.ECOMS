@@ -18,3 +18,7 @@ Go to [releases](https://github.com/SantanderMetGroup/loadeR.ECOMS/releases) for
 
 * Add LICENSE file
 * Documentation update
+
+## v1.4.8 (26 Jun 2023)
+
+* Downgrade R dependency

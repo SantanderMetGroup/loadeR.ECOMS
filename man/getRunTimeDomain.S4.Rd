@@ -15,10 +15,10 @@ getRunTimeDomain.S4(runDatesAll, validMonth, years)
 }
 \value{
 A list with two elements:
-\begin{itemize}
+\itemize{
 \item runDates a POSIXlt vector of initialization dates
 \item runTimeRanges a list of of initialization times, in the form of java ranges, as required by makeSubset.
-\end{itemize}
+}
 }
 \description{
 Output is passed to \code{getRunTimeDomain.ECOMS} for used-defined subsets.

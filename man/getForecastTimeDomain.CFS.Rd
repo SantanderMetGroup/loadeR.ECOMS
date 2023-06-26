@@ -7,13 +7,30 @@
 getForecastTimeDomain.CFS(grid, dic, runTimePars, time, aggr.d, aggr.m)
 }
 \arguments{
+\item{grid}{a java \sQuote{GeoGrid}}
+
+\item{dic}{dictionary information}
+
 \item{runTimePars}{A list of elements as returned by \code{\link{getRunTimeDomain.ECOMS}}}
 
-\item{gcs}{a java \sQuote{GridCoordinateSystem}}
+\item{time}{A character vector indicating the temporal filtering/aggregation 
+of the output data. Default to \code{"none"}, which returns the original time 
+series as stored in the dataset. For sub-daily variables, instantantaneous data at 
+selected verification times can be filtered using one of the character strings 
+\code{"00"}, \code{"03"}, \code{"06"}, \code{"09"}, \code{"12"}, \code{"15"},
+ \code{"18"}, \code{"21"},and \code{"00"} when applicable. If daily aggregated data are 
+required use \code{"DD"}. If the requested variable is static (e.g. orography) it will be ignored. 
+See the next arguments for time aggregation options.}
+
+\item{aggr.d}{Character string. Function of aggregation of sub-daily data for daily data calculation. 
+Currently accepted values are \code{"none"}, \code{"mean"}, \code{"min"}, \code{"max"} and \code{"sum"}.}
+
+\item{aggr.m}{Same as \code{aggr.d}, bun indicating the aggregation function to compute monthly from daily data.
+If \code{aggr.m = "none"} (the default), no monthly aggregation is undertaken.}
 }
 \value{
 A list with the following elements:
-\begin{itemize}
+\itemize{
 \item{forecastDates}{A list with POSIXlt dates defining the start and end of the 
 representative verification time. If start and end are identical, the variable is instantaneous
 and therefore the representative time interval is 0}
@@ -24,7 +41,7 @@ the first time of the runtime axis or not respectively. If FALSE, an additional 
 of each element of the runTimeList to avoid losing the first day when performing deaccumulation.}
 \item{dailyAggr}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
 to \code{\link{makeSubset.CFS}} to undertake the pertinent aggregation if TRUE.}
-\end{itemize}
+}
 }
 \description{
 This is a subroutine of \code{\link{loadSeasonalForecast.CFS}}

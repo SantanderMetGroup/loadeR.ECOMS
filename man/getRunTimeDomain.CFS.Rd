@@ -12,15 +12,19 @@ getRunTimeDomain.CFS(runDatesAll, validMonth, members, years, dataset)
 \item{validMonth}{Integer. Initialization month.}
 
 \item{members}{A vector defining members to select, as passed by \code{\link{loadSeasonlForecast}}}
+
+\item{years}{Years selected (see \code{\link{loadECOMS}})}
+
+\item{dataset}{Target hindcast dataset (see \code{\link{loadECOMS}})}
 }
 \value{
 A list with two elements:
-\begin{itemize}
+\itemize{
 \item runDatesEnsList a list of the same length as the number of members selected, with the initialization dates
 \item runTimesEnsList a list of the same length as the number of members selected, with a list of initialization
 times, in the form of java ranges, as required by makeSubset.
 \item years The years vector, updated if necessary. See details.
-\end{itemize}
+}
 }
 \description{
 Output is passed to \code{getRunTimeDomain.ECOMS} for used-defined subsets.

@@ -13,7 +13,7 @@ getForecastTimeDomain.GS5(grid, dic, runTimePars, time, aggr.d, aggr.m)
 }
 \value{
 A list with the following elements:
-\begin{itemize}
+\itemize{
 \item{forecastDates}{A list with POSIXlt dates defining the start and end of the 
 representative verification time. If start and end are identical, the variable is instantaneous
 and therefore the representative time interval is 0}
@@ -24,7 +24,7 @@ the first time of the runtime axis or not respectively. If FALSE, an additional 
 of each element of the runTimeList to avoid losing the first day when performing deaccumulation.}
 \item{dailyAggr}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
 to \code{makeSubset.GS5} to undertake the pertinent aggregation if TRUE.}
-\end{itemize}
+}
 }
 \description{
 This is a subroutine of \code{\link{loadSeasonalForecast.GS5}}

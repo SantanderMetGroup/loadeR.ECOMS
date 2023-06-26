@@ -8,11 +8,11 @@
 #' @param llRanges A list of length 2 or 1 (depending whether the subset crosses or not the dateline),
 #' with the java \sQuote{LatLonRect} objects defining the spatial ranges.
 #' @return A list of the following components:
-#' \begin{itemize}
+#' \itemize{
 #' \item{x}{x coordinates in ascending order} 
 #' \item{y}{y coordinates in ascending order}
 #' \item{revLat}{A logical indicating if the ordering of latitudes should be reversed or not}
-#' \end{itemize}
+#' }
 #' @keywords internal
 #' @author J Bedia
 

@@ -5,7 +5,7 @@
 #' @param gcs a java \sQuote{GridCoordinateSystem}
 #' @param runTimePars A list of elements as returned by \code{\link{getRunTimeDomain.ECOMS}}
 #' @return A list with the following elements:
-#' \begin{itemize}
+#' \itemize{
 #' \item{forecastDates}{A list with POSIXlt dates defining the start and end of the 
 #' representative verification time. If start and end are identical, the variable is instantaneous
 #' and therefore the representative time interval is 0}
@@ -16,7 +16,7 @@
 #' of each element of the runTimeList to avoid losing the first day when performing deaccumulation.}
 #' \item{dailyAggr}{Logical. Are the forecast time values going to be used for data aggregation?. This argument is passed
 #' to \code{makeSubset.GS5} to undertake the pertinent aggregation if TRUE.}
-#' \end{itemize}
+#' }
 #' @keywords internal
 #' @author J. Bedia 
 

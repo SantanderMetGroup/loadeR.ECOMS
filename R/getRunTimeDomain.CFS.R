@@ -8,12 +8,12 @@
 #' @param years Years selected (see \code{\link{loadECOMS}})
 #' @param dataset Target hindcast dataset (see \code{\link{loadECOMS}})
 #' @return A list with two elements:
-#' \begin{itemize}
+#' \itemize{
 #' \item runDatesEnsList a list of the same length as the number of members selected, with the initialization dates
 #' \item runTimesEnsList a list of the same length as the number of members selected, with a list of initialization
 #' times, in the form of java ranges, as required by makeSubset.
 #' \item years The years vector, updated if necessary. See details.
-#' \end{itemize}
+#' }
 #' @details The lagged runtime configuration of CFSv2 means that ensemble members are defined by different
 #'  initializations, so that the dimension ensemble does not exist \emph{per se}, but is defined by
 #'  different initializations.
